@@ -46,8 +46,10 @@ public class LogIn {
         if (password.equals(newPassword) && (username.equals(newUser) ||
                 email.equals(newEmail))) {
             isValid();
+            System.out.println("You may proceed!");
         } else {
             valid = false;
+            System.out.println("Please try again!");
         }
     }
 
