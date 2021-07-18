@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -41,6 +42,13 @@ public class Application {
             :: 3. Change Password                          ::
             :: 4. Back                                     ::
             :::::::::::::::::::::::::::::::::::::::::::::::::""";
+    private final static String editPost = "\n" + chooseAction + """
+            :::::::::::::::::::::::::::::::::::::::::::::::::
+            :: 1. Edit Title                               ::
+            :: 2. Edit Content                             ::
+            :: 3. Delete Post                              ::
+            :: 4. Back                                     ::
+            :::::::::::::::::::::::::::::::::::::::::::::::::""";
 
     private final static String actionCorrection = "Invalid Action";
     private final static String invalidAccount = "Username/Password is Wrong";
@@ -60,6 +68,14 @@ public class Application {
     private final static String newPasswordPrompt = "Enter your new password: ";
     private final static String newUsernamePrompt = "Enter your new username";
     private final static String newBioPrompt = "Enter your new bio: ";
+
+    //strings pertaining to post creation
+    private final static String postTitlePrompt = "Enter a Post Title: ";
+    private final static String postContentPrompt = "Enter the Post's Message: ";
+
+    //strings pertaining to post editing/deletion
+    private final static String postChoicePrompt = "Enter the number of the post you would like to edit"
+        + "or enter 0 to exit: ";
 
     private final static String logout = "Logging out...";
     private final static String exit = "Exiting...";
@@ -223,18 +239,19 @@ public class Application {
     }
 
     public void view_changeProfile() {
-        //display user's profile
-        System.out.printf(user.toString());
+
         boolean backToMain = false;
         Scanner scanner = new Scanner(System.in);
         String filename = "accountInfo.csv"; //we want to use this file when interacting with accounts
 
         //while still in the profile menu
         while (!backToMain) {
-            //show options
-            System.out.printf(viewProfile);
+            //display user's profile and show options
+            System.out.println(user.toString());
+            System.out.println(viewProfile);
 
             int choice = scanner.nextInt();
+            scanner.nextLine();
 
             //if it's an invalid choice, say so
             if (choice > 4 || choice < 1) {
@@ -251,7 +268,7 @@ public class Application {
                     System.out.println(newPasswordPrompt);
                     password = scanner.nextLine();
                     if (password.length() == 0) {
-                        System.out.println(passwordLengthCorrection);
+                        System.out.println(userPassLengthCorrection);
                     }
                     user.setPassword(password);
                 } else {
@@ -312,34 +329,82 @@ public class Application {
         }
     }
 
+    public void editPost(Post post) {
+        int choice;
+        Scanner scanner = new Scanner(System.in);
+
+        do {
+            System.out.println(editPost);
+
+            choice = scanner.nextInt();
+
+            if (choice > 4 || choice < 1) {
+                System.out.println(actionCorrection);
+            }
+        } while  (choice > 4 || choice < 1);
+
+        //TODO: do stuff based on user's choice
+    }
+
     public void mainScreen() {
         Scanner scanner = new Scanner(System.in);
-        String filename = "accountInfo.csv"; //we want to use this file when interacting with accounts
-        boolean exit = false;
+        boolean exiting = false;
 
-        while (!exit) {
+        while (!exiting) {
             //print options
-            System.out.printf(mainMenu);
+            System.out.println(mainMenu);
 
             //get choice
             int choice = scanner.nextInt();
+            scanner.nextLine();
 
             //act on choice
             if (choice == 1) { //view and change profile
                 view_changeProfile();
             } else if (choice == 2) { //create post
-
+                System.out.println(postTitlePrompt); //get title
+                String title = scanner.nextLine();
+                System.out.println(postContentPrompt); //get message
+                String content = scanner.nextLine();
+                user.addPost(new Post(title, user, content)); //add it to the list of posts
             } else if (choice == 3) { //view and edit your posts
+                //display posts from this user with numbers beside them
+                ArrayList<Post> posts = user.getPosts();
+                for (int x = 0; x < posts.size(); x++) {
+                    System.out.println(Integer.toString(x + 1) + posts.get(x).toString());
+                    System.out.println(" ");
+                }
 
+                //display option to edit a post and get input
+                int postChoice;
+                do {
+                    System.out.println(postChoicePrompt);
+                    postChoice = scanner.nextInt();
+                    scanner.nextLine();
+
+                    if (postChoice > posts.size() || postChoice < 0) {
+                        System.out.println(actionCorrection);
+                    }
+                } while (postChoice > posts.size() || postChoice < 0);
+
+                if (postChoice != 0) {
+                    editPost(posts.get(postChoice - 1));
+                }
             } else if (choice == 4) { //view and edit all your comments
-
+                //TODO
             } else if (choice == 5) { //view other people's posts
-
+                //TODO
             } else if (choice == 6) { //search for a specific user
-
-            } else if (choice == 7) {
-                exit = true;
+                //TODO
+            } else if (choice == 7) { //logout
+                exiting = true;
                 System.out.println(logout);
+                System.out.println(exit);
+            } else if (choice == 0) { //exit
+                exiting = true;
+                System.out.println(exit);
+            } else { //anything else is not a valid input
+                System.out.println(actionCorrection);
             }
         }
     }
