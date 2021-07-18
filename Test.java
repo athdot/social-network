@@ -1,14 +1,19 @@
 public class Test {
     public static void main(String[] args) {
-        String password = "Sandpaper";
-        Account test = new Account("Jeff Bezos",password);
-        System.out.println("Password Saved As: " + test.getPassword());
-        Account test11 = new Account("Jeeff", "Sandpape");
-        System.out.println("2nd test with 1 less char" + test11.getPassword());
-        Post test1 = new Post("CEO", test.getUsername(), "CEO Entrepeneur, born in 1964, Jeffery; Jeffery Bezos");
-        Post test2 = new Post("Test123", test.getUsername(), "This is a test");
-        test.addPost(password, test1);
-        test.addPost(password, test2);
-        System.out.println(test.toString());
+
+        String password1 = "Sandpaper";
+        Account account1 = new Account("Jeff Bezos", password1);
+        System.out.println("Password 1 Saved As: " + account1.getPassword());
+
+        String password2 = "Sandpape"; //have 1 less character than password1
+        Account account2 = new Account("Jeeff", password2);
+        System.out.println("Password 2 Saved As: " + account2.getPassword());
+
+        Post post1 = new Post("test post 1", account1.getUsername(), "CEO Entrepeneur, born in 1964, Jeffery; Jeffery Bezos");
+        Post post2 = new Post("test post 2", account2.getUsername(), "This is a test post, and you're reading the post content");
+        account1.addPost(post1);
+        account1.addPost(post2);
+
+        System.out.println(account1);
     }
 }
