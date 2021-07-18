@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.Scanner;
-import java.util.stream.StreamSupport;
 
 /**
  * Application - Project 4, Social Network App
