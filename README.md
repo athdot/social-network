@@ -188,7 +188,7 @@ There are no public test cases for this project. Each implementation will look d
 
 However, you are expected to write your own custom test cases, specific to your team's implementation. We've given you examples of what this looks like in all your previous assignments.  Here's an example from one of the Homework assignments: 
 
-@Test(timeout = 1000)
+@MethodTesting(timeout = 1000)
 public void testExpectedOne() {
     // Set the input        
     // Separate each input with a newline (\n). 
