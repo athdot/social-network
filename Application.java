@@ -53,6 +53,14 @@ public class Application {
     private final static String usernameSpaceCorrection = "Usernames Shouldn't Have Spaces";
     private final static String passwordLengthCorrection = "Password is Too Short";
 
+    //strings pertaining to profile actions
+    private final static String currentPasswordPrompt = "Enter your current password: ";
+    private final static String invalidPassword = "Password is incorrect";
+    private final static String newPasswordPrompt = "Enter your new password: ";
+    private final static String newUsernamePrompt = "Enter your new username";
+    private final static String newBioPrompt = "Enter your new bio: ";
+
+    private final static String logout = "Logging out...";
     private final static String exit = "Exiting...";
     //note: change all input to be String so program doesn't break if non-int is entered? (?do later)
     //nvm, instructions say application should not crash under any circumstances
@@ -210,8 +218,131 @@ public class Application {
         } while (!validCredentials); //continue to prompt login screen until user provides valid credentials
     }
 
+    public void view_changeProfile() {
+        //display user's profile
+        System.out.printf(user.toString());
+        boolean backToMain = false;
+        Scanner scanner = new Scanner(System.in);
+        String filename = "accountInfo.csv"; //we want to use this file when interacting with accounts
+
+        //while still in the profile menu
+        while (!backToMain) {
+            //show options
+            System.out.printf(viewProfile);
+
+            int choice = scanner.nextInt();
+
+            //if it's an invalid choice, say so
+            if (choice > 4 || choice < 1) {
+                System.out.println(actionCorrection);
+            } else if (choice == 4) {
+                backToMain = true;
+            } else if (choice == 3) { //change password
+                //prompt for current password
+                System.out.println(currentPasswordPrompt);
+                String password = scanner.nextLine();
+
+                if (cryptoHashFunction(password).equals(user.getPassword())) {
+                    //prompt for new password
+                    System.out.println(newPasswordPrompt);
+                    password = scanner.nextLine();
+                    if (password.length() == 0) {
+                        System.out.println(passwordLengthCorrection);
+                    }
+                    user.setPassword(password);
+                } else {
+                    System.out.println(invalidPassword);
+                }
+            } else if (choice == 2) { //change username
+                System.out.println(newUsernamePrompt);
+                //check if username is taken
+                boolean usernameIsTaken = false;
+                String username = scanner.nextLine();
+
+                try { //make sure that the username has not already been taken (case insensitive)
+                    //create the file in case it doesn't exist
+                    //even though there wouldn't be any existing accounts, we dodge FileNotFoundException
+                    File f = new File(filename);
+                    FileOutputStream fos = new FileOutputStream(f, true);
+                    fos.close();
+
+                    FileReader fr = new FileReader(f);
+                    BufferedReader bfr = new BufferedReader(fr);
+
+                    while (true) {
+                        String line = bfr.readLine();
+                        if (line == null) {
+                            //found no accounts with the same username
+                            usernameIsTaken = false;
+                            break;
+                        }
+                        //create array of length 2, contains username, then encrypted password
+                        String[] userPass = line.split(" ");
+                        if (userPass[0].equalsIgnoreCase(username)) {
+                            usernameIsTaken = true;
+                            break;
+                        }
+                    }
+                    bfr.close();
+
+                } catch (IOException ioException) {
+                    //Program must not crash, program should never get to this block
+                    System.out.println(fileErrorMessage);
+                }
+
+                //catch username problems
+                if (username.contains(" ")) {
+                    System.out.println(usernameSpaceCorrection);
+                } else if (usernameIsTaken) {
+                    System.out.println(usernameTakenMessage);
+                }
+
+                //update username
+                user.setUsername(username);
+                //TODO: update username instances in files - will this be a method in account class?
+
+            } else { //change bio
+                System.out.println(newBioPrompt);
+                user.setBio(scanner.nextLine());
+            }
+        }
+    }
+
+    public void mainScreen() {
+        Scanner scanner = new Scanner(System.in);
+        String filename = "accountInfo.csv"; //we want to use this file when interacting with accounts
+        boolean exit = false;
+
+        while (!exit) {
+            //print options
+            System.out.printf(mainMenu);
+
+            //get choice
+            int choice = scanner.nextInt();
+
+            //act on choice
+            if (choice == 1) { //view and change profile
+                view_changeProfile();
+            } else if (choice == 2) { //create post
+
+            } else if (choice == 3) { //view and edit your posts
+
+            } else if (choice == 4) { //view and edit all your comments
+
+            } else if (choice == 5) { //view other people's posts
+
+            } else if (choice == 6) { //search for a specific user
+
+            } else if (choice == 7) {
+                exit = true;
+                System.out.println(logout);
+            }
+        }
+    }
+
     public void start() { //control the flow of the user experience
         login();
+        mainScreen();
     }
 
     public static void main(String[] args) {
