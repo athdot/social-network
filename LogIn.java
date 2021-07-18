@@ -43,7 +43,7 @@ public class LogIn {
     // username/email
     // Wasn't sure if I should throw an exception here 
     public void confirm(String newPassword, String newUser, String newEmail) {
-        if (password.equals(newPassword) || username.equals(newUser) ||
+        if (password.equals(newPassword) && username.equals(newUser) &&
                 email.equals(newEmail)) {
             isValid();
         } else {
