@@ -224,8 +224,10 @@ Project 5 is a new iteration of Project 4. You'll be improving your solution wit
 
 There are three core improvements included in Project 5: 
 
-**Concurrency** - Your program will support concurrent use by multiple users. 
+**Concurrency** - Your program will support concurrent use by multiple users.
+
 **Network IO** - Your program will support networked use with a server and client. 
+
 **GUI** - Your program will have a fully-featured GUI that allows users to perform all the tasks they could do in the command line. 
 You don't have to worry about any of these yet, but you should keep them in mind while working on Project 4. The design decisions you make now will affect how easy it is to implement these features later!
 
