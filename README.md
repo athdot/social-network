@@ -111,6 +111,7 @@ Add polling features to posts.
 Allow certain users to moderate posts by editing or removing them. 
 
 **Option 2**
+
 The second option is to implement a social network "profile" application. Most social networks allow users to make profiles that document their personal information, interests, and other relevant characteristics. This will be a similar concept.
 
 Reminder: You can assume that only one user is accessing the application at a time. A user might log in, make a profile, then log out. Another user on the same machine can then log in, view the original user's profile, and make one of their own. 
@@ -276,6 +277,7 @@ For example: Student 1 - Submitted Report on Brightspace. Student 2 - Submitted 
 A detailed description of each class. This should include the functionality included in the class, the testing done to verify it works properly, and its relationship to other classes in the project. 
 
 **Submit**
+
 Here's a breakdown of grading: 
 
 All solution code, test cases, and documentation must be submitted on Vocareum by cloning the repository. (80 points). All required files should be included in the repository. 
