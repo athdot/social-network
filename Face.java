@@ -18,7 +18,6 @@ public class Face implements ActionListener {
         frame.setSize(650,450);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
-
     }
 
     public static void main(String[] args) {
@@ -28,8 +27,6 @@ public class Face implements ActionListener {
                 createGUI();
             }
         });
-
-
     }
 
     @Override
