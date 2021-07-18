@@ -134,7 +134,8 @@ public class Application {
                         if (userPass[0].equalsIgnoreCase(username)
                                 && userPass[1].equals(cryptoHashFunction(password))) {
                             validCredentials = true;
-                            user = new Account(username); //assign Account to current instance of Application
+                            //assign Account to current instance of Application
+                            user = new Account(username, cryptoHashFunction(password));
                             break;
                         }
                     }
