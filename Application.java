@@ -29,9 +29,10 @@ public class Application {
             :: 1. View Profile                             ::
             :: 2. Create New Post                          ::
             :: 3. View Your Posts                          ::
-            :: 4. View All Posts                           ::
-            :: 5. Search User                              ::
-            :: 6. Logout                                   ::
+            :: 4. View Your Comments                       ::
+            :: 5. View All Posts                           ::
+            :: 6. Search User                              ::
+            :: 7. Logout                                   ::
             :::::::::::::::::::::::::::::::::::::::::::::::::""";
     private final static String viewProfile = "\n" + chooseAction + """
             :::::::::::::::::::::::::::::::::::::::::::::::::
@@ -42,7 +43,7 @@ public class Application {
             :::::::::::::::::::::::::::::::::::::::::::::::::""";
 
     private final static String actionCorrection = "Invalid Action";
-    private final static String invalidAccount = "Username/Password is Invalid";
+    private final static String invalidAccount = "Username/Password is Wrong";
     private final static String fileErrorMessage = "Something Went Wrong";
     private final static String usernameTakenMessage = "Username is Taken";
     private final static String accountCreated = "Account Created";
@@ -51,7 +52,7 @@ public class Application {
     private final static String passwordPrompt = "Your Password: ";
 
     private final static String usernameSpaceCorrection = "Usernames Shouldn't Have Spaces";
-    private final static String passwordLengthCorrection = "Password is Too Short";
+    private final static String userPassLengthCorrection = "Username/Password is Too Short";
 
     private final static String exit = "Exiting...";
     //note: change all input to be String so program doesn't break if non-int is entered? (?do later)
@@ -118,7 +119,12 @@ public class Application {
                 String password = scanner.nextLine();
 
                 try {
+                    //creates the file in case it doesn't exist
+                    //even though there wouldn't be any existing accounts, we dodge FileNotFoundException
                     File f = new File(filename);
+                    FileOutputStream fos = new FileOutputStream(f, true);
+                    fos.close();
+
                     FileReader fr = new FileReader(f);
                     BufferedReader bfr = new BufferedReader(fr);
 
@@ -154,8 +160,7 @@ public class Application {
                 String password = scanner.nextLine();
 
                 try { //make sure that the username has not already been taken (case insensitive)
-                    //create the file in case it doesn't exist
-                    //even though there wouldn't be any existing accounts, we dodge FileNotFoundException
+                    //creates the file in case it doesn't exist
                     File f = new File(filename);
                     FileOutputStream fos = new FileOutputStream(f, true);
                     fos.close();
@@ -174,7 +179,6 @@ public class Application {
                         String[] userPass = line.split(" ");
                         if (userPass[0].equalsIgnoreCase(username)) {
                             usernameIsTaken = true;
-                            System.out.println(usernameTakenMessage);
                             break;
                         }
                     }
@@ -189,8 +193,8 @@ public class Application {
                     System.out.println(usernameSpaceCorrection);
                 } else if (usernameIsTaken) {
                     System.out.println(usernameTakenMessage);
-                } else if (password.length() == 0) {
-                    System.out.println(passwordLengthCorrection);
+                } else if (password.length() == 0 || username.length() == 0) {
+                    System.out.println(userPassLengthCorrection);
                 } else {
                     try { //only if username and password are valid, then write them to the file
                         File f = new File(filename);
