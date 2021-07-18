@@ -2,9 +2,9 @@ import java.util.ArrayList;
 import java.util.Date; 
 
 /**
- * Profile - CS180 PJ04
+ * Account - CS180 PJ04
  *
- * This is a simple class to manage a user profile
+ * This is a simple class to manage a user Account
  *
  * @author C. H. Graham
  *
@@ -12,7 +12,7 @@ import java.util.Date;
  *
  **/
 
-public class Profile {
+public class Account {
     // Basic login information
     private String username;
     private String password;
@@ -29,7 +29,7 @@ public class Profile {
 
     private static final String lineBreak = "=-=-=-=-=-=-=-=-=-=-=--=-=";
     
-    public Profile(String username, String password) {
+    public Account(String username, String password) {
         //TODO: Check if user exists, and if they do output error?
         this.username = username;
         this.password = cryptoHashFunction(password);
@@ -37,11 +37,11 @@ public class Profile {
         following = new ArrayList<String>();
         followers = new ArrayList<String>();
         bio = "";
-        saveProfile();
+        saveAccount();
     }
 
-    public Profile(String profileInfo) {
-        //TODO: Code later, once we have code to save a profile
+    public Account(String accountInfo) {
+        //TODO: Code later, once we have code to save a Account
 
     }
 
@@ -70,8 +70,8 @@ public class Profile {
         return output;
     }
 
-    //Saves profile to a file
-    public void saveProfile() {
+    //Saves Account to a file
+    public void saveAccount() {
         //TODO: Code file mgmt stuff
     }
 
@@ -95,7 +95,7 @@ public class Profile {
         return posts;
     }
 
-    //Outputs a user profile as a printable string
+    //Outputs a user Account as a printable string
     public String toString() {
         String output = lineBreak + "\n\n";
         output += "Username: " + username + "\n\n";
@@ -171,24 +171,24 @@ public class Profile {
         }
     }
 
-    //Follow a profile
-    public void followProfile(String password, String profile) {
+    //Follow a Account
+    public void followAccount(String password, String Account) {
         if (verifyPass(password)) {
-            following.add(profile);
+            following.add(Account);
         }
     }
 
-    //Unfollow a profile
-    public void unfollowProfile(String password, String profile) {
+    //Unfollow a Account
+    public void unfollowAccount(String password, String Account) {
         if (verifyPass(password)) {
-            following.remove(profile);
+            following.remove(Account);
         }
     }
 
-    //Deletes this profile, the posts and everything are removed
-    public void deleteProfile(String password) {
+    //Deletes this Account, the posts and everything are removed
+    public void deleteAccount(String password) {
         if (verifyPass(password)) {
-            //TODO: Delete user profile file
+            //TODO: Delete user Account file
         }
     }
 
