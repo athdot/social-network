@@ -84,7 +84,7 @@ public class Application {
 
     //strings pertaining to post editing/deletion
     private final static String postChoicePrompt = "Enter the number of the post you would like to edit"
-        + "or enter 0 to exit: ";
+        + " or enter 0 to exit: ";
 
     private final static String logout = "Logging Out...";
     private final static String exit = "loggedOut...";
@@ -371,6 +371,7 @@ public class Application {
             do {
                 try {
                     action = scanner.nextInt();
+                    scanner.nextLine(); //remove \n from pipeline
                 } catch (InputMismatchException inputMismatchException) {
                     System.out.println(actionCorrection);
                     continue;
@@ -399,17 +400,19 @@ public class Application {
                 //display posts from this user with numbers beside them
                 ArrayList<Post> posts = user.getPosts();
                 for (int x = 0; x < posts.size(); x++) {
-                    System.out.println(Integer.toString(x + 1) + posts.get(x).toString());
-                    System.out.println(" ");
+                    System.out.println((x + 1) + posts.get(x).toString() + "\n");
                 }
 
                 //display option to edit a post and get input
-                int postChoice;
+                int postChoice = 0; //default to zero to prevent ide errors
                 do {
                     System.out.println(postChoicePrompt);
-                    postChoice = scanner.nextInt();
-                    scanner.nextLine();
-
+                    try {
+                        postChoice = scanner.nextInt();
+                        scanner.nextLine();
+                    } catch (InputMismatchException inputMismatchException) {
+                        System.out.println();
+                    }
                     if (postChoice > posts.size() || postChoice < 0) {
                         System.out.println(actionCorrection);
                     }
