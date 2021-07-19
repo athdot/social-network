@@ -9,6 +9,22 @@ import java.util.Date;
  *
  **/
 
+// Basic login information
+    private String username;
+    private String password;
+
+    //A short blurb about the user
+    private String bio;
+    private Post post;
+    private static String[] names = {"carter","language","socrates","love","orange","taper",
+            "london","trouble","sandpaper","stables","ocean","river","elephant","juice",
+            "varsace","blankets","velvet","castaways","strange","things","cards","beyonce",
+            "polar","zeus","create","pool","canvas","feather","titties","box","triangle"};
+
+    //array list of comments and posts made by this account
+    private ArrayList<Post> posts;
+    private ArrayList<Comment> comments;
+
 public class Account {
     // Basic login information
     private String username;
@@ -63,6 +79,55 @@ public class Account {
 
         output += lineBreak + "\n";
         return output;
+    }
+    
+    // Generates a random username or password
+    public void computerGenerateName(String select) {
+        Scanner scan = new Scanner(System.in);
+        Random rand = new Random();
+
+        System.out.println("Select 1 to generate a unique name or" +
+                " select any other number to keep name: ");
+
+        int generate = scan.nextInt();
+        scan.nextLine();
+
+        try {
+            if (generate != 1) {
+                System.out.println(select);
+            } else if (generate == 1) {
+                // Formulate a randomized username unique to user
+                String characters = "!>/$%^&*#@+=:";
+                
+                // Generate a random integer from 0 - 300000000
+                int randomize = rand.nextInt(300000000);
+
+                int randomize2 = rand.nextInt(characters.length());
+                int randomize3 = rand.nextInt(characters.length());
+                int randomize4 = rand.nextInt(characters.length());
+                
+                // Loop through private static names list 
+                String name = names[(int) (Math.random() * names.length)];
+                
+                // Indexes characters string and appoints string in index to a character
+                char randChar = characters.charAt(randomize2);
+                char randChar2 = characters.charAt(randomize3);
+                char randChar3 = characters.charAt(randomize4);
+
+                // Create unique username 
+                if (select.equals(getUsername())) {
+                    setUsername("user" + randomize + randChar + randChar2 + randChar3);
+                    System.out.println(getPassword());
+                // Create unique password    
+                } else if (select.equals(getPassword())) {
+                    setPassword(name + randomize + randChar + randChar2);
+                    System.out.println(getPassword());
+                }
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            System.out.println("Unable to randomize!");
+        }
     }
 
     //TODO: Remove me, for testing
