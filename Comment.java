@@ -10,60 +10,56 @@ import java.util.Date;
 
 public class Comment {
 
-    private Post author; //author who made the comment
+    private String author; //author who made the comment
     private String content; //content of the comment
-    private Date timestamp; //timestamp of comment
+    private String commentTimestamp; //commentTimestamp of comment
+    private String postTimestamp; //acts as marker for which post the comment belongs
 
-    public Comment(Post author, String content) {
+    //overloaded: use this when commenting on a post
+    public Comment(String author, String content, String postTimestamp) {
+        //used for the creation of a new post, because commentTimestamp is yet to be assigned
         this.author = author;
         this.content = content;
-        timestamp = new Date();
+        commentTimestamp = new Date().toString(); //java.util.Date is only used to generate the timestamp
+        //for the remainder of its lifespan, a timestamp exists as a string.
+        this.postTimestamp = postTimestamp;
     }
 
-    public Date getTimestamp() {
-        return timestamp;
+    //overloaded: use this when reading from file
+    public Comment(String author, String content, String commentTimestamp, String postTimestamp) {
+        this.author = author;
+        this.content = content;
+        this.commentTimestamp = commentTimestamp;
+        this.postTimestamp = postTimestamp;
     }
 
-    // Edit however you like
-    public void editComment(Post editor, String author, String newContent) {
-        String regex = "(.*)" + editor.getContent() + "(.*)";
+    public String getAuthor() {
+        return author;
+    }
 
-        try {
-            if (editor.getAuthor().equals(author)) {
-                String editComment = editor.getContent().replaceAll(regex, newContent);
-                editor.setContent(editComment);
-                System.out.println(editor.getContent());;
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
-            System.out.println("Author not found! Comment wasn't able to edit");
-        } finally {
-            System.out.print("");
-        }
-        }
-    // Edit however you like
-    public void editTitle(Post editor, String author, String newTitle) {
-        String regex = "(.*)" + editor.getTitle() + "(.*)";
+    public String getContent() {
+        return content;
+    }
 
-        try {
-            if (editor.getAuthor().equals(author)) {
-                String editTitle = editor.getTitle().replaceAll(regex, newTitle);
-                editor.setTitle(editTitle);
-                System.out.println(editor.getTitle());
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
-            System.out.println("Title not found! Title wasn't able to edit");
-        } finally {
-            System.out.print("");
-        }
+    public String getCommentTimestamp() {
+        return commentTimestamp;
+    }
+
+    public String getPostTimestamp() {
+        return postTimestamp;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setContent (String content) {
+        this.content = content;
     }
 
     public String toString() {
-        String output = "";
-        output += "Author: " + author + "\n";
-        output += "Posted: " + timestamp.toString() + "\n";
-        output += ">> " + content + "\n";
-        return output;
+        String formattedComment = String.format("%s on %s Commented:\n" +
+                "%s", author, commentTimestamp.toString(), content);
+        return formattedComment;
     }
 }

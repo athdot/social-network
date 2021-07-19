@@ -12,6 +12,7 @@ import java.util.Scanner;
  */
 
 public class Application {
+/*
 
     private Account user; //remember the user who is signed in to this instance of the app
     private boolean quit = false; //becomes true if user enters 0 for action. Program terminates
@@ -92,29 +93,6 @@ public class Application {
     //nvm, instructions say application should not crash under any circumstances
 
     //This function takes a password and encrypts it, just for funsies
-    public String cryptoHashFunction(String password) {
-        //Will always be 32 digits, add digits
-        if (password.length() > 32) {
-            password = password.substring(0, 32);
-        } else {
-            for (int i = password.length(); i <= 32; i++) {
-                password = "0" + password;
-            }
-        }
-
-        int divisor =  0;
-        for (int i = 0; i < password.length(); i++) {
-            divisor += (int) password.charAt(i);
-        }
-
-        String output = "";
-        // char 32 to 126 range
-        for (int i = 0; i < password.length(); i ++) {
-            output += (char) ((((int) password.charAt(i)) * 1000 * i / divisor) % 93 + 33);
-        }
-
-        return output;
-    }
 
     public void login() { //control the login section of the program
 
@@ -233,7 +211,7 @@ public class Application {
                         FileOutputStream fos = new FileOutputStream(f, true);
                         PrintWriter pw = new PrintWriter(fos);
 
-                        pw.println(username + " " + cryptoHashFunction(password)); //write new account to file
+                        pw.println(username + "," + password); //write new account to file
                         System.out.println(accountCreated);
                         pw.close();
 
@@ -270,7 +248,7 @@ public class Application {
                 System.out.println(currentPasswordPrompt);
                 String password = scanner.nextLine();
 
-                if (cryptoHashFunction(password).equals(user.getPassword())) {
+                if (password.equals(user.getPassword())) {
                     //prompt for new password
                     System.out.println(newPasswordPrompt);
                     password = scanner.nextLine();
@@ -453,4 +431,5 @@ public class Application {
         Application app = new Application();
         app.start(); //run the program
     }
+*/
 }
