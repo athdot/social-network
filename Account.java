@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.Date; 
+import java.util.*;
 
 /**
  * Account - CS180 PJ04
@@ -9,11 +8,12 @@ import java.util.Date;
  *
  **/
 
-// Basic login information
+public class Account {
+    // Basic login information
     private String username;
     private String password;
 
-    //A short blurb about the user
+    //A short blurb about the user 
     private String bio;
     private Post post;
     private static String[] names = {"carter","language","socrates","love","orange","taper",
@@ -25,17 +25,6 @@ import java.util.Date;
     private ArrayList<Post> posts;
     private ArrayList<Comment> comments;
 
-public class Account {
-    // Basic login information
-    private String username;
-    private String password;
-
-    //A short blurb about the user 
-    private String bio;
-
-    //array list of comments and posts made by this account
-    private ArrayList<Post> posts;
-    private ArrayList<Comment> comments;
     
     public Account(String username, String password) {
         //TODO: Check if user exists, and if they do output error?

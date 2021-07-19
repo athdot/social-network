@@ -25,6 +25,9 @@ public class Post {
         timeStamp = new Date();
     }
 
+    //return author of post
+    public String getAuthor() { return author; }
+
     //Return the time the message was sent
     public Date getTimeStamp() {
         return timeStamp;
@@ -39,6 +42,12 @@ public class Post {
     public String getTitle() {
         return title;
     }
+
+    //change title
+    public void setTitle(String title) { this.title = title; }
+
+    //change content
+    public void setContent(String content) { this.content = content; }
 
     //Display message
     public String toString() {

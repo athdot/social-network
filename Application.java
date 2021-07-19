@@ -84,7 +84,10 @@ public class Application {
 
     //strings pertaining to post editing/deletion
     private final static String postChoicePrompt = "Enter the number of the post you would like to edit"
-        + " or enter 0 to exit: ";
+        + " or enter -1 to return to the main screen: ";
+    private final static String newPostTitlePrompt = "Enter a new Post Title: ";
+    private final static String newPostContentPrompt = "Enter the Post's new Message: ";
+    private final static String deletionConfirmation = "Are you sure you would like to delete this post? (Y/N): ";
 
     private final static String logout = "Logging Out...";
     private final static String exit = "loggedOut...";
@@ -344,6 +347,7 @@ public class Application {
             System.out.println(editPost);
             try {
                 action = scanner.nextInt();
+                scanner.nextLine();
             } catch (InputMismatchException inputMismatchException) {
                 System.out.println(actionCorrection);
                 continue;
@@ -357,7 +361,21 @@ public class Application {
             }
         } while (action > 4 || action < 1);
 
-        //TODO: do stuff based on user's action
+        if (action == 1) { //edit title
+            System.out.println(newPostTitlePrompt);
+            String title = scanner.nextLine();
+            post.setTitle(title);
+        } else if (action == 2) { //edit content
+            System.out.println(newPostContentPrompt);
+            String content = scanner.nextLine();
+            post.setContent(content);
+        } else if (action == 3) { //delete post
+            System.out.println(deletionConfirmation);
+            String response = scanner.nextLine();
+            if (response.equalsIgnoreCase("y")) {
+                user.getPosts().remove(post);
+            }
+        }
     }
 
     public void mainMenu() {
@@ -413,12 +431,16 @@ public class Application {
                     } catch (InputMismatchException inputMismatchException) {
                         System.out.println();
                     }
-                    if (postChoice > posts.size() || postChoice < 0) {
+                    if (postChoice > posts.size() || postChoice < -1) {
                         System.out.println(actionCorrection);
+                    } else if (postChoice == 0) {
+                        System.out.println(quit);
+                        quit = true;
+                        return; //return to start() method, start method will end the program since field quit = true
                     }
-                } while (postChoice > posts.size() || postChoice < 0);
+                } while (postChoice > posts.size() || postChoice < -1);
 
-                if (postChoice != 0) {
+                if (postChoice > 0) {
                     editPost(posts.get(postChoice - 1));
                 }
             } else if (action == 4) { //view and edit all your comments
