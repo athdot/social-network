@@ -13,43 +13,51 @@ import java.util.Scanner;
 public class Application {
 
     private Account user; //remember the user who is signed in to this instance of the app
+    private boolean quit = false; //becomes true if user enters 0 for action. Program terminates
+
+    private final static String accountFilename = "accountInfo.csv"; //file that remembers accounts
 
     private final static String welcome = """
-            :::::::::::::::::::::::::::::::::::::::::::::::::
-            :: Welcome to our Social Network Application!  ::
-            :: TO QUIT: Enter "0" as an action             ::
-            :::::::::::::::::::::::::::::::::::::::::::::::::""";
+            +--------------------------------------------------+
+            | Welcome to Group 8's Social Network Application! |
+            | NOTE: Enter 0 as an action to QUIT.              |
+            +--------------------------------------------------+""";
     private final static String chooseAction = "Choose an Action:\n";
     private final static String loginPage = "\n" + chooseAction + """
-            :::::::::::::::::::::::::::::::::::::::::::::::::
-            :: 1. Sign In                                  ::
-            :: 2. Create New Account                       ::
-            :::::::::::::::::::::::::::::::::::::::::::::::::""";
+            +--------------------------------------------------+
+            | LOGIN PAGE                                       |
+            | 1. Sign In                                       |
+            | 2. Create New Account                            |
+            +--------------------------------------------------+""";
     private final static String mainMenu = "\n" + chooseAction + """
-            :::::::::::::::::::::::::::::::::::::::::::::::::
-            :: 1. View Profile                             ::
-            :: 2. Create New Post                          ::
-            :: 3. View Your Posts                          ::
-            :: 4. View Your Comments                       ::
-            :: 5. View All Posts                           ::
-            :: 6. Search User                              ::
-            :: 7. Logout                                   ::
-            :::::::::::::::::::::::::::::::::::::::::::::::::""";
-    private final static String viewProfile = "\n" + chooseAction + """
-            :::::::::::::::::::::::::::::::::::::::::::::::::
-            :: 1. Change Bio                               ::
-            :: 2. Change Username                          ::
-            :: 3. Change Password                          ::
-            :: 4. Back                                     ::
-            :::::::::::::::::::::::::::::::::::::::::::::::::""";
+            +--------------------------------------------------+
+            | MAIN MENU                                        |
+            | 1. Your Profile                                  |
+            | 2. Create New Post                               |
+            | 3. View Your Posts                               |
+            | 4. View Your Comments                            |
+            | 5. View All Posts                                |
+            | 6. Search User                                   |
+            | 7. Logout                                        |
+            +--------------------------------------------------+""";
+    private final static String yourProfile = "\n" + chooseAction + """
+            +--------------------------------------------------+
+            | YOUR PROFILE                                     |
+            | 1. Change Bio                                    |
+            | 2. Change Username                               |
+            | 3. Change Password                               |
+            | 4. Back                                          |
+            +--------------------------------------------------+""";
     private final static String editPost = "\n" + chooseAction + """
-            :::::::::::::::::::::::::::::::::::::::::::::::::
-            :: 1. Edit Title                               ::
-            :: 2. Edit Content                             ::
-            :: 3. Delete Post                              ::
-            :: 4. Back                                     ::
-            :::::::::::::::::::::::::::::::::::::::::::::::::""";
+            +--------------------------------------------------+
+            | EDIT POST                                        |
+            | 1. Edit Title                                    |
+            | 2. Edit Content                                  |
+            | 3. Delete Post                                   |
+            | 4. Back                                          |
+            +--------------------------------------------------+""";
 
+    //string constants for login section
     private final static String actionCorrection = "Invalid Action";
     private final static String invalidAccount = "Username/Password is Wrong";
     private final static String fileErrorMessage = "Something Went Wrong";
@@ -77,8 +85,8 @@ public class Application {
     private final static String postChoicePrompt = "Enter the number of the post you would like to edit"
         + "or enter 0 to exit: ";
 
-    private final static String logout = "Logging out...";
-    private final static String exit = "Exiting...";
+    private final static String logout = "Logging Out...";
+    private final static String exit = "loggedOut...";
     //note: change all input to be String so program doesn't break if non-int is entered? (?do later)
     //nvm, instructions say application should not crash under any circumstances
 
@@ -110,14 +118,12 @@ public class Application {
     public void login() { //control the login section of the program
 
         boolean validCredentials = false;
-        String filename = "accountInfo.csv"; //we want to use this file while signing in/creating new account
         System.out.println(welcome);
         Scanner scanner = new Scanner(System.in);
 
         do {
-            String actionStr; //an 'a' will stand for action to be done, stores initial input for action choice
-            int actionInt = 0; //user must enter an integer choice, store that value from actionStr in here
-
+            String actionStr; //an 'a' will stand for action to be done, stores initial input for action action
+            int actionInt = 0; //user must enter an integer action, store that value from actionStr in here
             do {
                 System.out.println(loginPage);
                 actionStr = scanner.nextLine();
@@ -129,8 +135,10 @@ public class Application {
                 }
                 if (actionInt == 0) { //user enters 0 to exit the program (see app() method)
                     System.out.println(exit);
+                    quit = true; //quit is a variable that notify the start() method to end the program
                     return;
-                } else if (actionInt < 1 || actionInt > 2) { //there were 2 choices (other than exiting) for the login page
+                } else if (actionInt < 1 || actionInt > 2) {
+                    //there were 2 choices (other than 0 for loggedOut) for the login page
                     System.out.println(actionCorrection);
                 }
             } while (actionInt < 1 || actionInt > 2);
@@ -145,7 +153,7 @@ public class Application {
                 try {
                     //creates the file in case it doesn't exist
                     //even though there wouldn't be any existing accounts, we dodge FileNotFoundException
-                    File f = new File(filename);
+                    File f = new File(accountFilename);
                     FileOutputStream fos = new FileOutputStream(f, true);
                     fos.close();
 
@@ -185,7 +193,7 @@ public class Application {
 
                 try { //make sure that the username has not already been taken (case insensitive)
                     //creates the file in case it doesn't exist
-                    File f = new File(filename);
+                    File f = new File(accountFilename);
                     FileOutputStream fos = new FileOutputStream(f, true);
                     fos.close();
 
@@ -196,7 +204,6 @@ public class Application {
                         String line = bfr.readLine();
                         if (line == null) {
                             //found no accounts with the same username
-                            usernameIsTaken = false;
                             break;
                         }
                         //create array of length 2, contains username, then encrypted password
@@ -221,7 +228,7 @@ public class Application {
                     System.out.println(userPassLengthCorrection);
                 } else {
                     try { //only if username and password are valid, then write them to the file
-                        File f = new File(filename);
+                        File f = new File(accountFilename);
                         FileOutputStream fos = new FileOutputStream(f, true);
                         PrintWriter pw = new PrintWriter(fos);
 
@@ -238,27 +245,26 @@ public class Application {
         } while (!validCredentials); //continue to prompt login screen until user provides valid credentials
     }
 
-    public void view_changeProfile() {
+    public void yourProfile() {
 
-        boolean backToMain = false;
+        boolean goBack = false;
         Scanner scanner = new Scanner(System.in);
-        String filename = "accountInfo.csv"; //we want to use this file when interacting with accounts
 
         //while still in the profile menu
-        while (!backToMain) {
+        while (!goBack) {
             //display user's profile and show options
             System.out.println(user.toString());
-            System.out.println(viewProfile);
+            System.out.println(yourProfile);
 
-            int choice = scanner.nextInt();
+            int action = scanner.nextInt();
             scanner.nextLine();
 
-            //if it's an invalid choice, say so
-            if (choice > 4 || choice < 1) {
+            //if it's an invalid action, say so
+            if (action > 4 || action < 1) {
                 System.out.println(actionCorrection);
-            } else if (choice == 4) {
-                backToMain = true;
-            } else if (choice == 3) { //change password
+            } else if (action == 4) {
+                goBack = true;
+            } else if (action == 3) { //change password
                 //prompt for current password
                 System.out.println(currentPasswordPrompt);
                 String password = scanner.nextLine();
@@ -274,7 +280,7 @@ public class Application {
                 } else {
                     System.out.println(invalidPassword);
                 }
-            } else if (choice == 2) { //change username
+            } else if (action == 2) { //change username
                 System.out.println(newUsernamePrompt);
                 //check if username is taken
                 boolean usernameIsTaken = false;
@@ -283,7 +289,7 @@ public class Application {
                 try { //make sure that the username has not already been taken (case insensitive)
                     //create the file in case it doesn't exist
                     //even though there wouldn't be any existing accounts, we dodge FileNotFoundException
-                    File f = new File(filename);
+                    File f = new File(accountFilename);
                     FileOutputStream fos = new FileOutputStream(f, true);
                     fos.close();
 
@@ -330,44 +336,58 @@ public class Application {
     }
 
     public void editPost(Post post) {
-        int choice;
+        int action;
         Scanner scanner = new Scanner(System.in);
 
         do {
             System.out.println(editPost);
 
-            choice = scanner.nextInt();
+            action = scanner.nextInt();
 
-            if (choice > 4 || choice < 1) {
+            if (action > 4 || action < 1) {
                 System.out.println(actionCorrection);
             }
-        } while  (choice > 4 || choice < 1);
+        } while  (action > 4 || action < 1);
 
-        //TODO: do stuff based on user's choice
+        //TODO: do stuff based on user's action
     }
 
-    public void mainScreen() {
+    public void mainMenu() {
         Scanner scanner = new Scanner(System.in);
-        boolean exiting = false;
+        boolean loggedOut = false;
 
-        while (!exiting) {
-            //print options
+        while (!loggedOut) {
             System.out.println(mainMenu);
 
-            //get choice
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int action = 0; //default to zero to prevent IDE errors
+            do {
+                try {
+                    action = scanner.nextInt();
+                } catch (NumberFormatException numberFormatException) {
+                    System.out.println(actionCorrection);
+                    continue;
+                }
+                if (action == 0) {
+                    System.out.println(quit);
+                    quit = true;
+                    return; //return to start() method, start method will end the program since field quit = true
+                } else if (action < 1 || action > 7) {
+                    //there are 7 options to choose from (other than 0 for quit
+                    System.out.println(actionCorrection);
+                }
+            } while (action < 1 || action > 7); //action 0 would have executed returns statement
 
-            //act on choice
-            if (choice == 1) { //view and change profile
-                view_changeProfile();
-            } else if (choice == 2) { //create post
+            if (action == 1) { //go to your profile page
+                yourProfile();
+
+            } else if (action == 2) { //create post
                 System.out.println(postTitlePrompt); //get title
                 String title = scanner.nextLine();
                 System.out.println(postContentPrompt); //get message
                 String content = scanner.nextLine();
-                user.addPost(new Post(title, user, content)); //add it to the list of posts
-            } else if (choice == 3) { //view and edit your posts
+                user.addPost(new Post(title, user.getUsername(), content)); //add it to the list of posts
+
+            } else if (action == 3) { //view and edit your posts
                 //display posts from this user with numbers beside them
                 ArrayList<Post> posts = user.getPosts();
                 for (int x = 0; x < posts.size(); x++) {
@@ -390,28 +410,28 @@ public class Application {
                 if (postChoice != 0) {
                     editPost(posts.get(postChoice - 1));
                 }
-            } else if (choice == 4) { //view and edit all your comments
+            } else if (action == 4) { //view and edit all your comments
                 //TODO
-            } else if (choice == 5) { //view other people's posts
+            } else if (action == 5) { //view other people's posts
                 //TODO
-            } else if (choice == 6) { //search for a specific user
+            } else if (action == 6) { //search for a specific user
                 //TODO
-            } else if (choice == 7) { //logout
-                exiting = true;
+            } else if (action == 7) { //logout
+                loggedOut = true;
                 System.out.println(logout);
-                System.out.println(exit);
-            } else if (choice == 0) { //exit
-                exiting = true;
-                System.out.println(exit);
             } else { //anything else is not a valid input
+                //(this block should never be executed because of input validation above). Just for good standards
                 System.out.println(actionCorrection);
             }
         }
     }
 
-    public void start() { //control the flow of the user experience
-        login();
-        mainScreen();
+    public void start() { //control the flow of the user experience. Future run() method for threads?
+        do {
+            login();
+            if (!quit)
+                mainMenu();
+        } while (!quit);
     }
 
     public static void main(String[] args) {
