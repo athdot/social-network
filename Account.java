@@ -85,41 +85,45 @@ public class Account {
         Scanner scan = new Scanner(System.in);
         Random rand = new Random();
 
-        System.out.println("Select 1 to generate a unique name or" +
-                " select any other number to keep name: ");
+        if (select.equals(getUsername())) {
+            System.out.println("Select 1 to generate a unique username or" +
+                    " select any other number to keep name: ");
+        } else if (select.equals(getPassword())) {
+            System.out.println("Select 1 to generate a unique password or" +
+                    " select any other number to keep name: ");
+        }
 
         int generate = scan.nextInt();
         scan.nextLine();
 
         try {
-            if (generate != 1) {
+            if (generate != 1 && select != "") {
                 System.out.println(select);
             } else if (generate == 1) {
                 // Formulate a randomized username unique to user
-                String characters = "!>/$%^&*#@+=:";
-                
+                String characters = "!/$%^&*#@+=";
+
                 // Generate a random integer from 0 - 300000000
                 int randomize = rand.nextInt(300000000);
 
                 int randomize2 = rand.nextInt(characters.length());
                 int randomize3 = rand.nextInt(characters.length());
                 int randomize4 = rand.nextInt(characters.length());
-                
-                // Loop through private static names list 
+
+                // Loop through private static names list
                 String name = names[(int) (Math.random() * names.length)];
-                
-                // Indexes characters string and appoints string in index to a character
+
                 char randChar = characters.charAt(randomize2);
                 char randChar2 = characters.charAt(randomize3);
                 char randChar3 = characters.charAt(randomize4);
 
-                // Create unique username 
+                // Create unique username
                 if (select.equals(getUsername())) {
-                    setUsername("user" + randomize + randChar + randChar2 + randChar3);
+                    setUsername("user" + randomize + randChar);
                     System.out.println(getUsername());
-                // Create unique password    
+                    // Create unique password
                 } else if (select.equals(getPassword())) {
-                    setPassword(name + randomize + randChar + randChar2 + randChar3);
+                    setPassword(name + randomize + randChar);
                     System.out.println(getPassword());
                 }
             }
