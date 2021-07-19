@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -260,7 +261,7 @@ public class Application {
             scanner.nextLine();
 
             //if it's an invalid action, say so
-            if (action > 4 || action < 1) {
+            if (action < 1 || action > 4) {
                 System.out.println(actionCorrection);
             } else if (action == 4) {
                 goBack = true;
@@ -280,6 +281,7 @@ public class Application {
                 } else {
                     System.out.println(invalidPassword);
                 }
+
             } else if (action == 2) { //change username
                 System.out.println(newUsernamePrompt);
                 //check if username is taken
@@ -336,18 +338,24 @@ public class Application {
     }
 
     public void editPost(Post post) {
-        int action;
         Scanner scanner = new Scanner(System.in);
-
+        int action = 0; //default to zero to prevent
         do {
             System.out.println(editPost);
-
-            action = scanner.nextInt();
-
-            if (action > 4 || action < 1) {
+            try {
+                action = scanner.nextInt();
+            } catch (InputMismatchException inputMismatchException) {
+                System.out.println(actionCorrection);
+                continue;
+            }
+            if (action == 0) { //anytime the user enters a 0 for an action, quit
+                quit = true;
+                System.out.println(exit);
+                return;
+            } else if (action > 4 || action < 1) {
                 System.out.println(actionCorrection);
             }
-        } while  (action > 4 || action < 1);
+        } while (action > 4 || action < 1);
 
         //TODO: do stuff based on user's action
     }
@@ -363,7 +371,7 @@ public class Application {
             do {
                 try {
                     action = scanner.nextInt();
-                } catch (NumberFormatException numberFormatException) {
+                } catch (InputMismatchException inputMismatchException) {
                     System.out.println(actionCorrection);
                     continue;
                 }
@@ -412,13 +420,17 @@ public class Application {
                 }
             } else if (action == 4) { //view and edit all your comments
                 //TODO
+
             } else if (action == 5) { //view other people's posts
                 //TODO
+
             } else if (action == 6) { //search for a specific user
                 //TODO
+
             } else if (action == 7) { //logout
                 loggedOut = true;
                 System.out.println(logout);
+
             } else { //anything else is not a valid input
                 //(this block should never be executed because of input validation above). Just for good standards
                 System.out.println(actionCorrection);
