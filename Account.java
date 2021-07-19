@@ -117,10 +117,10 @@ public class Account {
                 // Create unique username 
                 if (select.equals(getUsername())) {
                     setUsername("user" + randomize + randChar + randChar2 + randChar3);
-                    System.out.println(getPassword());
+                    System.out.println(getUsername());
                 // Create unique password    
                 } else if (select.equals(getPassword())) {
-                    setPassword(name + randomize + randChar + randChar2);
+                    setPassword(name + randomize + randChar + randChar2 + randChar3);
                     System.out.println(getPassword());
                 }
             }
