@@ -1,4 +1,4 @@
-public class Test {
+public class MethodTesting {
     public static void main(String[] args) {
 
         String password1 = "Sandpaper";

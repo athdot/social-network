@@ -23,7 +23,7 @@ public class Comment {
     public Date getTimestamp() {
         return timestamp;
     }
-    
+
     // Edit however you like
     public void editComment(Post editor, String author, String newContent) {
         String regex = "(.*)" + editor.getContent() + "(.*)";
