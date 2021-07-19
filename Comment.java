@@ -10,11 +10,11 @@ import java.util.Date;
 
 public class Comment {
 
-    private Account author; //author who made the comment
+    private Post author; //author who made the comment
     private String content; //content of the comment
     private Date timestamp; //timestamp of comment
 
-    public Comment(Account author, String content) {
+    public Comment(Post author, String content) {
         this.author = author;
         this.content = content;
         timestamp = new Date();
