@@ -19,7 +19,9 @@ public class Account {
     private static String[] names = {"carter","language","socrates","love","orange","taper",
             "london","trouble","sandpaper","stables","ocean","river","elephant","juice",
             "varsace","blankets","velvet","castaways","strange","things","cards","beyonce",
-            "polar","zeus","create","pool","canvas","feather","titties","milk","box","triangle"};
+            "polar","zeus","create","pool","canvas","feather","titties","milkbox","triangle",
+            "redherring","leonardo","deadpool","schoolishard","masterschamber","mindpower",
+            "lordofthekings","willofd","goodmorning","testsubject","prickledpear"};
 
     //array list of comments and posts made by this account
     private ArrayList<Post> posts;
@@ -103,8 +105,8 @@ public class Account {
                 // Formulate a randomized username unique to user
                 String characters = "!/$%^&*#@+=";
 
-                // Generate a random integer from 0 - 300000000
-                int randomize = rand.nextInt(300000000);
+                // Generate a random integer from 0 - 3000000
+                int randomize = rand.nextInt(3000000);
 
                 int randomize2 = rand.nextInt(characters.length());
                 int randomize3 = rand.nextInt(characters.length());
