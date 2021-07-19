@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 /**
  * Will handle all methods regarding writing and reading from files
- * Reading/writing methods can be referenced from here. Testing the 2 filesystem
+ * Reading/writing methods can be referenced from here. EXPERIMENTING WITH 3 FILE SYSTEM
  *
  * @author N. Yao (experimental)
  * @version July 19, 2021

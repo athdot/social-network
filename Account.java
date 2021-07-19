@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 /**
  * Account - CS180 PJ04
  * This is a simple class to manage a user Account
