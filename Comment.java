@@ -10,14 +10,20 @@ import java.util.Date;
 
 public class Comment {
 
-    private Post author; //author who made the comment
+    private String author; //author who made the comment
     private String content; //content of the comment
     private Date timestamp; //timestamp of comment
 
-    public Comment(Post author, String content) {
+    public Comment(String author, String content) {
         this.author = author;
         this.content = content;
         timestamp = new Date();
+    }
+    
+    public Comment(String author, String content, Date timestamp) {
+    	this.author = author;
+        this.content = content;
+        this.timestamp = timestamp;
     }
 
     public Date getTimestamp() {
@@ -57,6 +63,12 @@ public class Comment {
         } finally {
             System.out.print("");
         }
+    }
+    
+    public String toFile() {
+    	String output = "";
+    	output += author + "," + timestamp.toString() + "," + content;
+    	return output;
     }
 
     public String toString() {

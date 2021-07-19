@@ -70,6 +70,16 @@ public class Account {
         return output;
     }
     
+   //toFile function
+    public String[] toFile() {
+    	ArrayList<String> output = new ArrayList<String>();
+    	output.add("Profile");
+    	output.add(username);
+    	output.add(password);
+    	output.add("bio:" + bio); //We need to have bio: here, if its empty, parse issues
+    	return output.toArray(new String[0]);
+    }
+    
     // Generates a random username or password
     public void computerGenerateName(String select) {
         Scanner scan = new Scanner(System.in);
