@@ -19,7 +19,7 @@ public class Account {
     private static String[] names = {"carter","language","socrates","love","orange","taper",
             "london","trouble","sandpaper","stables","ocean","river","elephant","juice",
             "varsace","blankets","velvet","castaways","strange","things","cards","beyonce",
-            "polar","zeus","create","pool","canvas","feather","titties","box","triangle"};
+            "polar","zeus","create","pool","canvas","feather","titties","milk","box","triangle"};
 
     //array list of comments and posts made by this account
     private ArrayList<Post> posts;
