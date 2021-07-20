@@ -371,7 +371,7 @@ public class Application {
                     continue;
                 }
                 if (action == 0) {
-                    System.out.println(quit);
+                    System.out.println(exit);
                     quit = true;
                     return; //return to start() method, start method will end the program since field quit = true
                 } else if (action < 1 || action > 7) {
@@ -394,7 +394,7 @@ public class Application {
                 //display posts from this user with numbers beside them
                 ArrayList<Post> posts = user.getPosts();
                 for (int x = 0; x < posts.size(); x++) {
-                    System.out.println((x + 1) + posts.get(x).toString() + "\n");
+                    System.out.println("Post " + (x + 1) + posts.get(x).toString() + "\n");
                 }
 
                 //display option to edit a post and get input
@@ -410,7 +410,7 @@ public class Application {
                     if (postChoice > posts.size() || postChoice < -1) {
                         System.out.println(actionCorrection);
                     } else if (postChoice == 0) {
-                        System.out.println(quit);
+                        System.out.println(exit);
                         quit = true;
                         return; //return to start() method, start method will end the program since field quit = true
                     }
