@@ -423,11 +423,41 @@ public class Application {
                     editPost(posts.get(postChoice - 1));
                 }
             } else if (action == 4) { //view and edit all your comments
-                //TODO
-		for (int i = 0; i < user.getPosts().size(); i++) {
-                    ArrayList<Comment> comments = user.getPosts().get(i).getComments();
-                    System.out.println("Post " + (i + 1) + "\n" + comments.get(i).toString() + "\n");
-                }
+                // TODO: those comments should change name to "received comments" and supposed to move the action 3!
+                DataManagement dm = new DataManagement();
+                ArrayList<Post> posts = dm.getUserPosts(user.getUsername());
+                //find specific user's posts with comments
+                /*for (int i = 0; i < dm.getUserPosts(user.getUsername()).size(); i++) {
+                    System.out.println("Post " + (i + 1) + posts.get(i).toString() + "\n");
+                    if (posts.get(i).getComments().get(i) != null) {  //if there are comments
+                        for (int j = 0; j < posts.get(i).getComments().size(); j++) {
+                            System.out.println("Comments " + (j + 1) + posts.get(i).getComments().get(j).toString());
+                        }
+                    }
+                }*/
+                //edit the comments
+                int editCommentChoice = 0;
+                int postChoice = 0;
+                String commentEdited = "";
+                do {
+                    System.out.println("Select the post you want to edit your comment(s)");
+                    postChoice = scanner.nextInt();  //minus one to get the true position
+                    System.out.println(dm.getUserPosts(user.getUsername()).get(postChoice).toString());
+                    System.out.println("Enter the number of comment you want to edit");
+                    editCommentChoice = scanner.nextInt();
+                    if (postChoice >= posts.size() || postChoice < -1) {
+                        break;
+                    }
+                    scanner.nextLine();
+                    commentEdited = scanner.nextLine();
+                    //edit comments under the "Post" object
+                    dm.getUserPosts(user.getUsername()).get(postChoice).getComments().
+                            get(editCommentChoice).editComment(dm.getUserPosts(user.getUsername()).get(postChoice),
+                            user.getUsername(), commentEdited);
+                    //save to database
+                    dm.setPost(dm.getUserPosts(user.getUsername()).get(postChoice));
+                } while (postChoice > posts.size() || postChoice < -1);
+
 		//TODO: the comment should be added under action 5--view all post
 
             } else if (action == 5) { //view other people's posts
