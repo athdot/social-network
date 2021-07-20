@@ -161,7 +161,7 @@ public class Application {
                 } else {
                 	correctLogin = true;
                 }
-            } while(correctLogin);
+            } while(!correctLogin);
             
             if (actionInt == 1) { //user chooses to sign in
                 String worked = server.streamReader("login[" + username + "," + password + "]");
@@ -225,52 +225,25 @@ public class Application {
                 	System.out.println(changedPassword);
                 }
             } else if (action == 2) { //change username
-                System.out.println(newUsernamePrompt);
-                //check if username is taken
-                boolean usernameIsTaken = false;
-                String username = scanner.nextLine();
+            	boolean correctLogin = false;
+            	
+            	do {
+                	System.out.println(newUsernamePrompt);
+                	String username = scanner.nextLine();
+                
+                	String taken = server.streamReader("changeUsername[" + username +"]");
+                	if (taken.equals("false")) {
+                		System.out.println(usernameTakenMessage);
+                		continue;
+                	}
+                
+                	if (username.contains(" ") || username.contains(",")) {
+                    	System.out.println(usernameSpaceCorrection);
+                	} else {
+                		correctLogin = true;
+                	}
+            	} while(!correctLogin);
 
-                try { //make sure that the username has not already been taken (case insensitive)
-                    //create the file in case it doesn't exist
-                    //even though there wouldn't be any existing accounts, we dodge FileNotFoundException
-                    File f = new File(accountFilename);
-                    FileOutputStream fos = new FileOutputStream(f, true);
-                    fos.close();
-
-                    FileReader fr = new FileReader(f);
-                    BufferedReader bfr = new BufferedReader(fr);
-
-                    while (true) {
-                        String line = bfr.readLine();
-                        if (line == null) {
-                            //found no accounts with the same username
-                            usernameIsTaken = false;
-                            break;
-                        }
-                        //create array of length 2, contains username, then encrypted password
-                        String[] userPass = line.split(" ");
-                        if (userPass[0].equalsIgnoreCase(username)) {
-                            usernameIsTaken = true;
-                            break;
-                        }
-                    }
-                    bfr.close();
-
-                } catch (IOException ioException) {
-                    //Program must not crash, program should never get to this block
-                    System.out.println(fileErrorMessage);
-                }
-
-                //catch username problems
-                if (username.contains(" ")) {
-                    System.out.println(usernameSpaceCorrection);
-                } else if (usernameIsTaken) {
-                    System.out.println(usernameTakenMessage);
-                }
-
-                //update username
-                user.setUsername(username);
-                //TODO: update username instances in files - will this be a method in account class?
             // User can choose to computer generate a username
             } else if (action == 5) {
                 user.computerGenerateName(user.getUsername());
@@ -307,15 +280,15 @@ public class Application {
 
         if (action == 1) { //edit title
             System.out.println(newPostTitlePrompt);
-            post.editTitle(user.getUsername(),scanner.nextLine());
+            //post.editTitle(user.getUsername(),scanner.nextLine());
 
         } else if (action == 2) { //edit content
             System.out.println(newPostContentPrompt);
-            post.editComment(user.getUsername(),scanner.nextLine());
+            //post.editComment(user.getUsername(),scanner.nextLine());
 
         } else if (action == 3) { // edit author name
             System.out.println("Enter new Author Name: ");
-            post.editAuthor(user.getUsername(),scanner.nextLine());
+            //post.editAuthor(user.getUsername(),scanner.nextLine());
 
         } else if (action == 4) { //delete post
             System.out.println(deletionConfirmation);
@@ -390,7 +363,7 @@ public class Application {
                 String title = scanner.nextLine();
                 System.out.println(postContentPrompt); //get message
                 String content = scanner.nextLine();
-                user.addPost(new Post(title, user.getUsername(), content,user)); //add it to the list of posts
+                //user.addPost(new Post(title, user.getUsername(), content,user)); //add it to the list of posts
 
             } else if (action == 3) { //view and edit your posts
                 //display posts from this user with numbers beside them
@@ -451,9 +424,9 @@ public class Application {
                     scanner.nextLine();
                     commentEdited = scanner.nextLine();
                     //edit comments under the "Post" object
-                    dm.getUserPosts(user.getUsername()).get(postChoice).getComments().
-                            get(editCommentChoice).editComment(dm.getUserPosts(user.getUsername()).get(postChoice),
-                            user.getUsername(), commentEdited);
+                    //dm.getUserPosts(user.getUsername()).get(postChoice).getComments().
+                    //        get(editCommentChoice).editComment(dm.getUserPosts(user.getUsername()).get(postChoice),
+                    //        user.getUsername(), commentEdited);
                     //save to database
                     dm.setPost(dm.getUserPosts(user.getUsername()).get(postChoice));
                 } while (postChoice > posts.size() || postChoice < -1);
@@ -464,26 +437,26 @@ public class Application {
                 //TODO: @Mingrui will implement this soon
 
             } else if (action == 6) { //search for a specific user
-                ArrayList <Account> accounts = getAccounts(); //this will be a method to retrieve all users from
+                //ArrayList <Account> accounts = getAccounts(); //this will be a method to retrieve all users from
                 System.out.println(searchRequest);
                 String user = scanner.nextLine();
 
                 Account correctUser;
 
-                for (int x = 0; x < accounts.size(); x++) {
-                    if (accounts.get(x).getUsername().equalsIgnoreCase(user)) {
-                        correctUser = accounts.get(x);
-                    }
-                }
+                //for (int x = 0; x < accounts.size(); x++) {
+                //    if (accounts.get(x).getUsername().equalsIgnoreCase(user)) {
+                //        correctUser = accounts.get(x);
+                //    }
+                //}
 
-                if (correctUser == null) {//if no user is found
-                    System.out.println(userNotFound);
-                } else {
-                    System.out.println(userFound);
-                    viewUsersPosts(correctUser);
-                }
+                //if (correctUser == null) {//if no user is found
+                //    System.out.println(userNotFound);
+                //} else {
+                //    System.out.println(userFound);
+                //    viewUsersPosts(correctUser);
+                //}
 
-                System.out.println(correctUser.toString());
+                //System.out.println(correctUser.toString());
 
             } else if (action == 7) { //logout
                 loggedOut = true;

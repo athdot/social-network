@@ -51,8 +51,11 @@ public class Backend {
 			return "true";
 		} else if (request.indexOf("changeUsername[") == 0) {
 			//changeUsername[newUser]
-			data.deleteAccount(loggedAccount.getUsername());
 			String newUser = unpack(request, "changeUsername[");
+			if (data.accountExists(newUser)) {
+				return "false";
+			}
+			data.deleteAccount(loggedAccount.getUsername());
 			data.findAndReplaceAll("post.csv", loggedAccount.getUsername(), newUser);
 			loggedAccount.setUsername(newUser);
 			data.setAccount(loggedAccount);
