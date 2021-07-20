@@ -366,7 +366,7 @@ public class Application {
             edit.editComment(post,post.getAuthor(),scanner.nextLine());
 
         } else if (action == 3) { // edit author name
-            System.out.println("Enter new Author Name: ");
+            System.out.println("Enter new author name: ");
             edit.editComment(post,post.getAuthor(),scanner.nextLine());
 
         } else if (action == 4) { //delete post
