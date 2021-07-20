@@ -423,7 +423,7 @@ public class Application {
                 //TODO
 		for (int i = 0; i < user.getPosts().size(); i++) {
                     ArrayList<Comment> comments = user.getPosts().get(i).getComments();
-                    System.out.println((i + 1) + comments.get(i).toString() + "\n");
+                    System.out.println("Post " + (i + 1) + "\n" + comments.get(i).toString() + "\n");
                 }
 		//TODO: the comment should be added under action 5--view all post
 
@@ -431,7 +431,18 @@ public class Application {
                 //TODO
 
             } else if (action == 6) { //search for a specific user
-                //TODO
+                ArrayList <Account> accounts = getAccounts(); //this will be a method to retrieve all users from
+                System.out.println(searchRequest);
+                String user = scanner.nextLine();
+                Account correctUser;
+
+                for (int x = 0; x < accounts.size(); x++) {
+                    if (accounts.get(x).getUsername().equalsIgnoreCase(user)) {
+                        correctUser = accounts.get(x);
+                    }
+                }
+
+                System.out.println(correctUser.toString());
 
             } else if (action == 7) { //logout
                 loggedOut = true;
