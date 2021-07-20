@@ -513,7 +513,7 @@ public class Application {
 		//TODO: the comment should be added under action 5--view all post
 
             } else if (action == 5) { //view other people's posts
-                //TODO
+                //TODO: @Mingrui will implement this soon
 
             } else if (action == 6) { //search for a specific user
                 ArrayList <Account> accounts = getAccounts(); //this will be a method to retrieve all users from
