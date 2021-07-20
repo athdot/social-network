@@ -28,6 +28,14 @@ public class Post {
         comments = new ArrayList<Comment>();
     }
     
+    public Post(Post post) {
+    	this.title = post.getTitle();
+    	this.author = post.getAuthor();
+    	this.content = post.getContent();
+    	timeStamp = post.getTimeStamp();
+    	comments = post.getComments();
+    }
+    
     //Set the timestamp
     public void setTimeStamp(Date date) {
     	timeStamp = date;

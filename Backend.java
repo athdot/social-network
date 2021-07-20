@@ -125,9 +125,16 @@ public class Backend {
 			//editTitle[oldTitle, postAuthor, newTitle]
 			String[] textData = unpack(request, "editTitle[").split(",");
 			Post post = data.getPost(textData[0], textData[1]);
-			data.deletePost(post);
-			post.setTitle(textData[2]);
-			data.setPost(post);
+			Post newPost = new Post(post);
+			newPost.setTitle(textData[2]);
+			
+			if (!data.postExists(newPost)) {
+				data.deletePost(post);
+				data.setPost(newPost);
+				return "true";
+			} else {
+				return "false";
+			}
 		} else if (request.indexOf("deletePost[") == 0) {
 			//deletePost[title, author]
 			String[] textData = unpack(request, "deletePost[").split(",");

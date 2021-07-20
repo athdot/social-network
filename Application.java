@@ -91,6 +91,7 @@ public class Application {
     //strings pertaining to post creation
     private final static String postTitlePrompt = "Enter a Post Title: ";
     private final static String postContentPrompt = "Enter the Post's Message: ";
+    private final static String onePostName = "You cannot name a post the same name twice!";
 
     //strings pertaining to post editing/deletion
     private final static String postChoicePrompt = "Enter the number of the post you would like to edit"
@@ -263,7 +264,6 @@ public class Application {
     }
 
     public void editPost(Post post) {
-        Scanner scanner = new Scanner(System.in);
         int action = 0; //default to zero to prevent
         do {
             System.out.println(editPost);
@@ -286,20 +286,32 @@ public class Application {
         if (action == 1) { //edit title
             System.out.println(newPostTitlePrompt);
             //post.editTitle(user.getUsername(),scanner.nextLine());
-
+            boolean goodTitle = false;
+            String newTitle;
+            do {
+            	newTitle = scanner.nextLine();
+            	String input = "editTitle[" + post.getTitle() + "," + post.getAuthor() + "," + newTitle + "]";
+            	input = server.streamReader(input);
+            	
+            	goodTitle = input.equals("true");
+            	if (!goodTitle) {
+            		System.out.println(onePostName);
+            	}
+            } while(!goodTitle);
+            
+            String postUpdate = server.streamReader("getPost[" + newTitle + "," + post.getAuthor() + "]");
+            post = StreamParse.stringToPost(postUpdate);
+            
         } else if (action == 2) { //edit content
             System.out.println(newPostContentPrompt);
             //post.editComment(user.getUsername(),scanner.nextLine());
-
-        } else if (action == 3) { // edit author name
-            System.out.println("Enter new Author Name: ");
-            //post.editAuthor(user.getUsername(),scanner.nextLine());
-
-        } else if (action == 4) { //delete post
+            String content = scanner.nextLine();
+            server.streamReader("editPost[" + post.getTitle() + "," + post.getAuthor() + "," + content + "]");
+        } else if (action == 3) { //delete post
             System.out.println(deletionConfirmation);
             String response = scanner.nextLine();
             if (response.equalsIgnoreCase("y")) {
-                user.getPosts().remove(post);
+                server.streamReader("deletePost[" + post.getTitle() +  "," + post.getAuthor() + "]");
             }
         }
     }
@@ -364,15 +376,26 @@ public class Application {
                 yourProfile();
 
             } else if (action == 2) { //create post
-                System.out.println(postTitlePrompt); //get title
-                String title = scanner.nextLine();
-                System.out.println(postContentPrompt); //get message
-                String content = scanner.nextLine();
-                //user.addPost(new Post(title, user.getUsername(), content,user)); //add it to the list of posts
-
+            	boolean postSuccess = false;
+            	do {
+            		System.out.println(postTitlePrompt); //get title
+            		String title = scanner.nextLine();
+            		System.out.println(postContentPrompt); //get message
+            		String content = scanner.nextLine();
+                
+            		//Cannot create multiple posts of the same name
+            		String worked = server.streamReader("post[" + title + "," + content +"]");
+            		postSuccess = worked.equals("true");
+            		
+            		if (!postSuccess) {
+            			System.out.println(onePostName);
+            		}
+            		//user.addPost(new Post(title, user.getUsername(), content,user)); //add it to the list of posts
+            	} while (!postSuccess);
             } else if (action == 3) { //view and edit your posts
                 //display posts from this user with numbers beside them
-                ArrayList<Post> posts = user.getPosts();
+                String stream = server.streamReader("getUserPosts[" + localUsername + "]");
+                ArrayList<Post> posts = StreamParse.stringToPosts(stream);
                 for (int x = 0; x < posts.size(); x++) {
                     System.out.println("Post " + (x + 1) + posts.get(x).toString() + "\n");
                 }
@@ -380,6 +403,10 @@ public class Application {
                 //display option to edit a post and get input
                 int postChoice = 0; //default to zero to prevent ide errors
                 do {
+                	if (posts.size() == 0) {
+                		System.out.println("You have no posts!");
+                		break;
+                	}
                     System.out.println(postChoicePrompt);
                     try {
                         postChoice = scanner.nextInt();
@@ -434,16 +461,16 @@ public class Application {
                         scanner.nextLine();
                         commentEdited = scanner.nextLine();
                         //edit comments under the "Post" object
-                        dm.getUserPosts(user.getUsername()).get(postChoice - 1).getComments().
-                                get(editCommentChoice - 1).editComment(dm.getUserPosts(user.getUsername()).
-                                        get(postChoice - 1), user.getUsername(), commentEdited);
+                        //dm.getUserPosts(user.getUsername()).get(postChoice - 1).getComments().
+                                //get(editCommentChoice - 1).editComment(dm.getUserPosts(user.getUsername()).
+                                        //get(postChoice - 1), user.getUsername(), commentEdited);
                         //save to database
-                        dm.setPost(dm.getUserPosts(user.getUsername()).get(postChoice - 1));
+                        //dm.setPost(dm.getUserPosts(user.getUsername()).get(postChoice - 1));
                     } else if (editCommentChoice == 2) {
                         //edit comments to "delete" the "Post" object
-                        dm.getUserPosts(user.getUsername()).get(postChoice).getComments().
-                                get(editCommentChoice - 1).editComment(dm.getUserPosts(user.getUsername())
-                                        .get(postChoice - 1), user.getUsername(), "deleted");
+                        //dm.getUserPosts(user.getUsername()).get(postChoice).getComments().
+                                //get(editCommentChoice - 1).editComment(dm.getUserPosts(user.getUsername())
+                                        //.get(postChoice - 1), user.getUsername(), "deleted");
                         //save to database
                         dm.setPost(dm.getUserPosts(user.getUsername()).get(postChoice));
                     } else if (editCommentChoice == 3) {

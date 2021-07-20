@@ -60,6 +60,10 @@ public class StreamParse {
 	}
 	
 	public static String postsToString(ArrayList<Post> posts) {
+		if (posts.size() == 0) {
+			return "";
+		}
+		
 		String output = postToString(posts.get(0));
 		
 		for (int i = 1; i < posts.size(); i++) {
@@ -88,6 +92,10 @@ public class StreamParse {
 	}
 	
 	public static ArrayList<Post> stringToPosts(String posts){
+		if (posts.equals("")) {
+			return new ArrayList<Post>();
+		}
+		
 		String[] postInput = posts.split("\n\n");
 		ArrayList<Post> output = new ArrayList<Post>();
 		
