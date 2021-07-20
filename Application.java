@@ -352,22 +352,22 @@ public class Application {
                 quit = true;
                 System.out.println(exit);
                 return;
-            } else if (action > 4 || action < 1) {
+            } else if (action > 5 || action < 1) {
                 System.out.println(actionCorrection);
             }
-        } while (action > 4 || action < 1);
+        } while (action > 5 || action < 1);
 
         if (action == 1) { //edit title
             System.out.println(newPostTitlePrompt);
-            edit.editTitle(post,post.getAuthor(),scanner.nextLine());
+            post.editTitle(post.getTitle(),scanner.nextLine());
 
         } else if (action == 2) { //edit content
             System.out.println(newPostContentPrompt);
-            edit.editComment(post,post.getAuthor(),scanner.nextLine());
+            post.editComment(post.getContent(),scanner.nextLine());
 
         } else if (action == 3) { // edit author name
-            System.out.println("Enter new author name: ");
-            edit.editAuthor(post,post.getAuthor(),scanner.nextLine());
+            System.out.println("Enter new Author Name: ");
+            post.editAuthor(post.getAuthor(),scanner.nextLine());
 
         } else if (action == 4) { //delete post
             System.out.println(deletionConfirmation);
@@ -377,6 +377,7 @@ public class Application {
             }
         }
     }
+	
     public void viewUsersPosts(Account user) {
         Scanner scanner = new Scanner(System.in);
         int action = 0; //default to zero to prevent
