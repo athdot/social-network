@@ -14,7 +14,6 @@ import java.util.Scanner;
 public class Application {
 
     private Account user; //remember the user who is signed in to this instance of the app
-    private Comment edit;
     private Post post;
     private boolean quit = false; //becomes true if user enters 0 for action. Program terminates
 
@@ -366,7 +365,7 @@ public class Application {
             post.editComment(post.getContent(),scanner.nextLine());
 
         } else if (action == 3) { // edit author name
-            System.out.println("Enter new Author Name: ");
+            System.out.println("Enter new author name: ");
             post.editAuthor(post.getAuthor(),scanner.nextLine());
 
         } else if (action == 4) { //delete post
