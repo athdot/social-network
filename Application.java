@@ -14,6 +14,7 @@ import java.util.Scanner;
 public class Application {
 
     private Account user; //remember the user who is signed in to this instance of the app
+    private Post post;
     private boolean quit = false; //becomes true if user enters 0 for action. Program terminates
 
     private final static String accountFilename = "accountInfo.csv"; //file that remembers accounts
@@ -57,6 +58,13 @@ public class Application {
             | 3. Delete Post                                   |
             | 4. Back                                          |
             +--------------------------------------------------+""";
+    private final static String viewUserOptions = "\n" + chooseAction + """
+            +--------------------------------------------------+
+            | VIEW USER                                        |
+            | 1. View Profile                                  |
+            | 2. View Posts                                    |
+            | 3. Back                                          |
+            +--------------------------------------------------+""";
 
     //string constants for login section
     private final static String actionCorrection = "Invalid Action";
@@ -91,6 +99,8 @@ public class Application {
 
     //strings pertaining to search users
     private final static String searchRequest = "Enter the username of the user you want to view: ";
+    private final static String userNotFound = "There is no user with that username.";
+    private final static String userFound = "Search successful. User found.";
 
     private final static String logout = "Logging Out...";
     private final static String exit = "Exiting...";
@@ -228,6 +238,7 @@ public class Application {
         } while (!validCredentials); //continue to prompt login screen until user provides valid credentials
     }
 
+    // Deals with username and password
     public void yourProfile() {
 
         boolean goBack = false;
@@ -243,7 +254,7 @@ public class Application {
             scanner.nextLine();
 
             //if it's an invalid action, say so
-            if (action < 1 || action > 4) {
+            if (action < 1 || action > 6) {
                 System.out.println(actionCorrection);
             } else if (action == 4) {
                 goBack = true;
@@ -311,7 +322,12 @@ public class Application {
                 //update username
                 user.setUsername(username);
                 //TODO: update username instances in files - will this be a method in account class?
-
+            // User can choose to computer generate a username
+            } else if (action == 5) {
+                user.computerGenerateName(user.getUsername());
+            // User can choose to computer generate a password
+            } else if (action == 6) {
+                user.computerGenerateName(user.getPassword());
             } else { //change bio
                 System.out.println(newBioPrompt);
                 user.setBio(scanner.nextLine());
@@ -335,24 +351,59 @@ public class Application {
                 quit = true;
                 System.out.println(exit);
                 return;
-            } else if (action > 4 || action < 1) {
+            } else if (action > 5 || action < 1) {
                 System.out.println(actionCorrection);
             }
-        } while (action > 4 || action < 1);
+        } while (action > 5 || action < 1);
 
         if (action == 1) { //edit title
             System.out.println(newPostTitlePrompt);
-            String title = scanner.nextLine();
-            post.setTitle(title);
+            post.editTitle(post.getTitle(),scanner.nextLine());
+
         } else if (action == 2) { //edit content
             System.out.println(newPostContentPrompt);
-            String content = scanner.nextLine();
-            post.setContent(content);
-        } else if (action == 3) { //delete post
+            post.editComment(post.getContent(),scanner.nextLine());
+
+        } else if (action == 3) { // edit author name
+            System.out.println("Enter new author name: ");
+            post.editAuthor(post.getAuthor(),scanner.nextLine());
+
+        } else if (action == 4) { //delete post
             System.out.println(deletionConfirmation);
             String response = scanner.nextLine();
             if (response.equalsIgnoreCase("y")) {
                 user.getPosts().remove(post);
+            }
+        }
+    }
+	
+    public void viewUsersPosts(Account user) {
+        Scanner scanner = new Scanner(System.in);
+        int action = 0; //default to zero to prevent
+        do {
+            System.out.println(viewUserOptions);
+            try {
+                action = scanner.nextInt();
+                scanner.nextLine();
+            } catch (InputMismatchException inputMismatchException) {
+                System.out.println(actionCorrection);
+                continue;
+            }
+            if (action == 0) { //anytime the user enters a 0 for an action, quit
+                quit = true;
+                System.out.println(exit);
+                return;
+            } else if (action > 4 || action < 1) {
+                System.out.println(actionCorrection);
+            }
+        } while (action > 3 || action < 1);
+
+        if (action == 1) {
+            System.out.println(user.toString());
+        } else if (action == 2) {
+            ArrayList<Post> posts = user.getPosts();
+            for (int x = 0; x < posts.size(); x++) {
+                System.out.println(posts.get(x).toString());
             }
         }
     }
@@ -422,42 +473,13 @@ public class Application {
                 if (postChoice > 0) {
                     editPost(posts.get(postChoice - 1));
                 }
-            } else if (action == 4) { //view and edit all your comments
-                // TODO: those comments should change name to "received comments" and supposed to move the action 3!
-                DataManagement dm = new DataManagement();
-                ArrayList<Post> posts = dm.getUserPosts(user.getUsername());
-                //find specific user's posts with comments
-                /*for (int i = 0; i < dm.getUserPosts(user.getUsername()).size(); i++) {
-                    System.out.println("Post " + (i + 1) + posts.get(i).toString() + "\n");
-                    if (posts.get(i).getComments().get(i) != null) {  //if there are comments
-                        for (int j = 0; j < posts.get(i).getComments().size(); j++) {
-                            System.out.println("Comments " + (j + 1) + posts.get(i).getComments().get(j).toString());
-                        }
-                    }
-                }*/
-                //edit the comments
-                int editCommentChoice = 0;
-                int postChoice = 0;
-                String commentEdited = "";
-                do {
-                    System.out.println("Select the post you want to edit your comment(s)");
-                    postChoice = scanner.nextInt();  //minus one to get the true position
-                    System.out.println(dm.getUserPosts(user.getUsername()).get(postChoice).toString());
-                    System.out.println("Enter the number of comment you want to edit");
-                    editCommentChoice = scanner.nextInt();
-                    if (postChoice >= posts.size() || postChoice < -1) {
-                        break;
-                    }
-                    scanner.nextLine();
-                    commentEdited = scanner.nextLine();
-                    //edit comments under the "Post" object
-                    dm.getUserPosts(user.getUsername()).get(postChoice).getComments().
-                            get(editCommentChoice).editComment(dm.getUserPosts(user.getUsername()).get(postChoice),
-                            user.getUsername(), commentEdited);
-                    //save to database
-                    dm.setPost(dm.getUserPosts(user.getUsername()).get(postChoice));
-                } while (postChoice > posts.size() || postChoice < -1);
 
+            } else if (action == 4) { //view and edit all your comments
+                //TODO
+		for (int i = 0; i < user.getPosts().size(); i++) {
+                    ArrayList<Comment> comments = user.getPosts().get(i).getComments();
+                    System.out.println("Post " + (i + 1) + "\n" + comments.get(i).toString() + "\n");
+                }
 		//TODO: the comment should be added under action 5--view all post
 
             } else if (action == 5) { //view other people's posts
@@ -474,6 +496,13 @@ public class Application {
                     if (accounts.get(x).getUsername().equalsIgnoreCase(user)) {
                         correctUser = accounts.get(x);
                     }
+                }
+
+                if (correctUser == null) {//if no user is found
+                    System.out.println(userNotFound);
+                } else {
+                    System.out.println(userFound);
+                    viewUsersPosts(correctUser);
                 }
 
                 System.out.println(correctUser.toString());

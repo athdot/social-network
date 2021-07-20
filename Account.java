@@ -94,7 +94,7 @@ public class Account {
     	return output.toArray(new String[0]);
     }
     
-    // Generates a random username or password
+   // Generates a random username or password
     public void computerGenerateName(String select) {
         Scanner scan = new Scanner(System.in);
         Random rand = new Random();
@@ -111,12 +111,15 @@ public class Account {
         scan.nextLine();
 
         try {
+	    // Program allows user to keep their old name if they later decide
+	    // to opt out of computer generated name chooser
             if (generate != 1 && select != "") {
                 System.out.println(select);
+		    
+            // Formulates a randomized username unique to user
             } else if (generate == 1) {
-                // Formulate a randomized username unique to user
                 String characters = "!/$%^&*#@+=";
-
+		    
                 // Generate a random integer from 0 - 3000000
                 int randomize = rand.nextInt(3000000);
 
@@ -140,13 +143,49 @@ public class Account {
                     setPassword(name + randomize + randChar);
                     System.out.println(getPassword());
                 }
+		    
+	    // User can choose to create their own name if they don't want
+	    // a computer generated name    
+            } else if (generate != 1 && (select == "") {
+                if (select.equals(getUsername())) {
+                    System.out.println("Create new username");
+                    select = scan.nextLine();
+                    setUsername(select);
+                } else if (select.equals(getPassword())) {
+                    System.out.println("Create new password");
+                    select = scan.nextLine();
+                    setPassword(select);
+                }
+		    
+		// Loop until there are no spaces or username hasn't been taken
+                while (select.contains(" ") || usernameIsTaken) {
+                    if (select.contains(" ")) {
+                        System.out.println("Usernames Shouldn't Have Spaces");
+                        System.out.println("Try Again");
+                        select = scan.nextLine();
+                        if (select.equals(getUsername())) {
+                            setUsername(select);
+                        } else if (select.equals(getPassword())) {
+                            setPassword(select);
+                        }
+                    } else if (usernameIsTaken == true) {
+                        System.out.println("Username is Taken");
+                        System.out.println("Try Again");
+                        select = scan.nextLine();
+                        if (select.equals(getUsername())) {
+                            setUsername(select);
+                        } else if (select.equals(getPassword())) {
+                            setPassword(select);
+                        }
+                    }
+                } 
             }
         } catch (RuntimeException e) {
             e.printStackTrace();
             System.out.println("Unable to randomize!");
         }
     }
-
+	
     //TODO: Remove me, for testing
     public String getPassword() {
     	return password;
