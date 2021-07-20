@@ -27,6 +27,9 @@ public class Account {
     private ArrayList<Post> posts;
     private ArrayList<Comment> comments;
 
+    private List<Account> accountInfo;
+    private String profileFile = "profile.csv";
+
     
     public Account(String username, String password) {
         //TODO: Check if user exists, and if they do output error?
@@ -39,7 +42,16 @@ public class Account {
 
     public Account(String accountInfo) {
         //TODO: Code later, once we have code to save a Account
-
+	Arrays.asList(getUsername(), getPassword());
+        try {
+            FileWriter fw = new FileWriter(profileFile);
+            for (Account rowValue : this.accountInfo) {
+                fw.append(String.join(",", (CharSequence) rowValue));
+                fw.append("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void saveAccount() { //save account to file
