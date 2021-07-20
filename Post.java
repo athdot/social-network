@@ -63,6 +63,65 @@ public class Post {
         return title;
     }
     
+    public void editComment(String author, String newContent) {
+        // Encases old comment to be replaced with the new comment
+        String regex = "(.*)" + getContent() + "(.*)";
+
+        try {
+            if (getAuthor().equals(author)) {
+                String editComment = getContent().replaceAll(regex, newContent);
+                setContent(editComment);
+                System.out.println(getContent());
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            System.out.println("Author not found! Comment wasn't able to edit");
+        } finally {
+            System.out.print("");
+        }
+        }
+
+    public void editAuthor(String author, String newAuthor) {
+        // Encases old author name to be replaced with the new author
+        String regex = "(.*)" + getAuthor() + "(.*)";
+
+        try {
+            // Makes sure that only author can edit
+            if (getAuthor().equals(author)) {
+                // Replace original author name with the new author name;
+                String editAuthor = getAuthor().replaceAll(regex, newAuthor);
+                setAuthor(editAuthor);
+                System.out.println(getAuthor());
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            System.out.println("Author not found! Author wasn't able to edit");
+        } finally {
+            System.out.print("");
+        }
+    }
+    
+
+    public void editTitle(String author, String newTitle) {
+        // Encases old title to be replaced with the new title
+        String regex = "(.*)" + getTitle() + "(.*)";
+
+        try {
+            // Makes sure that only author can edit
+            if (getAuthor().equals(author)) {
+                // Replaces old title with new title
+                String editTitle = getTitle().replaceAll(regex, newTitle);
+                setTitle(editTitle);
+                System.out.println(getTitle());
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            System.out.println("Author not found! Title wasn't able to edit");
+        } finally {
+            System.out.print("");
+        }
+    }
+    
     //toFile function
     public String[] toFile() {
     	ArrayList<String> output = new ArrayList<String>();
