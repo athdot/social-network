@@ -56,8 +56,9 @@ public class Application {
             | EDIT POST                                        |
             | 1. Edit Title                                    |
             | 2. Edit Content                                  |
-            | 3. Delete Post                                   |
-            | 4. Back                                          |
+            | 3. Add a Comment                                 |
+            | 4. Delete Post                                   |
+            | 5. Back                                          |
             +--------------------------------------------------+""";
     private final static String viewUserOptions = "\n" + chooseAction + """
             +--------------------------------------------------+
@@ -99,6 +100,7 @@ public class Application {
     private final static String newPostTitlePrompt = "Enter a new Post Title: ";
     private final static String newPostContentPrompt = "Enter the Post's new Message: ";
     private final static String deletionConfirmation = "Are you sure you would like to delete this post? (Y/N): ";
+    private final static String createComment = "Enter your comment: ";
 
     //strings pertaining to search users
     private final static String searchRequest = "Enter the username of the user you want to view: ";
@@ -307,7 +309,11 @@ public class Application {
             //post.editComment(user.getUsername(),scanner.nextLine());
             String content = scanner.nextLine();
             server.streamReader("editPost[" + post.getTitle() + "," + post.getAuthor() + "," + content + "]");
-        } else if (action == 3) { //delete post
+        } else if (action == 3) { //add comment
+        	System.out.println(createComment);
+        	String newComment = scanner.nextLine();
+        	server.streamReader("addComment[" + post.getTitle() + "," + post.getAuthor() + "," + newComment + "]");
+    	} else if (action == 4) { //delete post
             System.out.println(deletionConfirmation);
             String response = scanner.nextLine();
             if (response.equalsIgnoreCase("y")) {
