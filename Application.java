@@ -396,7 +396,7 @@ public class Application {
                 }
 
             } else if (action == 4) { //view and edit all your comments
-                // TODO: those comments should change name to "received comments" and supposed to move the action 3!
+                // TODO: those commentted out stuffs would should the user's all posts with comments
                 DataManagement dm = new DataManagement();
                 ArrayList<Post> posts = dm.getUserPosts(user.getUsername());
                 //find specific user's posts with comments
@@ -413,22 +413,37 @@ public class Application {
                 int postChoice = 0;
                 String commentEdited = "";
                 do {
-                    System.out.println("Select the post you want to edit your comment(s)");
-                    postChoice = scanner.nextInt();  //minus one to get the true position
-                    System.out.println(dm.getUserPosts(user.getUsername()).get(postChoice).toString());
-                    System.out.println("Enter the number of comment you want to edit");
-                    editCommentChoice = scanner.nextInt();
-                    if (postChoice >= posts.size() || postChoice < -1) {
-                        break;
+                    do {
+                        System.out.println("Select the post you want to edit your comment(s)");
+                        postChoice = scanner.nextInt();  //minus one to get the true position
+                    } while (postChoice >= posts.size() || postChoice < -1);
+                    do {
+                        System.out.println(dm.getUserPosts(user.getUsername()).get(postChoice - 1).toString());
+                        System.out.println("1. Enter the number of comment you want to edit\n"
+                                + "2. Enter the number of comment you want to delete\n"
+                                + "3. back to main menu");
+                        editCommentChoice = scanner.nextInt();
+                    } while (editCommentChoice < 1 || editCommentChoice > 3);
+                    
+                    if (editCommentChoice == 1) {
+                        scanner.nextLine();
+                        commentEdited = scanner.nextLine();
+                        //edit comments under the "Post" object
+                        dm.getUserPosts(user.getUsername()).get(postChoice - 1).getComments().
+                                get(editCommentChoice - 1).editComment(dm.getUserPosts(user.getUsername()).
+                                        get(postChoice - 1), user.getUsername(), commentEdited);
+                        //save to database
+                        dm.setPost(dm.getUserPosts(user.getUsername()).get(postChoice - 1));
+                    } else if (editCommentChoice == 2) {
+                        //edit comments to "delete" the "Post" object
+                        dm.getUserPosts(user.getUsername()).get(postChoice).getComments().
+                                get(editCommentChoice - 1).editComment(dm.getUserPosts(user.getUsername())
+                                        .get(postChoice - 1), user.getUsername(), "deleted");
+                        //save to database
+                        dm.setPost(dm.getUserPosts(user.getUsername()).get(postChoice));
+                    } else if (editCommentChoice == 3) {
+                        break;  // return to main menu
                     }
-                    scanner.nextLine();
-                    commentEdited = scanner.nextLine();
-                    //edit comments under the "Post" object
-                    //dm.getUserPosts(user.getUsername()).get(postChoice).getComments().
-                    //        get(editCommentChoice).editComment(dm.getUserPosts(user.getUsername()).get(postChoice),
-                    //        user.getUsername(), commentEdited);
-                    //save to database
-                    dm.setPost(dm.getUserPosts(user.getUsername()).get(postChoice));
                 } while (postChoice > posts.size() || postChoice < -1);
 		    
 		//TODO: the comment should be added under action 5--view all post
