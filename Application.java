@@ -358,14 +358,14 @@ public class Application {
 
         if (action == 1) { //edit title
             System.out.println(newPostTitlePrompt);
-            post.editTitle(post.getTitle(),scanner.nextLine());
+            post.editTitle(post.getAuthor(),scanner.nextLine());
 
         } else if (action == 2) { //edit content
             System.out.println(newPostContentPrompt);
-            post.editComment(post.getContent(),scanner.nextLine());
+            post.editComment(user.getUsername(),scanner.nextLine());
 
         } else if (action == 3) { // edit author name
-            System.out.println("Enter new author name: ");
+            System.out.println("Enter new Author Name: ");
             post.editAuthor(post.getAuthor(),scanner.nextLine());
 
         } else if (action == 4) { //delete post
