@@ -17,16 +17,15 @@ public class Post {
     private String author;
     private String content;
     private Date timeStamp;
-    private Account info;
-    private String filename;
+    private ArrayList<Comment> comments;
     //private ArrayList<Message> lowerMessages //For later
 
-    public Post(String title, String author, String content, Account info) {
+    public Post(String title, String author, String content) {
         this.title = title;
         this.author = author;
         this.content = content;
         timeStamp = new Date();
-        this.info = info;
+        comments = new ArrayList<Comment>();
     }
     
     //Set the timestamp
@@ -62,65 +61,6 @@ public class Post {
     //Get title
     public String getTitle() {
         return title;
-    }
-    
-    public void editComment(String username, String newContent) {
-        // Encases old comment to be replaced with the new comment
-        String regex = "(.*)" + getContent() + "(.*)";
-
-        try {
-            if (info.getUsername().equals(username)) {
-                String editComment = getContent().replaceAll(regex, newContent);
-                setContent(editComment);
-                System.out.println(getContent());
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
-            System.out.println("Username not found! Comment wasn't able to edit");
-        } finally {
-            System.out.print("");
-        }
-    }
-
-    public void editAuthor(String username, String newAuthor) {
-        // Encases old author name to be replaced with the new author
-        String regex = "(.*)" + getAuthor() + "(.*)";
-
-        try {
-            // Makes sure that only author can edit
-            if (info.getUsername().equals(username)) {
-                // Replace original author name with the new author name;
-                String editAuthor = getAuthor().replaceAll(regex, newAuthor);
-                setAuthor(editAuthor);
-                System.out.println(getAuthor());
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
-            System.out.println("Author not found! Author wasn't able to edit");
-        } finally {
-            System.out.print("");
-        }
-    }
-
-
-    public void editTitle(String username, String newTitle) {
-        // Encases old title to be replaced with the new title
-        String regex = "(.*)" + getTitle() + "(.*)";
-
-        try {
-            // Makes sure that only author can edit
-            if (info.getUsername().equals(username)) {
-                // Replaces old title with new title
-                String editTitle = getTitle().replaceAll(regex, newTitle);
-                setTitle(editTitle);
-                System.out.println(getTitle());
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
-            System.out.println("Author not found! Title wasn't able to edit");
-        } finally {
-            System.out.print("");
-        }
     }
     
     //toFile function

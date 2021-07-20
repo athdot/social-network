@@ -87,6 +87,25 @@ public class DataManagement {
     	return -1;
     }
     
+    public void findAndReplaceAll(String filename, String find, String replace) {
+    	ArrayList<String[]> blockFile = readFile(filename);
+    	
+    	for (int i = 0; i < blockFile.size(); i++) {
+    		String[] block = blockFile.get(i);
+    		for (int j = 0; j < block.length; i++) {
+    			block[j] = block[j].replaceAll(find, replace);
+    		}
+    		blockFile.set(i, block);
+    	}
+    	
+    	writeFile(filename, blockFile);
+    }
+    
+    public boolean postExists(Post post) {
+    	ArrayList<String[]> profileList = readFile("profile.csv");
+    	return (getPost(profileList, post.getTitle(), post.getAuthor()) > -1);
+    }
+    
     //This method turns a post 'block' into a post object, essentially parsing it
     public Post toPost(String[] postInput) {
     	//Creates a post from text
@@ -149,13 +168,31 @@ public class DataManagement {
     		//Check main author
     		if (block[2].split(",")[0].equals(user)) {
     			postList.add(toPost(block));
-    		} else {
-    			for (int j = 3; j < block.length; j++) {
-    				if (block[j].split(",")[0].equals(user)) {
-    	    			postList.add(toPost(block));
-    	    			break;
-    	    		}
-    			}
+    		}
+    	}
+    	
+    	return postList;
+    }
+    
+    public Post getPost(String title, String author) {
+    	ArrayList<String[]> recentPosts = readFile("post.csv");
+    	int index = getPost(recentPosts, title, author);
+    	return toPost(recentPosts.get(index));
+    }
+    
+    public ArrayList<Post> getUserComments(String user) {
+    	ArrayList<String[]> recentPosts = readFile("post.csv");
+    	ArrayList<Post> postList = new ArrayList<Post>();
+    	
+    	for (int i = 0; i < recentPosts.size(); i++) {
+    		String[] block = recentPosts.get(i);
+    		//Check main author
+    		
+    		for (int j = 3; j < block.length; j++) {
+    			if (block[j].split(",")[0].equals(user)) {
+    	    		postList.add(toPost(block));
+    	    		break;
+    	    	}
     		}
     	}
     	
@@ -169,9 +206,15 @@ public class DataManagement {
     	return output;
     }
     
+    
     public Account getAccount(String accountName) {
     	ArrayList<String[]> profileList = readFile("profile.csv");
     	return toAccount(profileList.get(getAccountIndex(profileList, accountName)));
+    }
+    
+    public boolean accountExists(String accountName) {
+    	ArrayList<String[]> profileList = readFile("profile.csv");
+    	return (getAccountIndex(profileList, accountName) > -1);
     }
     
     //This method gets the index in the file of an account
