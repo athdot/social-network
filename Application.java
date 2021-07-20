@@ -14,6 +14,8 @@ import java.util.Scanner;
 public class Application {
 
     private Account user; //remember the user who is signed in to this instance of the app
+    private Comment edit;
+    private Post post;
     private boolean quit = false; //becomes true if user enters 0 for action. Program terminates
 
     private final static String accountFilename = "accountInfo.csv"; //file that remembers accounts
@@ -237,6 +239,7 @@ public class Application {
         } while (!validCredentials); //continue to prompt login screen until user provides valid credentials
     }
 
+    // Deals with username and password
     public void yourProfile() {
 
         boolean goBack = false;
@@ -252,7 +255,7 @@ public class Application {
             scanner.nextLine();
 
             //if it's an invalid action, say so
-            if (action < 1 || action > 4) {
+            if (action < 1 || action > 6) {
                 System.out.println(actionCorrection);
             } else if (action == 4) {
                 goBack = true;
@@ -320,7 +323,12 @@ public class Application {
                 //update username
                 user.setUsername(username);
                 //TODO: update username instances in files - will this be a method in account class?
-
+            // User can choose to computer generate a username
+            } else if (action == 5) {
+                user.computerGenerateName(user.getUsername());
+            // User can choose to computer generate a password
+            } else if (action == 6) {
+                user.computerGenerateName(user.getPassword());
             } else { //change bio
                 System.out.println(newBioPrompt);
                 user.setBio(scanner.nextLine());
@@ -351,13 +359,17 @@ public class Application {
 
         if (action == 1) { //edit title
             System.out.println(newPostTitlePrompt);
-            String title = scanner.nextLine();
-            post.setTitle(title);
+            edit.editTitle(post,post.getAuthor(),scanner.nextLine());
+
         } else if (action == 2) { //edit content
             System.out.println(newPostContentPrompt);
-            String content = scanner.nextLine();
-            post.setContent(content);
-        } else if (action == 3) { //delete post
+            edit.editComment(post,post.getAuthor(),scanner.nextLine());
+
+        } else if (action == 3) { // edit author name
+            System.out.println("Enter new Author Name: ");
+            edit.editComment(post,post.getAuthor(),scanner.nextLine());
+
+        } else if (action == 4) { //delete post
             System.out.println(deletionConfirmation);
             String response = scanner.nextLine();
             if (response.equalsIgnoreCase("y")) {
@@ -365,7 +377,6 @@ public class Application {
             }
         }
     }
-
     public void viewUsersPosts(Account user) {
         Scanner scanner = new Scanner(System.in);
         int action = 0; //default to zero to prevent
