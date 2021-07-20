@@ -94,7 +94,7 @@ public class Account {
     	return output.toArray(new String[0]);
     }
     
-    // Generates a random username or password
+   // Generates a random username or password
     public void computerGenerateName(String select) {
         Scanner scan = new Scanner(System.in);
         Random rand = new Random();
@@ -140,13 +140,44 @@ public class Account {
                     setPassword(name + randomize + randChar);
                     System.out.println(getPassword());
                 }
+            } else if (generate != 1 && select == "") {
+                if (select.equals(getUsername())) {
+                    System.out.println("Create new username");
+                    select = scan.nextLine();
+                    setUsername(select);
+                } else if (select.equals(getPassword())) {
+                    System.out.println("Create new password");
+                    select = scan.nextLine();
+                    setPassword(select);
+                }
+                while (select.contains(" ") || usernameIsTaken) {
+                    if (select.contains(" ")) {
+                        System.out.println("Usernames Shouldn't Have Spaces");
+                        System.out.println("Try Again");
+                        select = scan.nextLine();
+                        if (select.equals(getUsername())) {
+                            setUsername(select);
+                        } else if (select.equals(getPassword())) {
+                            setPassword(select);
+                        }
+                    } else if (usernameIsTaken == true) {
+                        System.out.println("Username is Taken");
+                        System.out.println("Try Again");
+                        select = scan.nextLine();
+                        if (select.equals(getUsername())) {
+                            setUsername(select);
+                        } else if (select.equals(getPassword())) {
+                            setPassword(select);
+                        }
+                    }
+                } 
             }
         } catch (RuntimeException e) {
             e.printStackTrace();
             System.out.println("Unable to randomize!");
         }
     }
-
+	
     //TODO: Remove me, for testing
     public String getPassword() {
     	return password;
