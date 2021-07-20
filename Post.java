@@ -63,31 +63,31 @@ public class Post {
         return title;
     }
     
-    public void editComment(String author, String newContent) {
+    public void editComment(String username, String newContent) {
         // Encases old comment to be replaced with the new comment
         String regex = "(.*)" + getContent() + "(.*)";
 
         try {
-            if (getAuthor().equals(author)) {
+            if (info.getUsername().equals(username)) {
                 String editComment = getContent().replaceAll(regex, newContent);
                 setContent(editComment);
                 System.out.println(getContent());
             }
         } catch(Exception e) {
             e.printStackTrace();
-            System.out.println("Author not found! Comment wasn't able to edit");
+            System.out.println("Username not found! Comment wasn't able to edit");
         } finally {
             System.out.print("");
         }
-        }
+    }
 
-    public void editAuthor(String author, String newAuthor) {
+    public void editAuthor(String username, String newAuthor) {
         // Encases old author name to be replaced with the new author
         String regex = "(.*)" + getAuthor() + "(.*)";
 
         try {
             // Makes sure that only author can edit
-            if (getAuthor().equals(author)) {
+            if (info.getUsername().equals(username)) {
                 // Replace original author name with the new author name;
                 String editAuthor = getAuthor().replaceAll(regex, newAuthor);
                 setAuthor(editAuthor);
@@ -100,15 +100,15 @@ public class Post {
             System.out.print("");
         }
     }
-    
 
-    public void editTitle(String author, String newTitle) {
+
+    public void editTitle(String username, String newTitle) {
         // Encases old title to be replaced with the new title
         String regex = "(.*)" + getTitle() + "(.*)";
 
         try {
             // Makes sure that only author can edit
-            if (getAuthor().equals(author)) {
+            if (info.getUsername().equals(username)) {
                 // Replaces old title with new title
                 String editTitle = getTitle().replaceAll(regex, newTitle);
                 setTitle(editTitle);
