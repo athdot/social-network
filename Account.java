@@ -40,20 +40,6 @@ public class Account {
         saveAccount();
     }
 
-    public Account(String accountInfo) {
-        //TODO: Code later, once we have code to save a Account
-	Arrays.asList(getUsername(), getPassword());
-        try {
-            FileWriter fw = new FileWriter(profileFile);
-            for (Account rowValue : this.accountInfo) {
-                fw.append(String.join(",", (CharSequence) rowValue));
-                fw.append("\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void saveAccount() { //save account to file
         //TODO: Code file mgmt stuff
     }
@@ -98,7 +84,7 @@ public class Account {
     public void computerGenerateName(String select) {
         Scanner scan = new Scanner(System.in);
         Random rand = new Random();
-        usernameIsTaken = false;
+        boolean usernameIsTaken = false;
 
         if (select.equals(getUsername())) {
             System.out.println("Select 1 to generate a unique username or" +
