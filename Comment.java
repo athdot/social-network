@@ -39,9 +39,9 @@ public class Comment {
 
     public String toString() {
         String output = "";
-        output += "| Author: " + author + "\n";
-        output += "| Posted: " + timestamp.toString() + "\n";
-        output += "| >> " + content + "\n";
+        output += "Author: " + author + "\n";
+        output += "Posted: " + timestamp.toString() + "\n";
+        output += ">> " + content + "\n";
         return output;
     }
 }

@@ -93,16 +93,11 @@ public class Post {
 
     //Display message
     public String toString() {
-        String output = "\n";
+        String output = "";
         output += "-- " + title + " --\n";
-        output += "| Author: " + author + "\n";
-        output += "| Posted: " + timeStamp.toString() + "\n";
-        output += "| >> " + content + "\n";
-        
-        for (int i = 0; i < comments.size(); i ++) {
-        	output += "| \n";
-        	output += comments.get(i).toString();
-        }
+        output += "Author: " + author + "\n";
+        output += "Posted: " + timeStamp.toString() + "\n";
+        output += ">> " + content + "\n";
         return output;
     }
 }

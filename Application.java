@@ -56,9 +56,8 @@ public class Application {
             | EDIT POST                                        |
             | 1. Edit Title                                    |
             | 2. Edit Content                                  |
-            | 3. Add a Comment                                 |
-            | 4. Delete Post                                   |
-            | 5. Back                                          |
+            | 3. Delete Post                                   |
+            | 4. Back                                          |
             +--------------------------------------------------+""";
     private final static String viewUserOptions = "\n" + chooseAction + """
             +--------------------------------------------------+
@@ -100,7 +99,6 @@ public class Application {
     private final static String newPostTitlePrompt = "Enter a new Post Title: ";
     private final static String newPostContentPrompt = "Enter the Post's new Message: ";
     private final static String deletionConfirmation = "Are you sure you would like to delete this post? (Y/N): ";
-    private final static String createComment = "Enter your comment: ";
 
     //strings pertaining to search users
     private final static String searchRequest = "Enter the username of the user you want to view: ";
@@ -313,7 +311,7 @@ public class Application {
         	System.out.println(createComment);
         	String newComment = scanner.nextLine();
         	server.streamReader("addComment[" + post.getTitle() + ","+ post.getAuthor() + "," + newComment + "]");
-    	} else if (action == 4) { //delete post
+    	  } else if (action == 4) { //delete post
             System.out.println(deletionConfirmation);
             String response = scanner.nextLine();
             if (response.equalsIgnoreCase("y")) {
@@ -486,8 +484,38 @@ public class Application {
 		    
 		//TODO: the comment should be added under action 5--view all post
 
-            } else if (action == 5) { //view other people's posts
-                //TODO: @Mingrui will implement this soon
+            } else if (action == 5) {  //view all people's posts
+                DataManagement dm = new DataManagement();
+                //print all the post from most recent
+                String postAuthor = "";
+                for (int i = 0; i < 30; i++) {
+                    System.out.println("Post: " + (i + 1) + dm.getRecentPosts(0, 30).get(i).toString() + "\n");
+                }
+                do {
+                    postAuthor = scanner.nextLine();
+                    System.out.println("1. Enter author name that you want to Create a comment" + "\n"
+                            + "2. return to main menu");
+                } while (dm.getUserPosts(postAuthor) == null);
+                //show that user's post
+                //add comments
+                if (postAuthor.equals("2")) {
+                    break;
+                } else {
+                    for (int i = 0; i < dm.getUserPosts(postAuthor).size(); i++) {
+                        System.out.println("Post: " + dm.getUserPosts(postAuthor).get(i).toString() + "\n"); 
+                    }
+                    System.out.println("Enter the number of post you want to add comment");
+                    int postChoice = 0;
+                    postChoice = scanner.nextInt();
+                    try {
+                        String commentEntered = scanner.nextLine();
+                        Comment c = new Comment(user.getUsername(), commentEntered);
+                        dm.getUserPosts(postAuthor).get(postChoice - 1).addComment(c);  //add comment
+                        dm.setPost(dm.getUserPosts(postAuthor).get(postChoice - 1));  //save the added comment to file
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
 
             } else if (action == 6) { //search for a specific user
                 //ArrayList <Account> accounts = getAccounts(); //this will be a method to retrieve all users from
