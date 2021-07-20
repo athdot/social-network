@@ -425,6 +425,7 @@ public class Application {
                     ArrayList<Comment> comments = user.getPosts().get(i).getComments();
                     System.out.println((i + 1) + comments.get(i).toString() + "\n");
                 }
+		//TODO: the comment should be added under action 5--view all post
 
             } else if (action == 5) { //view other people's posts
                 //TODO
