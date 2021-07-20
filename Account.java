@@ -98,6 +98,7 @@ public class Account {
     public void computerGenerateName(String select) {
         Scanner scan = new Scanner(System.in);
         Random rand = new Random();
+        usernameIsTaken = false;
 
         if (select.equals(getUsername())) {
             System.out.println("Select 1 to generate a unique username or" +
@@ -110,16 +111,15 @@ public class Account {
         int generate = scan.nextInt();
         scan.nextLine();
 
+
         try {
-	    // Program allows user to keep their old name if they later decide
-	    // to opt out of computer generated name chooser
+            // Program allows user to keep their old name if they later decide
+            // to opt out of computer generated name chooser
             if (generate != 1 && select != "") {
                 System.out.println(select);
-		    
-            // Formulates a randomized username unique to user
             } else if (generate == 1) {
+                // Formulate a randomized username unique to user
                 String characters = "!/$%^&*#@+=";
-		    
                 // Generate a random integer from 0 - 3000000
                 int randomize = rand.nextInt(3000000);
 
@@ -143,10 +143,9 @@ public class Account {
                     setPassword(name + randomize + randChar);
                     System.out.println(getPassword());
                 }
-		    
-	    // User can choose to create their own name if they don't want
-	    // a computer generated name    
-            } else if (generate != 1 && (select == "") {
+            // User can choose to create their own name if they don't want
+            // a computer generated name only if they didn't already have a name
+            } else if (generate != 1 && select == "") {
                 if (select.equals(getUsername())) {
                     System.out.println("Create new username");
                     select = scan.nextLine();
@@ -156,9 +155,11 @@ public class Account {
                     select = scan.nextLine();
                     setPassword(select);
                 }
-		    
-		// Loop until there are no spaces or username hasn't been taken
-                while (select.contains(" ") || usernameIsTaken) {
+                // Name can't have a space
+                // Username can't be taken
+                // Length has to be more than 6
+                while (select.contains(" ") || usernameIsTaken || select.length()
+                        >= 0 && select.length() < 7) {
                     if (select.contains(" ")) {
                         System.out.println("Usernames Shouldn't Have Spaces");
                         System.out.println("Try Again");
@@ -177,8 +178,17 @@ public class Account {
                         } else if (select.equals(getPassword())) {
                             setPassword(select);
                         }
+                    } else if (select.length() >= 0 && select.length() < 7) {
+                        System.out.println("Username is too short");
+                        System.out.println("Try Again");
+                        select = scan.nextLine();
+                        if (select.equals(getUsername())) {
+                            setUsername(select);
+                        } else if (select.equals(getPassword())) {
+                            setPassword(select);
+                        }
                     }
-                } 
+                }
             }
         } catch (RuntimeException e) {
             e.printStackTrace();
