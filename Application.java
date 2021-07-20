@@ -90,7 +90,7 @@ public class Application {
     private final static String deletionConfirmation = "Are you sure you would like to delete this post? (Y/N): ";
 
     private final static String logout = "Logging Out...";
-    private final static String exit = "loggedOut...";
+    private final static String exit = "Exiting...";
     //note: change all input to be String so program doesn't break if non-int is entered? (?do later)
     //nvm, instructions say application should not crash under any circumstances
 
@@ -410,7 +410,7 @@ public class Application {
                     if (postChoice > posts.size() || postChoice < -1) {
                         System.out.println(actionCorrection);
                     } else if (postChoice == 0) {
-                        System.out.println(quit);
+                        System.out.println(exit);
                         quit = true;
                         return; //return to start() method, start method will end the program since field quit = true
                     }
