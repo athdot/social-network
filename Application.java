@@ -442,7 +442,7 @@ public class Application {
                 String title = scanner.nextLine();
                 System.out.println(postContentPrompt); //get message
                 String content = scanner.nextLine();
-                user.addPost(new Post(title, user.getUsername(), content)); //add it to the list of posts
+                user.addPost(new Post(title, user.getUsername(), content,user)); //add it to the list of posts
 
             } else if (action == 3) { //view and edit your posts
                 //display posts from this user with numbers beside them
