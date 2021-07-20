@@ -17,15 +17,16 @@ public class Post {
     private String author;
     private String content;
     private Date timeStamp;
-    private ArrayList<Comment> comments;
+    private Account info;
+    private String filename;
     //private ArrayList<Message> lowerMessages //For later
 
-    public Post(String title, String author, String content) {
+    public Post(String title, String author, String content, Account info) {
         this.title = title;
         this.author = author;
         this.content = content;
         timeStamp = new Date();
-        comments = new ArrayList<Comment>();
+        this.info = info;
     }
     
     //Set the timestamp
