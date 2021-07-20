@@ -19,35 +19,32 @@ public class DataManagement {
     //Every block is stored in a ArrayList<String[]>
 	
     //A few misc test cases
-    //public static void main(String[] args) {
-        //DataManagement hehe = new DataManagement();
-        //Post post1 = new Post("Car","baba","I like cars bruh come on");
-        //hehe.setPost(post1);
-        //hehe.setPost(new Post("diamonds","baba","MINE DIAM,ONDS"));
-        //hehe.setPost(new Post("TEST","baba","hey bro"));
-        //post1.addComment(new Comment("babadook","this is a test of comments"));
-        //hehe.setPost(post1);
-        //ArrayList<Post> g = hehe.getUserPosts("babadook");
-        //for (int i = 0; i < g.size(); i++) {
-        // 	System.out.println(g.get(i).toString());
-        //}
-        //hehe.deletePost(post1);
-        //g = hehe.getRecentPosts(0,10);
-        //for (int i = 0; i < g.size(); i++) {
-        //	System.out.println(g.get(i).toString());
-        //}
+    public static void main(String[] args) {
+        DataManagement hehe = new DataManagement();
+        Post post1 = new Post("Car","baba","I like cars bruh come on");
+        hehe.setPost(post1);
+        hehe.setPost(new Post("diamonds","baba","MINE DIAM,ONDS"));
+        hehe.setPost(new Post("TEST","baba","hey bro"));
+        post1.addComment(new Comment("babadook","this is a test of comments"));
+        hehe.setPost(post1);
+        ArrayList<Post> g = hehe.getUserPosts("babadook");
+        for (int i = 0; i < g.size(); i++) {
+         	System.out.println(g.get(i).toString());
+        }
+        for (int i = 0; i < g.size(); i++) {
+        	System.out.println(g.get(i).toString());
+        }
         //=-=-=- Testcase 2
-        //Account temp = new Account("Chad",CryptoHash.getHash("thedad"));
-        //temp.setBio("Hey boo");
-        //hehe.setAccount(temp);
-        //Account test1 = new Account("Charles",CryptoHash.getHash("password"));
-        //hehe.setAccount(test1);
-        //System.out.println(hehe.getAccount("Charles").toString());
-        //test1.setBio("Test123");
-        //hehe.setAccount(test1);
-        //System.out.println(hehe.getAccount("Charles").toString());
-        //hehe.deleteAccount("Charles");
-    //}
+        Account temp = new Account("Chad",CryptoHash.getHash("thedad"));
+        temp.setBio("Hey bo213123o");
+        hehe.setAccount(temp);
+        Account test1 = new Account("Charles",CryptoHash.getHash("password"));
+        hehe.setAccount(test1);
+        System.out.println(hehe.getAccount("Charles").toString());
+        test1.setBio("Test123");
+        hehe.setAccount(test1);
+        System.out.println(hehe.getAccount("Charles").toString());
+    }
     
     //This method deletes a post in the file system, if it exists
     public void deletePost(Post post) {
