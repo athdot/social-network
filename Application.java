@@ -312,7 +312,7 @@ public class Application {
         } else if (action == 3) { //add comment
         	System.out.println(createComment);
         	String newComment = scanner.nextLine();
-        	server.streamReader("addComment[" + post.getTitle() + "," + post.getAuthor() + "," + newComment + "]");
+        	server.streamReader("addComment[" + post.getTitle() + ","+ post.getAuthor() + "," + newComment + "]");
     	} else if (action == 4) { //delete post
             System.out.println(deletionConfirmation);
             String response = scanner.nextLine();
