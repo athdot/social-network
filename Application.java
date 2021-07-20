@@ -23,6 +23,13 @@ public class Application {
     private final static String welcome = """
             +--------------------------------------------------+
             | Welcome to Group 8's Social Network Application! |
+            |                                                  |
+            | Written by:                                      |
+            | Charles Graham, Nathan Yao, Mingrui Xia,         |
+            | Jasmine Maduafokwa, and Sami Heathcote           |
+            |                                                  |
+            | Copyright: We have no money for a copyright      |
+            |                                                  |
             | NOTE: Enter 0 as an action to QUIT.              |
             +--------------------------------------------------+""";
     private final static String chooseAction = "Choose an Action:\n";
