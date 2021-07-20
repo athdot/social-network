@@ -367,7 +367,7 @@ public class Application {
 
         } else if (action == 3) { // edit author name
             System.out.println("Enter new author name: ");
-            edit.editComment(post,post.getAuthor(),scanner.nextLine());
+            edit.editAuthor(post,post.getAuthor(),scanner.nextLine());
 
         } else if (action == 4) { //delete post
             System.out.println(deletionConfirmation);
