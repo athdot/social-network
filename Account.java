@@ -135,7 +135,11 @@ public class Account {
 
     //TODO: Remove me, for testing
     public String getPassword() {
-        return password;
+    	return password;
+    }
+    
+    public boolean correctPassword(String input) {
+        return password.equals(input);
     }
 
 /*    //Make sure the password matches through the encryption
