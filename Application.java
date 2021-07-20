@@ -421,6 +421,10 @@ public class Application {
                 }
             } else if (action == 4) { //view and edit all your comments
                 //TODO
+		for (int i = 0; i < user.getPosts().size(); i++) {
+                    ArrayList<Comment> comments = user.getPosts().get(i).getComments();
+                    System.out.println((i + 1) + comments.get(i).toString() + "\n");
+                }
 
             } else if (action == 5) { //view other people's posts
                 //TODO
