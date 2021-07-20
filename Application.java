@@ -57,6 +57,13 @@ public class Application {
             | 3. Delete Post                                   |
             | 4. Back                                          |
             +--------------------------------------------------+""";
+    private final static String viewUserOptions = "\n" + chooseAction + """
+            +--------------------------------------------------+
+            | VIEW USER                                        |
+            | 1. View Profile                                  |
+            | 2. View Posts                                    |
+            | 3. Back                                          |
+            +--------------------------------------------------+""";
 
     //string constants for login section
     private final static String actionCorrection = "Invalid Action";
@@ -91,6 +98,8 @@ public class Application {
 
     //strings pertaining to search users
     private final static String searchRequest = "Enter the username of the user you want to view: ";
+    private final static String userNotFound = "There is no user with that username.";
+    private final static String userFound = "Search successful. User found.";
 
     private final static String logout = "Logging Out...";
     private final static String exit = "Exiting...";
@@ -357,6 +366,37 @@ public class Application {
         }
     }
 
+    public void viewUsersPosts(Account user) {
+        Scanner scanner = new Scanner(System.in);
+        int action = 0; //default to zero to prevent
+        do {
+            System.out.println(viewUserOptions);
+            try {
+                action = scanner.nextInt();
+                scanner.nextLine();
+            } catch (InputMismatchException inputMismatchException) {
+                System.out.println(actionCorrection);
+                continue;
+            }
+            if (action == 0) { //anytime the user enters a 0 for an action, quit
+                quit = true;
+                System.out.println(exit);
+                return;
+            } else if (action > 4 || action < 1) {
+                System.out.println(actionCorrection);
+            }
+        } while (action > 3 || action < 1);
+
+        if (action == 1) {
+            System.out.println(user.toString());
+        } else if (action == 2) {
+            ArrayList<Post> posts = user.getPosts();
+            for (int x = 0; x < posts.size(); x++) {
+                System.out.println(posts.get(x).toString());
+            }
+        }
+    }
+
     public void mainMenu() {
         Scanner scanner = new Scanner(System.in);
         boolean loggedOut = false;
@@ -422,6 +462,7 @@ public class Application {
                 if (postChoice > 0) {
                     editPost(posts.get(postChoice - 1));
                 }
+
             } else if (action == 4) { //view and edit all your comments
                 //TODO
 		for (int i = 0; i < user.getPosts().size(); i++) {
@@ -444,6 +485,13 @@ public class Application {
                     if (accounts.get(x).getUsername().equalsIgnoreCase(user)) {
                         correctUser = accounts.get(x);
                     }
+                }
+
+                if (correctUser == null) {//if no user is found
+                    System.out.println(userNotFound);
+                } else {
+                    System.out.println(userFound);
+                    viewUsersPosts(correctUser);
                 }
 
                 System.out.println(correctUser.toString());
