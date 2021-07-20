@@ -36,7 +36,7 @@ public class Backend {
 			//createAccount[username,password]
 			//Create a new account if exists
 			
-			String[] loginVal = unpack(request, "login[").split(",");
+			String[] loginVal = unpack(request, "createAccount[").split(",");
 			if (data.accountExists(loginVal[0])) {
 				return "false";
 			} else {

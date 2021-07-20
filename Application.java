@@ -15,6 +15,7 @@ public class Application {
 
     private Account user; //remember the user who is signed in to this instance of the app
     private Post post;
+    private String localUsername;
     private boolean quit = false; //becomes true if user enters 0 for action. Program terminates
 
     private final static String accountFilename = "accountInfo.csv"; //file that remembers accounts
@@ -76,12 +77,13 @@ public class Application {
     private final static String usernamePrompt = "Your Username: ";
     private final static String passwordPrompt = "Your Password: ";
 
-    private final static String usernameSpaceCorrection = "Usernames Shouldn't Have Spaces";
+    private final static String usernameSpaceCorrection = "Spaces and Commas are not Allowed";
     private final static String userPassLengthCorrection = "Username/Password is Too Short";
 
     //strings pertaining to profile actions
     private final static String currentPasswordPrompt = "Enter your current password: ";
     private final static String invalidPassword = "Password is incorrect";
+    private final static String changedPassword = "Password Changed";
     private final static String newPasswordPrompt = "Enter your new password: ";
     private final static String newUsernamePrompt = "Enter your new username";
     private final static String newBioPrompt = "Enter your new bio: ";
@@ -107,12 +109,18 @@ public class Application {
     //note: change all input to be String so program doesn't break if non-int is entered? (?do later)
     //nvm, instructions say application should not crash under any circumstances
 
-  
+    Scanner scanner;
+    Backend server;
+    
+    public Application() {
+    	scanner = new Scanner(System.in);
+    	server = new Backend();
+    }
+    
     public void login() { //control the login section of the program
 
         boolean validCredentials = false;
         System.out.println(welcome);
-        Scanner scanner = new Scanner(System.in);
 
         do {
             String actionStr; //an 'a' will stand for action to be done, stores initial input for action action
@@ -136,103 +144,42 @@ public class Application {
                 }
             } while (actionInt < 1 || actionInt > 2);
 
-            if (actionInt == 1) { //user chooses to sign in
-
+            boolean correctLogin = false;
+            String username;
+            String password;
+            
+            do {
                 System.out.print(usernamePrompt);
-                String username = scanner.nextLine();
+                username = scanner.nextLine();
                 System.out.print(passwordPrompt);
-                String password = scanner.nextLine();
-
-                try {
-                    //creates the file in case it doesn't exist
-                    //even though there wouldn't be any existing accounts, we dodge FileNotFoundException
-                    File f = new File(accountFilename);
-                    FileOutputStream fos = new FileOutputStream(f, true);
-                    fos.close();
-
-                    FileReader fr = new FileReader(f);
-                    BufferedReader bfr = new BufferedReader(fr);
-
-                    while (true) {
-                        String line = bfr.readLine();
-                        if (line == null) {
-                            //if there are no matches after searching all accounts from the file
-                            System.out.println(invalidAccount);
-                            break;
-                        }
-                        //create array of length 2, contains username, then encrypted password
-                        String[] userPass = line.split(" ");
-                        if (userPass[0].equalsIgnoreCase(username)
-                                && userPass[1].equals(CryptoHash.getHash(password))) {
-                            validCredentials = true;
-                            //assign Account to current instance of Application
-                            user = new Account(username, CryptoHash.getHash(password));
-                            break;
-                        }
-                    }
-                    bfr.close();
-
-                } catch (IOException ioException) { //program must not crash under any circumstances
-                    System.out.println(fileErrorMessage);
-                }
-
-            } else { //if (actionInt == 2), where user chooses to create new account
-
-                boolean usernameIsTaken = false;
-                System.out.print(usernamePrompt);
-                String username = scanner.nextLine();
-                System.out.print(passwordPrompt);
-                String password = scanner.nextLine();
-
-                try { //make sure that the username has not already been taken (case insensitive)
-                    //creates the file in case it doesn't exist
-                    File f = new File(accountFilename);
-                    FileOutputStream fos = new FileOutputStream(f, true);
-                    fos.close();
-
-                    FileReader fr = new FileReader(f);
-                    BufferedReader bfr = new BufferedReader(fr);
-
-                    while (true) {
-                        String line = bfr.readLine();
-                        if (line == null) {
-                            //found no accounts with the same username
-                            break;
-                        }
-                        //create array of length 2, contains username, then encrypted password
-                        String[] userPass = line.split(" ");
-                        if (userPass[0].equalsIgnoreCase(username)) {
-                            usernameIsTaken = true;
-                            break;
-                        }
-                    }
-                    bfr.close();
-
-                } catch (IOException ioException) {
-                    //Program must not crash, program should never get to this block
-                    System.out.println(fileErrorMessage);
-                }
-
-                if (username.contains(" ")) {
+                password = scanner.nextLine();
+            
+                if (username.contains(" ") || username.contains(",")) {
                     System.out.println(usernameSpaceCorrection);
-                } else if (usernameIsTaken) {
-                    System.out.println(usernameTakenMessage);
                 } else if (password.length() == 0 || username.length() == 0) {
                     System.out.println(userPassLengthCorrection);
                 } else {
-                    try { //only if username and password are valid, then write them to the file
-                        File f = new File(accountFilename);
-                        FileOutputStream fos = new FileOutputStream(f, true);
-                        PrintWriter pw = new PrintWriter(fos);
-
-                        pw.println(username + " " + CryptoHash.getHash(password)); //write new account to file
-                        System.out.println(accountCreated);
-                        pw.close();
-
-                    } catch (FileNotFoundException fileNotFoundException) {
-                        //this should never be reached, java would create file in write mode
-                        System.out.println(fileErrorMessage);
-                    }
+                	correctLogin = true;
+                }
+            } while(correctLogin);
+            
+            if (actionInt == 1) { //user chooses to sign in
+                String worked = server.streamReader("login[" + username + "," + password + "]");
+                
+                if (worked.equals("false")) {
+                	System.out.println(invalidAccount);
+                } else {
+                	validCredentials = true;
+                	break;
+                }
+            } else { //if (actionInt == 2), where user chooses to create new account
+                String worked = server.streamReader("createAccount[" + username + "," + password + "]");
+                if (worked.equals("true")) {
+                	System.out.println(accountCreated);
+                	validCredentials = true;
+                	break;
+                } else {
+                	System.out.println(usernameTakenMessage);
                 }
             }
         } while (!validCredentials); //continue to prompt login screen until user provides valid credentials
@@ -240,13 +187,13 @@ public class Application {
 
     // Deals with username and password
     public void yourProfile() {
-
         boolean goBack = false;
-        Scanner scanner = new Scanner(System.in);
 
         //while still in the profile menu
         while (!goBack) {
             //display user's profile and show options
+        	Account user = StreamParse.stringToAccount(server.streamReader("getProfile[" + localUsername +"]"));
+        	
             System.out.println(user.toString());
             System.out.println(yourProfile);
 
@@ -262,19 +209,21 @@ public class Application {
                 //prompt for current password
                 System.out.println(currentPasswordPrompt);
                 String password = scanner.nextLine();
-
-                if (CryptoHash.getHash(password).equals(user.getPassword())) {
-                    //prompt for new password
-                    System.out.println(newPasswordPrompt);
-                    password = scanner.nextLine();
-                    if (password.length() == 0) {
-                        System.out.println(userPassLengthCorrection);
-                    }
-                    user.setPassword(password);
-                } else {
-                    System.out.println(invalidPassword);
+                
+                System.out.println(newPasswordPrompt);
+                String newPassword = scanner.nextLine();
+                if (newPassword.length() == 0) {
+                    System.out.println(userPassLengthCorrection);
                 }
 
+                String changeSuccess = "changePassword[" + password + "," + newPassword + "]";
+                changeSuccess = server.streamReader(changeSuccess);
+                
+                if (changeSuccess.equals("false")) {
+                    System.out.println(invalidPassword);
+                } else {
+                	System.out.println(changedPassword);
+                }
             } else if (action == 2) { //change username
                 System.out.println(newUsernamePrompt);
                 //check if username is taken
@@ -409,7 +358,6 @@ public class Application {
     }
 
     public void mainMenu() {
-        Scanner scanner = new Scanner(System.in);
         boolean loggedOut = false;
 
         while (!loggedOut) {
