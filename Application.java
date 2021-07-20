@@ -89,6 +89,9 @@ public class Application {
     private final static String newPostContentPrompt = "Enter the Post's new Message: ";
     private final static String deletionConfirmation = "Are you sure you would like to delete this post? (Y/N): ";
 
+    //strings pertaining to search users
+    private final static String searchRequest = "Enter the username of the user you want to view: ";
+
     private final static String logout = "Logging Out...";
     private final static String exit = "Exiting...";
     //note: change all input to be String so program doesn't break if non-int is entered? (?do later)
@@ -434,6 +437,7 @@ public class Application {
                 ArrayList <Account> accounts = getAccounts(); //this will be a method to retrieve all users from
                 System.out.println(searchRequest);
                 String user = scanner.nextLine();
+
                 Account correctUser;
 
                 for (int x = 0; x < accounts.size(); x++) {
