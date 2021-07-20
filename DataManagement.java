@@ -92,7 +92,7 @@ public class DataManagement {
     	
     	for (int i = 0; i < blockFile.size(); i++) {
     		String[] block = blockFile.get(i);
-    		for (int j = 0; j < block.length; i++) {
+    		for (int j = 0; j < block.length; j++) {
     			block[j] = block[j].replaceAll(find, replace);
     		}
     		blockFile.set(i, block);
@@ -219,10 +219,9 @@ public class DataManagement {
     
     //This method gets the index in the file of an account
     private int getAccountIndex(ArrayList<String[]> accountList, String account) {
-    	
     	for (int i = 0; i < accountList.size(); i++) {
     		String[] block = accountList.get(i);
-    		if (block[1].equals(account)) {
+    		if (block.length > 1 && block[1].equals(account)) {
     			return i;
     		}
     	}

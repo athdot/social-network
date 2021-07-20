@@ -136,6 +136,7 @@ public class Application {
                 }
                 if (actionInt == 0) { //user enters 0 to exit the program (see app() method)
                     System.out.println(exit);
+                    server.streamReader("logout");
                     quit = true; //quit is a variable that notify the start() method to end the program
                     return;
                 } else if (actionInt < 1 || actionInt > 2) {
@@ -170,6 +171,7 @@ public class Application {
                 	System.out.println(invalidAccount);
                 } else {
                 	validCredentials = true;
+                	localUsername = username;
                 	break;
                 }
             } else { //if (actionInt == 2), where user chooses to create new account
@@ -177,6 +179,7 @@ public class Application {
                 if (worked.equals("true")) {
                 	System.out.println(accountCreated);
                 	validCredentials = true;
+                	localUsername = username;
                 	break;
                 } else {
                 	System.out.println(usernameTakenMessage);
@@ -235,6 +238,8 @@ public class Application {
                 	if (taken.equals("false")) {
                 		System.out.println(usernameTakenMessage);
                 		continue;
+                	} else {
+                		localUsername = username;
                 	}
                 
                 	if (username.contains(" ") || username.contains(",")) {
@@ -252,7 +257,7 @@ public class Application {
                 user.computerGenerateName(user.getPassword());
             } else { //change bio
                 System.out.println(newBioPrompt);
-                user.setBio(scanner.nextLine());
+                server.streamReader("changeBio[" + scanner.nextLine() +"]");
             }
         }
     }
@@ -475,6 +480,7 @@ public class Application {
 
             } else if (action == 7) { //logout
                 loggedOut = true;
+                server.streamReader("logout");
                 System.out.println(logout);
 
             } else { //anything else is not a valid input
