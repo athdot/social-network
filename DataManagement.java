@@ -160,7 +160,7 @@ public class DataManagement {
     	}
     	
     	for (int i = startIndex; i < endIndex; i++ ) {
-    		if (i >= recentPosts.size() || i < 0) {
+    		if (i >= recentPosts.size() || i < 0 || recentPosts.get(i).length == 0) {
     			break;
     		}
     		postList.add(toPost(recentPosts.get(i)));
