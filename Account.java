@@ -37,11 +37,6 @@ public class Account {
         this.password = password; //will be encrypted from Application.java
         posts = new ArrayList<Post> ();
         bio = ""; //user can set the bio later
-        saveAccount();
-    }
-
-    public void saveAccount() { //save account to file
-        //TODO: Code file mgmt stuff
     }
 
     public String getUsername() {
@@ -80,7 +75,7 @@ public class Account {
     	return output.toArray(new String[0]);
     }
     
-   // Generates a random username or password
+    // Generates a random username or password
     public void computerGenerateName(String select) {
         Scanner scan = new Scanner(System.in);
         Random rand = new Random();
@@ -129,53 +124,10 @@ public class Account {
                     setPassword(name + randomize + randChar);
                     System.out.println(getPassword());
                 }
-            // User can choose to create their own name if they don't want
-            // a computer generated name only if they didn't already have a name
-            } else if (generate != 1 && select == "") {
-                if (select.equals(getUsername())) {
-                    System.out.println("Create new username");
-                    select = scan.nextLine();
-                    setUsername(select);
-                } else if (select.equals(getPassword())) {
-                    System.out.println("Create new password");
-                    select = scan.nextLine();
-                    setPassword(select);
-                }
-                // Name can't have a space
-                // Username can't be taken
-                // Length has to be more than 6
-                while (select.contains(" ") || usernameIsTaken || select.length()
-                        >= 0 && select.length() < 7) {
-                    if (select.contains(" ")) {
-                        System.out.println("Usernames Shouldn't Have Spaces");
-                        System.out.println("Try Again");
-                        select = scan.nextLine();
-                        if (select.equals(getUsername())) {
-                            setUsername(select);
-                        } else if (select.equals(getPassword())) {
-                            setPassword(select);
-                        }
-                    } else if (usernameIsTaken == true) {
-                        System.out.println("Username is Taken");
-                        System.out.println("Try Again");
-                        select = scan.nextLine();
-                        if (select.equals(getUsername())) {
-                            setUsername(select);
-                        } else if (select.equals(getPassword())) {
-                            setPassword(select);
-                        }
-                    } else if (select.length() >= 0 && select.length() < 7) {
-                        System.out.println("Username is too short");
-                        System.out.println("Try Again");
-                        select = scan.nextLine();
-                        if (select.equals(getUsername())) {
-                            setUsername(select);
-                        } else if (select.equals(getPassword())) {
-                            setPassword(select);
-                        }
-                    }
-                }
+                // User can choose to create their own name if they don't want
+                // a computer generated name only if they didn't already have a name
             }
+            
         } catch (RuntimeException e) {
             e.printStackTrace();
             System.out.println("Unable to randomize!");

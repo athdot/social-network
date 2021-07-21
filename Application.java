@@ -89,6 +89,14 @@ public class Application {
             | 3. View Comments                                 |
             | 4. Back                                          |
             +--------------------------------------------------+""";
+    private final static String allPostOptions = "\n" + chooseAction + """
+    		+--------------------------------------------------+
+    		| OPTIONS                                          |
+    		| 1. View Post                                     |
+    		| 2. Load Next 5 Posts                             |
+    		| 3. Load Last 5 Posts                             |
+    		| 4. Back                                          |
+    		+--------------------------------------------------+""";
 
     //string constants for login section
     private final static String actionCorrection = "Invalid Action";
@@ -129,9 +137,11 @@ public class Application {
     private final static String commentEdit = "What comment would you like to edit?";
 
     //strings pertaining to search users
-    private final static String searchRequest = "Enter the username of the user you want to view: ";
+    private final static String searchRequest = "Enter the username of the user you want to view or enter " +
+            "-1 to return to the main screen: ";
     private final static String userNotFound = "There is no user with that username.";
     private final static String userFound = "Search successful. User found.";
+    private final static String addComment = "Choose the number of the post you would like to comment on";
 
     private final static String logout = "Logging Out...";
     private final static String exit = "Exiting...";
@@ -188,13 +198,14 @@ public class Application {
                     System.out.println(userPassLengthCorrection);
                 } else {
                 	correctLogin = true;
-                	user = new Account(username, password); //current user signed in (THIS CAN PROBABLY BE REMOVED)...
-                    //if CSV import logic is changed. (see if it ends up unused)
+                	user = new Account(username.toLowerCase(), password);
+                	//current user signed in
                 }
             } while(!correctLogin);
 
             if (actionInt == 1) { //user chooses to sign in
-                String worked = server.streamReader("login[" + username + "," + password + "]");
+            	String worked = "login[" + username.toLowerCase() + "," + password + "]";
+                worked = server.streamReader(worked);
 
                 if (worked.equals("false")) {
                 	System.out.println(invalidAccount);
@@ -203,7 +214,8 @@ public class Application {
                 	break;
                 }
             } else { //if (actionInt == 2), where user chooses to create new account
-                String worked = server.streamReader("createAccount[" + username + "," + password + "]");
+            	String worked = "createAccount[" + username.toLowerCase() + "," + password + "]";
+                worked = server.streamReader(worked);
                 if (worked.equals("true")) {
                 	System.out.println(accountCreated);
                 	localUsername = username;
@@ -439,7 +451,7 @@ public class Application {
                     //make sure that the username of the imported post matches currently signed-in user.
                     //you can't import a post for someone else.
                     System.out.println("Importing...");
-                    existing.add(importBlock.get(0));
+                    existing.add(0, importBlock.get(0));
                     dm.writeFile("post.csv", existing);
                 } else {
                     System.out.println("This post cannot be imported");
@@ -468,22 +480,72 @@ public class Application {
                     quit = true;
                     System.out.println(exit);
                     return;
-                } else if (action > 3 || action < 1) {
+                } else if (action > 4 || action < 1) {
                     System.out.println(actionCorrection);
                 }
-            } while (action > 3 || action < 1);
+            } while (action > 4 || action < 1);
 
             if (action == 1) {
                 System.out.println(user.toString());
             } else if (action == 2) {
                 ArrayList<Post> posts = dm.getUserPosts(user.getUsername());
                 for (int x = 0; x < posts.size(); x++) {
-                    System.out.println(posts.get(x).toString());
+                    System.out.println("Post: " + (x + 1) + posts.get(x).toString());
+                }
+
+                //ask if the user wants to comment on a post
+                System.out.println("Would you like to comment on a post? (Y/N)");
+                String input;
+                do {
+                    input = scanner.nextLine();
+
+                    if (!(input.equalsIgnoreCase("y") || input.equalsIgnoreCase("n"))) {
+                        System.out.println("Please enter Y or N");
+                    }
+                } while (!(input.equalsIgnoreCase("y") || input.equalsIgnoreCase("n")));
+
+                if (input.equalsIgnoreCase("n")) {
+                    continue;
+                }
+                //display option to comment on a post and get input
+                int postChoice = 0; //default to zero to prevent ide errors
+                do {
+                    if (posts.size() == 0) {
+                        System.out.println("There are no posts to comment on!");
+                        break;
+                    }
+                    System.out.println(addComment);
+                    try {
+                        postChoice = scanner.nextInt();
+                        scanner.nextLine();
+                    } catch (InputMismatchException inputMismatchException) {
+                        System.out.println();
+                    }
+                    if (postChoice > posts.size() || postChoice < -1) {
+                        System.out.println(actionCorrection);
+                    } else if (postChoice == 0) {
+                        System.out.println(exit);
+                        quit = true;
+                        return; //return to start() method, start method will end the program since field quit = true
+                    }
+                } while (postChoice > posts.size() || postChoice < -1);
+
+                if (postChoice > 0) {
+                    System.out.println(createComment);
+                    String newComment = scanner.nextLine();
+                    server.streamReader("addComment[" + posts.get(postChoice - 1).getTitle() + ","
+                            + posts.get(postChoice - 1).getAuthor() + "," + newComment + "]");
+                }
+
+            } else if (action == 3) {
+                ArrayList<Post> comments = dm.getUserComments(user.getUsername());
+                for (int x = 0; x < comments.size(); x++) {
+                    System.out.println(comments.get(x).toString());
                 }
             } else if (action == 4) {
                 break;
             }
-        } while (action != 3);
+        } while (action != 4);
     }
 
     public void mainMenu() {
@@ -605,59 +667,97 @@ public class Application {
             } else if (action == 5) {  //view all people's posts
                 //print all the post from most recent
                 String postAuthor = "";
-                for (int i = 0; i < 30; i++) {
-                    System.out.println("Post: " + (i + 1) + dm.getRecentPosts(0, 30).get(i).toString() + "\n");
-                }
+                int postIndex = 0;
+                int postScale = 5;
+
+                boolean exitProcess = false;
+
                 do {
-                    postAuthor = scanner.nextLine();
-                    System.out.println("1. Enter author name that you want to Create a comment" + "\n"
-                            + "2. return to main menu");
-                } while (dm.getUserPosts(postAuthor) == null);
-                //show that user's post
-                //add comments
-                if (postAuthor.equals("2")) {
-                    break;
-                } else {
-                    for (int i = 0; i < dm.getUserPosts(postAuthor).size(); i++) {
-                        System.out.println("Post: " + dm.getUserPosts(postAuthor).get(i).toString() + "\n");
+                	String postList = "getRecentPosts[" + postIndex + "," + (postIndex + postScale) + "]";
+                    postList = server.streamReader(postList);
+                    ArrayList<Post> posts = StreamParse.stringToPosts(postList);
+                    for (int i = 0; i < posts.size(); i++) {
+                        System.out.println("Post: " + (postIndex + i + 1) + posts.get(i).toString());
                     }
 
-                    boolean validChoice = false;
-                    int postChoice = 0;
-                    do {
-                        try {
-                            System.out.println("Enter the number of post you want to add comment");
-                            postChoice = scanner.nextInt();
-                            scanner.nextLine(); //remove \n from pipeline
-                            validChoice = true;
-                        } catch (InputMismatchException inputMismatchException) {
-                            System.out.println(actionCorrection);
-                            continue;
-                        }
-                    } while (!validChoice);
+                	do {
+                		//Options
+                		System.out.println(allPostOptions);
+                		postAuthor = scanner.nextLine();
+                	} while (dm.getUserPosts(postAuthor) == null);
+                	//show that user's post
+                	//add comments
+                	if (postAuthor.equals("1")) {
+                		//Load a certain post
 
-                    try {
-                        String commentEntered = scanner.nextLine();
-                        Comment c = new Comment(user.getUsername(), commentEntered);
-                        dm.getUserPosts(postAuthor).get(postChoice - 1).addComment(c);  //add comment
-                        dm.setPost(dm.getUserPosts(postAuthor).get(postChoice - 1));  //save the added comment to file
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
+                	} else if (postAuthor.equals("2")) {
+                		String postList2 = "getRecentPosts[" + (postIndex + postScale);
+                		postList2 += "," + (postIndex + postScale * 2) + "]";
+                        postList = server.streamReader(postList2);
+                        ArrayList<Post> posts2 = StreamParse.stringToPosts(postList);
+                		if (posts2.size() > 0) {
+                			postIndex += postScale;
+                		} else {
+                			System.out.println("No further posts...");
+                		}
+                	} else if (postAuthor.equals("3")) {
+                		String postList2 = "getRecentPosts[" + (postIndex - postScale);
+                		postList2 += "," + postIndex + "]";
+                        postList = server.streamReader(postList2);
+                        ArrayList<Post> posts2 = StreamParse.stringToPosts(postList);
+                		if (posts2.size() > 0) {
+                			postIndex -= postScale;
+                		} else {
+                			System.out.println("No further posts...");
+                		}
+                	} else if (postAuthor.equals("4")) {
+                		exitProcess = false;
+                    	break;
+                	} else {
+                    	for (int i = 0; i < dm.getUserPosts(postAuthor).size(); i++) {
+                        	System.out.println("Post: " + dm.getUserPosts(postAuthor).get(i).toString() + "\n");
+                    	}
+                    	System.out.println("Enter the number of post you want to add comment");
+                    	int postChoice = 0;
+                    	postChoice = scanner.nextInt();
+                    	try {
+                        	String commentEntered = scanner.nextLine();
+                        	Comment c = new Comment(user.getUsername(), commentEntered);
+                        	dm.getUserPosts(postAuthor).get(postChoice - 1).addComment(c);  //add comment
+                        	dm.setPost(dm.getUserPosts(postAuthor).get(postChoice - 1));  //save the added comment to file
+                    	} catch (Exception e) {
+                        	e.printStackTrace();
+                    	}
+                	}
+                } while (!exitProcess);
 
             } else if (action == 6) { //search for a specific user
-                System.out.println(searchRequest);
-                String username = scanner.nextLine();
+                String username;
+                Account correctUser = null;
 
-                Account correctUser = dm.getAccount(username);
+                do {
+                    System.out.println(searchRequest);
+                    username = scanner.nextLine();
+                    if (username.contains("-1")) {
+                        break;
+                    } else if (username.equalsIgnoreCase("0")) {
+                        System.out.println(exit);
+                        quit = true;
+                        return;
+                    }
+                    if (dm.accountExists(username)) {
+                        correctUser = dm.getAccount(username);
+                        System.out.println(userFound);
+                    } else {
+                        System.out.println(userNotFound);
+                    }
 
-                if (correctUser == null) {//if no user is found
-                    System.out.println(userNotFound);
-                } else {
-                    System.out.println(userFound);
+                } while (correctUser == null);
+
+                if (correctUser != null) {
                     viewUsersPosts(correctUser);
                 }
+
 
             } else if (action == 7) { //logout
                 loggedOut = true;

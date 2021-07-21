@@ -21,10 +21,10 @@ public class DataManagement {
     //A few misc test cases
     public static void main(String[] args) {
         DataManagement hehe = new DataManagement();
-        Post post1 = new Post("Car","baba","I like cars bruh come on");
+        Post post1 = new Post("testcase","user","text");
         hehe.setPost(post1);
-        hehe.setPost(new Post("diamonds","baba","MINE DIAM,ONDS"));
-        hehe.setPost(new Post("TEST","baba","hey bro"));
+        hehe.setPost(new Post("diamonds","babadsadasaa","test123124"));
+        hehe.setPost(new Post("TEST","babasdas","hey"));
         post1.addComment(new Comment("babadook","this is a test of comments"));
         hehe.setPost(post1);
         ArrayList<Post> g = hehe.getUserPosts("babadook");
@@ -149,7 +149,7 @@ public class DataManagement {
     	ArrayList<Post> postList = new ArrayList<Post>();
     	
     	for (int i = startIndex; i < endIndex; i++ ) {
-    		if (i >= recentPosts.size()) {
+    		if (i >= recentPosts.size() || i < 0) {
     			break;
     		}
     		postList.add(toPost(recentPosts.get(i)));
