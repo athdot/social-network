@@ -52,10 +52,23 @@ public class Comment {
         return output;
     }
     
-    public String[] emojis(String[] emojis) {
-        for (String i : emojis) {
-            System.out.print(i);
+    public void emojis(String[] emoticon) {
+        System.out.println("Emoji drop down menu: ");
+
+        int bambi = 1;
+        for (String i : emoticon) {
+            System.out.print((bambi++) + "." + " " + i + " ");
         }
-        return emojis;
+    }
+
+    public String emojiSelection(String[] emoticon) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Select emoji number: ");
+
+        int emoji = scanner.nextInt();
+        scanner.nextLine();
+
+        return emoticon[emoji - 1];
     }
 }
