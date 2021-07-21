@@ -40,8 +40,31 @@ public class Account {
         saveAccount();
     }
 
-    public void saveAccount() { //save account to file
-        //TODO: Code file mgmt stuff
+        public void saveAccount() throws FileNotFoundException { 
+	//save account to file
+        String b;
+        try {
+            FileOutputStream fo = new FileOutputStream("profile.csv");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        BufferedWriter bw = null;
+        try {
+            bw = new BufferedWriter(new FileWriter("profile.csv", true));
+
+                String name = getUsername();
+                String password = getPassword();
+
+
+                b = String.format("\n%s, %s\n", name, password);
+                bw.write(b);
+            bw.close();
+
+        } catch (FileNotFoundException e) {
+            throw new FileNotFoundException();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getUsername() {
