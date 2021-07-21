@@ -656,8 +656,17 @@ public class Application {
                         System.out.println("Emoji? Press 1: ");
 
                         //todo: make sure this has input validation
-                        int emojiChoice = scanner.nextInt();
-                        scanner.nextLine();
+                        int emojiChoice = 0; //default to 0 preventing IDE compile errors
+                        boolean validInput = false;
+                        do {
+                            try {
+                                emojiChoice = scanner.nextInt();
+                                scanner.nextLine();
+                                validInput = true;
+                            } catch (InputMismatchException inputMismatchException) {
+                                System.out.println(actionCorrection);
+                            }
+                        } while (!validInput);
 
                         while (emojiChoice == 1) {
                             if (emojiChoice == 1) {
@@ -669,7 +678,16 @@ public class Application {
                                         "to exit");
 
                                 //todo: make sure this has input validation
-                                emojiChoice = scanner.nextInt();
+                                boolean validInput2 = false;
+                                do {
+                                    try {
+                                        emojiChoice = scanner.nextInt();
+                                        scanner.nextLine();
+                                        validInput2 = true;
+                                    } catch (InputMismatchException inputMismatchException) {
+                                        System.out.println(actionCorrection);
+                                    }
+                                } while (!validInput2);
                             }
                         System.out.println("Would you like to continue comment (Y) or exit (N)? ");
                         statement = scanner.nextLine();
@@ -810,8 +828,6 @@ public class Application {
                 if (postChoice > 0) {
                     editComment(posts.get(postChoice - 1));
                 }
-
-		//TODO: the comment should be added under action 5--view all post
 
             } else if (action == 5) {  //view all people's posts
                 //print all the post from most recent

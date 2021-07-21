@@ -19,6 +19,7 @@ import static org.junit.Assert.fail;
  * NOTE: Delete profile.csv and post.csv before running this test. This program tests the functionality of the expected
  * app according to the provided requirements on the handout. Persistence of data is tested through login function, and
  * attempts to override existing data. Creating, editing, and deleting accounts, posts, and comments is also tested.
+ * Other functions, including searching for user or view all posts, is touched upon.
  *
  * @author Group 8
  * @version 7/21/2021
@@ -73,20 +74,14 @@ public class RunLocalTest {
         }
 
         @Test(timeout = 1000)
-        public void testLogin() {
+        public void testApp() {
             try {
                 // Set the input
                 // this is a wrong username and password (assuming it is not stored)
                 String input = "1\nwrongUser\nwrongPass\n" + //test invalid login
                         "2\nUser\nPass\n" +
-                        "1\n1\nThis is my new bio\n" + //test editing profile bio
-                        "2\nUser2\n" +
-                        "2\nUser2\n" + //test choosing username that already exists
-                        "2\nUser3\n" +
-                        "3\nPass\nPass2\n5\n" +
-                        "2\n1\nPost title\nPost message\n" + //ensure posting and editing post works
-                        "3\n1\nNew post message\n" +
-                        "3\nX$!$%!@\n";
+                        "1\n1\nThis is my new bio\n" +
+                        "";
 
                 // Pair the input with the expected result
                 String expected = "";
