@@ -612,6 +612,8 @@ public class Application {
                 if (x == 0) {
                 	System.out.println("This user has no comments...");
                 	continue;
+                } else {
+                	System.out.println("Posts with user comments in them...");
                 }
             } else if (action == 4) {
                 break;
