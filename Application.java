@@ -365,7 +365,7 @@ public class Application {
             System.out.println(createComment);
             //post.editTitle(user.getUsername(),scanner.nextLine());
             String comment = scanner.nextLine();
-            server.streamReader("addComment[" + post.getTitle() + "," + post.getAuthor() + comment + "]");
+            server.streamReader("addComment[" + post.getTitle() + "," + post.getAuthor() + "," + comment + "]");
         } else if (action == 2) { //edit comment
         	//Print out post with numbered comments
         	//TODO
