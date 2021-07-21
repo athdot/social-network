@@ -420,15 +420,63 @@ public class Application {
         	System.out.println("here");
         	server.streamReader(call);
         } else if (action == 2) { //Edit comment
-            ArrayList<Post> posts = user.getPosts();
-            for (int x = 0; x < posts.size(); x++) {
-                System.out.println(posts.get(x).toString());
+        	ArrayList<Comment> comments = post.getComments();
+            ArrayList<Comment> yourComment = new ArrayList<Comment>();
+            
+            for (int i = 0; i < comments.size(); i++ ) {
+            	if (comments.get(i).getAuthor().equals(localUsername)) {
+            		yourComment.add(comments.get(i));
+            	}
+            }
+            System.out.println("Your Comments: ");
+            for (int x = 0; x < yourComment.size(); x++) {
+            	System.out.println("Comment " + (x +  1) + ": \n");
+            	System.out.println("| Post: " + post.getTitle());
+                System.out.println(yourComment.get(x).toString());
+            }
+            System.out.println("Select a Comment to Edit: ");
+            String del = scanner.nextLine();
+            
+            try {
+            	int opt = Integer.parseInt(del);
+            	System.out.println("What would you like to change the comment to?");
+            	String newComment = scanner.nextLine();
+            	if (newComment.length() < 1) {
+            		newComment = " ";
+            	}
+            	String call = "editComment[" + post.getTitle() + "," + post.getAuthor();
+            	call += "," + (opt - 1) + "," +  newComment + "]";
+            	server.streamReader(call);
+            	System.out.println("Edited Comment!");
+            } catch (Exception e) {
+            	System.out.println("Not a valid number!");
             }
         } else if (action == 3) { //Delete comment
             //DONE: add option to view user comments and make action 4 to go back
-            ArrayList<Comment> comments = user.getComments();
-            for (int x = 0; x < comments.size(); x++) {
-                System.out.println(comments.get(x).toString());
+            ArrayList<Comment> comments = post.getComments();
+            ArrayList<Comment> yourComment = new ArrayList<Comment>();
+            
+            for (int i = 0; i < comments.size(); i++ ) {
+            	if (comments.get(i).getAuthor().equals(localUsername)) {
+            		yourComment.add(comments.get(i));
+            	}
+            }
+            System.out.println("Your Comments: ");
+            for (int x = 0; x < yourComment.size(); x++) {
+            	System.out.println("Comment " + (x +  1) + ": \n");
+            	System.out.println("| Post: " + post.getTitle());
+                System.out.println(yourComment.get(x).toString());
+            }
+            System.out.println("Select a Comment to Delete: ");
+            String del = scanner.nextLine();
+            try {
+            	int opt = Integer.parseInt(del);
+            	String call = "deleteComment[" + post.getTitle() + "," + post.getAuthor();
+            	call += "," + (opt - 1) + "]";
+            	server.streamReader(call);
+            	System.out.println("Deleted Comment!");
+            } catch (Exception e) {
+            	System.out.println("Not a valid number!");
             }
         } //action 4 will end this current method
     }

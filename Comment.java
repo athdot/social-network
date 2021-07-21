@@ -38,6 +38,10 @@ public class Comment {
         return timestamp;
     }
     
+    public String getAuthor() {
+    	return author;
+    }
+    
     
     public String toFile() {
     	String output = "";
