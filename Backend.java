@@ -170,6 +170,20 @@ public class Backend {
 			} catch (Exception e) {
 				return "false";
 			}
+		} else if (request.indexOf("postSearch[") == 0) {
+			//postSearch[phrase]
+			ArrayList<Post> temp = data.getSimilarPosts(unpack(request, "postSearch["));
+			return StreamParse.postsToString(temp);
+		} else if (request.indexOf("userSearch[") == 0) {
+			ArrayList<String> temp = data.getAssociatedUsers(unpack(request, "userSearch["));
+			if (temp.size() == 0) {
+				return "";
+			}
+			String returnValue = temp.get(0);
+			for (int i = 0; i < temp.size(); i ++) {
+				returnValue += "," + temp.get(i);
+			}
+			return returnValue;
 		}
 		
 		return "false";
