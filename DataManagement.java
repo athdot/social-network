@@ -68,7 +68,7 @@ public class DataManagement {
     	} else {
     		postList.remove(postExists);
     		//Set this index to portExists if we want chats to stay behind
-    		postList.add(0, post.toFile());
+    		postList.add(postExists, post.toFile());
     	}
     	
         writeFile("post.csv", postList);
@@ -147,6 +147,10 @@ public class DataManagement {
     public ArrayList<Post> getRecentPosts(int startIndex, int endIndex) {
     	ArrayList<String[]> recentPosts = readFile("post.csv");
     	ArrayList<Post> postList = new ArrayList<Post>();
+    	
+    	if (endIndex == -1) {
+    		return getAllPosts();
+    	}
     	
     	for (int i = startIndex; i < endIndex; i++ ) {
     		if (i >= recentPosts.size() || i < 0) {

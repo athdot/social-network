@@ -100,7 +100,15 @@ public class Application {
     		| 2. View Post                                     |
     		| 3. Load Next 5 Posts                             |
     		| 4. Load Last 5 Posts                             |
-    		| 5. Back                                          |
+    		| 5. Display All Posts                             |
+    		| 6. Back                                          |
+    		+--------------------------------------------------+""";
+    private final static String totalOptions = "\n" + chooseAction + """
+    		+--------------------------------------------------+
+    		| OPTIONS                                          |
+    		| 1. Redisplay Page                                |
+    		| 2. View Post                                     |
+    		| 3. Back                                          |
     		+--------------------------------------------------+""";
 
     //string constants for login section
@@ -757,11 +765,21 @@ public class Application {
 
                 	do {
                 		//Options
-                		System.out.println(allPostOptions);
+                		if (postScale == 5) {
+                			System.out.println(allPostOptions);
+                		} else {
+                			System.out.println(totalOptions);
+                		}
                 		postAuthor = scanner.nextLine();
+                		try {
+                			
+                		} catch (Exception e) {
+                			System.out.println("Not a proper option!");
+                		}
                 	} while (dm.getUserPosts(postAuthor) == null);
                 	//show that user's post
                 	//add comments
+                	
                 	if (postAuthor.equals("1")) {
                 		continue;
                 	} else if (postAuthor.equals("2")) {
@@ -790,13 +808,29 @@ public class Application {
 
                         if (postChoice > 0) {
                             postChoice -= (postIndex + 1);
-                            System.out.println("Post: " + posts.get(postChoice).toString());
+                            if (postChoice < 0 || postChoice > posts.size()) {
+                            	System.out.println("Not a valid post!");
+                            } else {
+                            	System.out.println("Post: " + posts.get(postChoice).toString());
                             
-                            // Add comment options
-                            editComment(posts.get(postChoice));
+                            	// Add comment options
+                            	editComment(posts.get(postChoice));
+                            }
                         }
+                        continue;
+                	} 
+                	
+                	if (postScale != 5) {
+                		if (postAuthor.equals("3")) {
+                			postScale = 5;
+                			continue;
+                		}
+                		System.out.println(actionCorrection);
+                		continue;
+                	}
+                	
                 		
-                	} else if (postAuthor.equals("3")) {
+                	if (postAuthor.equals("3")) {
                 		String postList2 = "getRecentPosts[" + (postIndex + postScale);
                 		postList2 += "," + (postIndex + postScale * 2) + "]";
                         postList = server.streamReader(postList2);
@@ -819,23 +853,14 @@ public class Application {
                 			dontShow = true;
                 		}
                 	} else if (postAuthor.equals("5")) {
+                		//Display all posts
+                		postScale = -1;
+                		continue;
+                	} else if (postAuthor.equals("6")) {
                 		exitProcess = false;
                     	break;
                 	} else {
-                    	for (int i = 0; i < dm.getUserPosts(postAuthor).size(); i++) {
-                        	System.out.println("Post: " + dm.getUserPosts(postAuthor).get(i).toString() + "\n");
-                    	}
-                    	System.out.println("Enter the number of post you want to add comment");
-                    	int postChoice = 0;
-                    	postChoice = scanner.nextInt();
-                    	try {
-                        	String commentEntered = scanner.nextLine();
-                        	Comment c = new Comment(user.getUsername(), commentEntered);
-                        	dm.getUserPosts(postAuthor).get(postChoice - 1).addComment(c);  //add comment
-                        	dm.setPost(dm.getUserPosts(postAuthor).get(postChoice - 1));  //save the added comment to file
-                    	} catch (Exception e) {
-                        	e.printStackTrace();
-                    	}
+                    	System.out.println(actionCorrection);
                 	}
                 } while (!exitProcess);
 
