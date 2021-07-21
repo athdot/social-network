@@ -749,7 +749,8 @@ public class Application {
 
             } else if (action == 3) { //view and edit your posts
                 //display posts from this user with numbers beside them
-                String stream = server.streamReader("getUserPosts[" + localUsername + "]");
+            	String getPosts = "getUserPosts[" + localUsername.toLowerCase() + "]";
+                String stream = server.streamReader(getPosts);
                 ArrayList<Post> posts = StreamParse.stringToPosts(stream);
                 for (int x = 0; x < posts.size(); x++) {
                     System.out.println("Post " + (x + 1) + posts.get(x).toString() + "\n");
@@ -956,7 +957,7 @@ public class Application {
 
                 do {
                     System.out.println(searchRequest);
-                    username = scanner.nextLine();
+                    username = scanner.nextLine().toLowerCase();
                     if (username.contains("-1")) {
                         break;
                     } else if (username.equalsIgnoreCase("0")) {
