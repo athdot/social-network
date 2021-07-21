@@ -1,4 +1,5 @@
 import java.util.Date;
+import java.util.Scanner;
 
 /**
  * Application - Project 4, Social Network App
