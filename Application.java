@@ -262,7 +262,7 @@ public class Application {
             } else if (action == 4) {
             	System.out.println("Are you sure you want to delete account " + localUsername + "? (Y/N)");
             	String thing = scanner.nextLine();
-            	if (thing.equals("Y")) {
+            	if (thing.toUpperCase().equals("Y")) {
             		System.out.println("Deleting account...");
             		server.streamReader("deleteAccount");
             		return true;
