@@ -687,17 +687,26 @@ public class Application {
                 do {
                     System.out.println(searchRequest);
                     username = scanner.nextLine();
+                    if (username.contains("-1")) {
+                        break;
+                    } else if (username.equalsIgnoreCase("0")) {
+                        System.out.println(exit);
+                        quit = true;
+                        return;
+                    }
                     if (dm.accountExists(username)) {
                         correctUser = dm.getAccount(username);
+                        System.out.println(userFound);
+                    } else {
+                        System.out.println(userNotFound);
                     }
 
-                    if (correctUser == null) {//if no user is found
-                        System.out.println(userNotFound);
-                    } else {
-                        System.out.println(userFound);
-                    }
                 } while (correctUser == null);
-                viewUsersPosts(correctUser);
+
+                if (correctUser != null) {
+                    viewUsersPosts(correctUser);
+                }
+
 
             } else if (action == 7) { //logout
                 loggedOut = true;
