@@ -9,6 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -79,7 +80,7 @@ public class RunLocalTest {
                 // Run through all overall required features of the app
                 // this is a wrong username and password (assuming it is not stored)
                 String input = "1\nwrongUser\nwrongPass\n" + //test invalid login
-                        "2\nUser\nPass\n" + //
+                        "2\nUser\nPass\n" + //account creation
                         "1\n1\nThis is my new bio\n5\n" + //edit a field of your profile
                         "2\n1\nPost Title\nPost Message\n" + //create a new post
                         "3\n1\n2\nNew Message\n" +  //be able to edit posts
@@ -89,6 +90,8 @@ public class RunLocalTest {
                         "5\n2\n1\n1\nComment Message\n6\n" + //comment of another user's post
                         "6\nUser\n1\n4\n" + //search for a user and view their content
                         "7\n0\n"; //test quit action
+
+                String timestamp = new Date().toString(); //relies on speed of computer
 
                 // Pair the input with the expected result
                 String expected = "+--------------------------------------------------+\n" +
@@ -204,7 +207,7 @@ public class RunLocalTest {
                         "Post 1\n" +
                         "| -- Post Title --\n" +
                         "| Author: user\n" +
-                        "| Posted: Wed Jul 21 14:47:02 EDT 2021\n" +
+                        "| Posted: " + timestamp + "\n" +
                         "| >> Post Message\n" +
                         "\n" +
                         "\n" +
@@ -278,7 +281,7 @@ public class RunLocalTest {
                         "Post: 1\n" +
                         "| -- Post Title --\n" +
                         "| Author: user\n" +
-                        "| Posted: Wed Jul 21 14:47:02 EDT 2021\n" +
+                        "| Posted: " + timestamp + "\n" +
                         "| >> New Message\n" +
                         "\n" +
                         "\n" +
@@ -297,7 +300,7 @@ public class RunLocalTest {
                         "Post: \n" +
                         "| -- Post Title --\n" +
                         "| Author: user\n" +
-                        "| Posted: Wed Jul 21 14:47:02 EDT 2021\n" +
+                        "| Posted: " + timestamp + "\n" +
                         "| >> New Message\n" +
                         "\n" +
                         "\n" +
@@ -315,12 +318,12 @@ public class RunLocalTest {
                         "Post: 1\n" +
                         "| -- Post Title --\n" +
                         "| Author: user\n" +
-                        "| Posted: Wed Jul 21 14:47:02 EDT 2021\n" +
+                        "| Posted: " + timestamp + "\n" +
                         "| >> New Message\n" +
                         "|\n" +
                         "| Comments: \n" +
                         "| Author: user2\n" +
-                        "| Posted: Wed Jul 21 14:47:02 EDT 2021\n" +
+                        "| Posted: " + timestamp + "\n" +
                         "| >> Comment Message\n" +
                         "\n" +
                         "\n" +
@@ -416,7 +419,8 @@ public class RunLocalTest {
 
                 // Trims the output and verifies it is correct.
                 output = output.replace("\r\n", "\n");
-                assertEquals("Program does not meet all core",
+                assertEquals("Program does not meet all core.\n" +
+                                "Otherwise, check timestamp output comparison, which is negligible.",
                         expected.trim(), output.trim());
 
             } catch (Exception e) {
