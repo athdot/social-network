@@ -773,6 +773,8 @@ public class Application {
                     }
                     if (postChoice > posts.size() || postChoice < -1) {
                         System.out.println(actionCorrection);
+                    } else if (postChoice == -1) {
+                    	break;
                     }
                 } while (postChoice < posts.size() || postChoice > -1);
 
@@ -846,6 +848,7 @@ public class Application {
                     	}
                     	dontShow = false;
                     }
+                    dontShow = false;
 
                 	do {
                 		//Options
