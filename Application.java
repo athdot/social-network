@@ -67,8 +67,9 @@ public class Application {
             | 1. Edit Title                                    |
             | 2. Edit Content                                  |
             | 3. Add a Comment                                 |
-            | 4. Delete Post                                   |
-            | 5. Back                                          |
+            | 4. Export Post                                   |
+            | 5. Delete Post                                   |
+            | 6. Back                                          |
             +--------------------------------------------------+""";
     private final static String createNewPost = "\n" + chooseAction + """
             +--------------------------------------------------+
@@ -79,11 +80,12 @@ public class Application {
             +--------------------------------------------------+""";
     private final static String viewCommentOptions = "\n" + chooseAction + """
             +--------------------------------------------------+
-            | EDIT COMMENTS                                    |
+            | EDIT POST                                        |
             | 1. Add Comment                                   |
             | 2. Edit Comment                                  |
             | 3. Delete Comment                                |
-            | 4. Back                                          |
+            | 4. Export as CSV                                 |
+            | 5. Back                                          |
             +--------------------------------------------------+""";
     private final static String viewUserOptions = "\n" + chooseAction + """
             +--------------------------------------------------+
@@ -384,7 +386,14 @@ public class Application {
         	System.out.println(createComment);
         	String newComment = scanner.nextLine();
         	server.streamReader("addComment[" + post.getTitle() + ","+ post.getAuthor() + "," + newComment + "]");
-    	  } else if (action == 4) { //delete post
+        } else if (action == 4) {
+        	System.out.println("What do you wish to name the file?");
+        	try {
+        		exportAsCsv(scanner.nextLine(), post);
+        	} catch (Exception e) {
+        		System.out.println("Error: Saving to file failed...");
+        	}
+        } else if (action == 5) { //delete post
             System.out.println(deletionConfirmation);
             String response = scanner.nextLine();
             if (response.equalsIgnoreCase("y")) {
@@ -411,7 +420,7 @@ public class Application {
             } else if (action > 5 || action < 1) {
                 System.out.println(actionCorrection);
             }
-        } while (action > 4 || action < 1);
+        } while (action > 5 || action < 1);
 
         if (action == 1) { //Add comment
         	System.out.println(createComment);
@@ -478,7 +487,14 @@ public class Application {
             } catch (Exception e) {
             	System.out.println("Not a valid number!");
             }
-        } //action 4 will end this current method
+        } else if (action == 4) {
+        	System.out.println("What do you wish to name the file?");
+        	try {
+        		exportAsCsv(scanner.nextLine(), post);
+        	} catch (Exception e) {
+        		System.out.println("Error: Saving to file failed...");
+        	}
+        } //action 5 will end this current method
     }
 
     public void createPost() {
@@ -950,6 +966,15 @@ public class Application {
                 System.out.println(actionCorrection);
             }
         }
+    }
+    
+    private void exportAsCsv(String filename, Post post) {
+    	System.out.println("Exporting '" + post.getTitle() + "' as " + filename + "...");
+    	DataManagement temp = new DataManagement();
+    	ArrayList<String[]> export = new ArrayList<String[]>();
+    	export.add(post.toFile());
+    	temp.writeFile(filename, export);
+    	System.out.println("Operation complete");
     }
 
     public void start() { //control the flow of the user experience. Future run() method for threads?
