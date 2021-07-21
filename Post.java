@@ -97,10 +97,15 @@ public class Post {
         output += "| -- " + title + " --\n";
         output += "| Author: " + author + "\n";
         output += "| Posted: " + timeStamp.toString() + "\n";
-        output += "| >> " + content + "\n";
+        output += "| >> " + content + "\n|\n";
+        output += "| Comments: \n";
         
-        for (int i = 0; i < comments.size(); i++) {
-        	output += "\n" + comments.get(i).toString();
+        if (comments.size() > 0) {
+        	output += comments.get(0).toString();
+        }
+        
+        for (int i = 1; i < comments.size(); i++) {
+        	output += "|\n" + comments.get(i).toString();
         }
         return output;
     }
