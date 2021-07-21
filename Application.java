@@ -305,7 +305,7 @@ public class Application {
                     System.out.println(newUsernamePrompt);
                     String username = scanner.nextLine();
 
-                    String taken = server.streamReader("changeUsername[" + username + "]");
+                    String taken = server.streamReader("changeUsername[" + username.toLowerCase() + "]");
                     if (taken.equals("false")) {
                         System.out.println(usernameTakenMessage);
                         continue;
@@ -592,9 +592,14 @@ public class Application {
             if (action == 1) {
                 System.out.println(user.toString());
             } else if (action == 2) {
-                ArrayList<Post> posts = dm.getUserPosts(user.getUsername());
-                for (int x = 0; x < posts.size(); x++) {
+                ArrayList<Post> posts = dm.getUserPosts(user.getUsername().toLowerCase());
+                int x;
+                for (x = 0; x < posts.size(); x++) {
                     System.out.println("Post: " + (x + 1) + posts.get(x).toString());
+                }
+                if (x == 0) {
+                	System.out.println("This user has no posts...");
+                	continue;
                 }
 
                 //ask if the user wants to comment on a post
@@ -639,7 +644,7 @@ public class Application {
 
                     String[] emojis = new String[0];
 
-                    System.out.println("Would you like to enter a comment?");
+                    System.out.println("Would you like to enter a comment? (Y/N)");
 
                     String statement = scanner.nextLine();
 
