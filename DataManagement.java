@@ -166,7 +166,7 @@ public class DataManagement {
     	for (int i = 0; i < recentPosts.size(); i++) {
     		String[] block = recentPosts.get(i);
     		//Check main author
-    		if (block[2].split(",")[0].equals(user)) {
+    		if (block.length > 2 && block[2].split(",")[0].equals(user)) {
     			postList.add(toPost(block));
     		}
     	}
