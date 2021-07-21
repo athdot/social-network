@@ -77,8 +77,7 @@ public class RunLocalTest {
         @Test(timeout = 1000)
         public void testApp() {
             try {
-                // Run through all overall required features of the app
-                // this is a wrong username and password (assuming it is not stored)
+                // try inputs that run through all required categorical features of the app
                 String input = "1\nwrongUser\nwrongPass\n" + //test invalid login
                         "2\nUser\nPass\n" + //account creation
                         "1\n1\nThis is my new bio\n5\n" + //edit a field of your profile
@@ -89,7 +88,8 @@ public class RunLocalTest {
                         "2\nUser2\nPass2\n" + //create 2nd account
                         "5\n2\n1\n1\nComment Message\n6\n" + //comment of another user's post
                         "6\nUser\n1\n4\n" + //search for a user and view their content
-                        "7\n0\n"; //test quit action
+                        "7\n1\nUser\nPass\n" + //accounts can be deleted
+                        "1\n4\nY\n0\n"; //text exit function
 
                 String timestamp = new Date().toString(); //relies on speed of computer
 
@@ -390,6 +390,56 @@ public class RunLocalTest {
                         "| 7. Logout                                        |\n" +
                         "+--------------------------------------------------+\n" +
                         "Logging Out...\n" +
+                        "+--------------------------------------------------+\n" +
+                        "| Welcome to Group 8's Social Network Application! |\n" +
+                        "|                                                  |\n" +
+                        "| Written by:                                      |\n" +
+                        "| Charles Graham, Nathan Yao, Mingrui Xia,         |\n" +
+                        "| Jasmine Maduafokwa, and Sami Heathcote           |\n" +
+                        "|                                                  |\n" +
+                        "| Copyright: We have no money for a copyright      |\n" +
+                        "|                                                  |\n" +
+                        "| NOTE: Enter 0 as an action to QUIT.              |\n" +
+                        "+--------------------------------------------------+\n" +
+                        "\n" +
+                        "Choose an Action:\n" +
+                        "+--------------------------------------------------+\n" +
+                        "| LOGIN PAGE                                       |\n" +
+                        "| 1. Sign In                                       |\n" +
+                        "| 2. Create New Account                            |\n" +
+                        "+--------------------------------------------------+\n" +
+                        "Your Username: Your Password: \n" +
+                        "Choose an Action:\n" +
+                        "+--------------------------------------------------+\n" +
+                        "| MAIN MENU                                        |\n" +
+                        "| 1. Your Profile                                  |\n" +
+                        "| 2. Create Post                                   |\n" +
+                        "| 3. View Your Posts                               |\n" +
+                        "| 4. View Your Comments                            |\n" +
+                        "| 5. View All Posts                                |\n" +
+                        "| 6. Search User                                   |\n" +
+                        "| 7. Logout                                        |\n" +
+                        "+--------------------------------------------------+\n" +
+                        "=-=-=-=-=-=-=-=-=-=-=--=-=\n" +
+                        "\n" +
+                        "Username: user\n" +
+                        "\n" +
+                        "Bio: This is my new bio\n" +
+                        "\n" +
+                        "=-=-=-=-=-=-=-=-=-=-=--=-=\n" +
+                        "\n" +
+                        "\n" +
+                        "Choose an Action:\n" +
+                        "+--------------------------------------------------+\n" +
+                        "| YOUR PROFILE                                     |\n" +
+                        "| 1. Change Bio                                    |\n" +
+                        "| 2. Change Username                               |\n" +
+                        "| 3. Change Password                               |\n" +
+                        "| 4. Delete Account                                |\n" +
+                        "| 5. Back                                          |\n" +
+                        "+--------------------------------------------------+\n" +
+                        "Are you sure you want to delete account User? (Y/N)\n" +
+                        "Deleting account...\n" +
                         "+--------------------------------------------------+\n" +
                         "| Welcome to Group 8's Social Network Application! |\n" +
                         "|                                                  |\n" +
