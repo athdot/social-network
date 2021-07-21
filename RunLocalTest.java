@@ -79,9 +79,12 @@ public class RunLocalTest {
                 // Set the input
                 // this is a wrong username and password (assuming it is not stored)
                 String input = "1\nwrongUser\nwrongPass\n" + //test invalid login
-                        "2\nUser\nPass\n" +
-                        "1\n1\nThis is my new bio\n" +
-                        "";
+                        "2\nUser\nPass\n" + //
+                        "1\n1\nThis is my new bio\n5\n" + //edit a field of your profile
+                        "2\n1\nPost Title\nPost Message\n" + //create a new post
+                        "3\n1\n" +  //todo
+                        "7\n2\nUser\nPass\n" + //program must handle invalid accounts
+                        "2\nUser2\nPass2\n";
 
                 // Pair the input with the expected result
                 String expected = "";
