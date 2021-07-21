@@ -307,7 +307,11 @@ public class Application {
             //post.editComment(user.getUsername(),scanner.nextLine());
             String content = scanner.nextLine();
             server.streamReader("editPost[" + post.getTitle() + "," + post.getAuthor() + "," + content + "]");
-        } else if (action == 3) { //delete post
+        } else if (action == 3) { //add comment
+        	System.out.println(createComment);
+        	String newComment = scanner.nextLine();
+        	server.streamReader("addComment[" + post.getTitle() + ","+ post.getAuthor() + "," + newComment + "]");
+    	  } else if (action == 4) { //delete post
             System.out.println(deletionConfirmation);
             String response = scanner.nextLine();
             if (response.equalsIgnoreCase("y")) {
