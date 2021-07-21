@@ -79,7 +79,7 @@ public class DataManagement {
     	
     	for (int i = 0; i < postList.size(); i++) {
     		String[] block = postList.get(i);
-    		if (block[1].equals(title) && block[2].split(",")[0].equals(author)) {
+    		if (block.length > 2 && block[1].equals(title) && block[2].split(",")[0].equals(author)) {
     			return i;
     		}
     	}
