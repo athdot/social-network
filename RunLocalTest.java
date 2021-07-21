@@ -80,16 +80,18 @@ public class RunLocalTest {
                 // try inputs that run through all required categorical features of the app
                 String input = "1\nwrongUser\nwrongPass\n" + //test invalid login
                         "2\nUser\nPass\n" + //account creation
-                        "1\n1\nThis is my new bio\n5\n" + //edit a field of your profile
+                        "1\n1\nThis is my new bio\n" + //edit a field of your profile
+                        "2\nnewUser\n5\n" + //more profile modification
                         "2\n1\nPost Title\nPost Message\n" + //create a new post
                         "3\n1\n2\nNew Message\n" +  //be able to edit posts
 
                         "7\n2\nUser\nPass\n" + //program must handle invalid accounts
                         "2\nUser2\nPass2\n" + //create 2nd account
-                        "5\n2\n1\n1\nComment Message\n6\n" + //comment of another user's post
+                        "5\n2\n1\n1\nComment Message\n" + //comment of another user's post
+                        "4\n1\n3\n1\n" + //comment deletion and editing
                         "6\nUser\n1\n4\n" + //search for a user and view their content
-                        "7\n1\nUser\nPass\n" + //accounts can be deleted
-                        "1\n4\nY\n0\n"; //text exit function
+                        "7\n1\nUser\nPass\n" +
+                        "1\n4\nY\n0\n"; //account deletion and exit function
 
                 String timestamp = new Date().toString(); //relies on speed of computer
 
@@ -170,6 +172,25 @@ public class RunLocalTest {
                         "| 4. Delete Account                                |\n" +
                         "| 5. Back                                          |\n" +
                         "+--------------------------------------------------+\n" +
+                        "Enter your new username\n" +
+                        "=-=-=-=-=-=-=-=-=-=-=--=-=\n" +
+                        "\n" +
+                        "Username: newuser\n" +
+                        "\n" +
+                        "Bio: This is my new bio\n" +
+                        "\n" +
+                        "=-=-=-=-=-=-=-=-=-=-=--=-=\n" +
+                        "\n" +
+                        "\n" +
+                        "Choose an Action:\n" +
+                        "+--------------------------------------------------+\n" +
+                        "| YOUR PROFILE                                     |\n" +
+                        "| 1. Change Bio                                    |\n" +
+                        "| 2. Change Username                               |\n" +
+                        "| 3. Change Password                               |\n" +
+                        "| 4. Delete Account                                |\n" +
+                        "| 5. Back                                          |\n" +
+                        "+--------------------------------------------------+\n" +
                         "\n" +
                         "Choose an Action:\n" +
                         "+--------------------------------------------------+\n" +
@@ -206,13 +227,13 @@ public class RunLocalTest {
                         "+--------------------------------------------------+\n" +
                         "Post 1\n" +
                         "| -- Post Title --\n" +
-                        "| Author: user\n" +
+                        "| Author: newuser\n" +
                         "| Posted: " + timestamp + "\n" +
                         "| >> Post Message\n" +
                         "\n" +
                         "\n" +
                         "Enter the number of the post you would like to edit\n" +
-                        "Enter -1 to return to the main screen: \n" +
+                        "Enter 0 to return to the main screen: \n" +
                         "\n" +
                         "Choose an Action:\n" +
                         "+--------------------------------------------------+\n" +
@@ -225,7 +246,7 @@ public class RunLocalTest {
                         "| 6. Back                                          |\n" +
                         "+--------------------------------------------------+\n" +
                         "Enter the Post's new Message: \n" +
-                        "editPost[Post Title,user,New Message]\n" +
+                        "editPost[Post Title,newuser,New Message]\n" +
                         "\n" +
                         "Choose an Action:\n" +
                         "+--------------------------------------------------+\n" +
@@ -257,14 +278,6 @@ public class RunLocalTest {
                         "| 1. Sign In                                       |\n" +
                         "| 2. Create New Account                            |\n" +
                         "+--------------------------------------------------+\n" +
-                        "Your Username: Your Password: Username is Taken\n" +
-                        "\n" +
-                        "Choose an Action:\n" +
-                        "+--------------------------------------------------+\n" +
-                        "| LOGIN PAGE                                       |\n" +
-                        "| 1. Sign In                                       |\n" +
-                        "| 2. Create New Account                            |\n" +
-                        "+--------------------------------------------------+\n" +
                         "Your Username: Your Password: Account Created\n" +
                         "\n" +
                         "Choose an Action:\n" +
@@ -278,31 +291,59 @@ public class RunLocalTest {
                         "| 6. Search User                                   |\n" +
                         "| 7. Logout                                        |\n" +
                         "+--------------------------------------------------+\n" +
-                        "Post: 1\n" +
-                        "| -- Post Title --\n" +
-                        "| Author: user\n" +
-                        "| Posted: " + timestamp + "\n" +
-                        "| >> New Message\n" +
-                        "\n" +
                         "\n" +
                         "Choose an Action:\n" +
                         "+--------------------------------------------------+\n" +
-                        "| OPTIONS                                          |\n" +
-                        "| 1. Redisplay Page                                |\n" +
-                        "| 2. View Post                                     |\n" +
-                        "| 3. Load Next 5 Posts                             |\n" +
-                        "| 4. Load Last 5 Posts                             |\n" +
-                        "| 5. Display All Posts                             |\n" +
-                        "| 6. Back                                          |\n" +
+                        "| CREATE POST                                      |\n" +
+                        "| 1. Write New Post                                |\n" +
+                        "| 2. Import Post from CSV                          |\n" +
+                        "| 3. Back                                          |\n" +
                         "+--------------------------------------------------+\n" +
-                        "Enter the number of the post you would like to edit\n" +
-                        "Enter -1 to return to the main screen: \n" +
-                        "Post: \n" +
-                        "| -- Post Title --\n" +
+                        "Invalid Action\n" +
+                        "Invalid Action\n" +
+                        "\n" +
+                        "Choose an Action:\n" +
+                        "+--------------------------------------------------+\n" +
+                        "| MAIN MENU                                        |\n" +
+                        "| 1. Your Profile                                  |\n" +
+                        "| 2. Create Post                                   |\n" +
+                        "| 3. View Your Posts                               |\n" +
+                        "| 4. View Your Comments                            |\n" +
+                        "| 5. View All Posts                                |\n" +
+                        "| 6. Search User                                   |\n" +
+                        "| 7. Logout                                        |\n" +
+                        "+--------------------------------------------------+\n" +
+                        "\n" +
+                        "Choose an Action:\n" +
+                        "+--------------------------------------------------+\n" +
+                        "| CREATE POST                                      |\n" +
+                        "| 1. Write New Post                                |\n" +
+                        "| 2. Import Post from CSV                          |\n" +
+                        "| 3. Back                                          |\n" +
+                        "+--------------------------------------------------+\n" +
+                        "Enter a Post Title: \n" +
+                        "Enter the Post's Message: \n" +
+                        "\n" +
+                        "Choose an Action:\n" +
+                        "+--------------------------------------------------+\n" +
+                        "| MAIN MENU                                        |\n" +
+                        "| 1. Your Profile                                  |\n" +
+                        "| 2. Create Post                                   |\n" +
+                        "| 3. View Your Posts                               |\n" +
+                        "| 4. View Your Comments                            |\n" +
+                        "| 5. View All Posts                                |\n" +
+                        "| 6. Search User                                   |\n" +
+                        "| 7. Logout                                        |\n" +
+                        "+--------------------------------------------------+\n" +
+                        "Post 1\n" +
+                        "| -- 1 --\n" +
                         "| Author: user\n" +
                         "| Posted: " + timestamp + "\n" +
-                        "| >> New Message\n" +
+                        "| >> Comment Message\n" +
                         "\n" +
+                        "\n" +
+                        "Select the post you want to edit your comment(s)\n" +
+                        "Enter -1 to return to main menu, 0 to quit program\n" +
                         "\n" +
                         "Choose an Action:\n" +
                         "+--------------------------------------------------+\n" +
@@ -313,30 +354,9 @@ public class RunLocalTest {
                         "| 4. Export as CSV                                 |\n" +
                         "| 5. Back                                          |\n" +
                         "+--------------------------------------------------+\n" +
-                        "Enter your Comment: \n" +
-                        "here\n" +
-                        "Post: 1\n" +
-                        "| -- Post Title --\n" +
-                        "| Author: user\n" +
-                        "| Posted: " + timestamp + "\n" +
-                        "| >> New Message\n" +
-                        "|\n" +
-                        "| Comments: \n" +
-                        "| Author: user2\n" +
-                        "| Posted: " + timestamp + "\n" +
-                        "| >> Comment Message\n" +
-                        "\n" +
-                        "\n" +
-                        "Choose an Action:\n" +
-                        "+--------------------------------------------------+\n" +
-                        "| OPTIONS                                          |\n" +
-                        "| 1. Redisplay Page                                |\n" +
-                        "| 2. View Post                                     |\n" +
-                        "| 3. Load Next 5 Posts                             |\n" +
-                        "| 4. Load Last 5 Posts                             |\n" +
-                        "| 5. Display All Posts                             |\n" +
-                        "| 6. Back                                          |\n" +
-                        "+--------------------------------------------------+\n" +
+                        "Your Comments: \n" +
+                        "Select a Comment to Delete: \n" +
+                        "Not a valid number!\n" +
                         "\n" +
                         "Choose an Action:\n" +
                         "+--------------------------------------------------+\n" +
@@ -364,7 +384,7 @@ public class RunLocalTest {
                         "\n" +
                         "Username: user\n" +
                         "\n" +
-                        "Bio: This is my new bio\n" +
+                        "Bio: \n" +
                         "\n" +
                         "=-=-=-=-=-=-=-=-=-=-=--=-=\n" +
                         "\n" +
@@ -424,7 +444,7 @@ public class RunLocalTest {
                         "\n" +
                         "Username: user\n" +
                         "\n" +
-                        "Bio: This is my new bio\n" +
+                        "Bio: \n" +
                         "\n" +
                         "=-=-=-=-=-=-=-=-=-=-=--=-=\n" +
                         "\n" +
