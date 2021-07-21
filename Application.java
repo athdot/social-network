@@ -354,10 +354,10 @@ public class Application {
                 quit = true;
                 System.out.println(exit);
                 return;
-            } else if (action > 5 || action < 1) {
+            } else if (action > 6 || action < 1) {
                 System.out.println(actionCorrection);
             }
-        } while (action > 5 || action < 1);
+        } while (action > 6 || action < 1);
 
         if (action == 1) { //edit title
             System.out.println(newPostTitlePrompt);
@@ -713,7 +713,7 @@ public class Application {
         boolean loggedOut = false;
         DataManagement dm = new DataManagement();
 
-        while (!loggedOut) {
+        while (!loggedOut && !quit) {
             System.out.println(mainMenu); //main menu is too large to replay if invalid action message is displayed
 
             int action = 0; //default to zero to prevent IDE errors
