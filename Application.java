@@ -22,6 +22,13 @@ public class Application {
     private final static String welcome = """
             +--------------------------------------------------+
             | Welcome to Group 8's Social Network Application! |
+            |                                                  |
+            | Written by:                                      |
+            | Charles Graham, Nathan Yao, Mingrui Xia,         |
+            | Jasmine Maduafokwa, and Sami Heathcote           |
+            |                                                  |
+            | Copyright: We have no money for a copyright      |
+            |                                                  |
             | NOTE: Enter 0 as an action to QUIT.              |
             +--------------------------------------------------+""";
     private final static String chooseAction = "Choose an Action:\n";
@@ -55,8 +62,9 @@ public class Application {
             | EDIT POST                                        |
             | 1. Edit Title                                    |
             | 2. Edit Content                                  |
-            | 3. Delete Post                                   |
-            | 4. Back                                          |
+            | 3. Add a Comment                                 |
+            | 4. Delete Post                                   |
+            | 5. Back                                          |
             +--------------------------------------------------+""";
     private final static String createNewPost = "\n" + chooseAction + """
             +--------------------------------------------------+
@@ -64,6 +72,14 @@ public class Application {
             | 1. Write New Post                                |
             | 2. Import Post from CSV                          |
             | 3. Back                                          |
+            +--------------------------------------------------+""";
+    private final static String viewCommentOptions = "\n" + chooseAction + """
+            +--------------------------------------------------+
+            | EDIT COMMENTS                                    |
+            | 1. Add Comment                                   |
+            | 2. Edit Comment                                  |
+            | 3. Delete Comment                                |
+            | 4. Back                                          |
             +--------------------------------------------------+""";
     private final static String viewUserOptions = "\n" + chooseAction + """
             +--------------------------------------------------+
@@ -99,6 +115,7 @@ public class Application {
     private final static String postTitlePrompt = "Enter a Post Title: ";
     private final static String postContentPrompt = "Enter the Post's Message: ";
     private final static String onePostName = "You cannot name a post the same name twice!";
+    private final static String createComment = "Enter your Comment: ";
 
     //strings pertaining to post editing/deletion
     private final static String postChoicePrompt = "Enter the number of the post you would like to edit"
@@ -106,6 +123,10 @@ public class Application {
     private final static String newPostTitlePrompt = "Enter a new Post Title: ";
     private final static String newPostContentPrompt = "Enter the Post's new Message: ";
     private final static String deletionConfirmation = "Are you sure you would like to delete this post? (Y/N): ";
+
+    //strings pertaining to comment info
+    private final static String commentDelete = "What comment would you like to delete?";
+    private final static String commentEdit = "What comment would you like to edit?";
 
     //strings pertaining to search users
     private final static String searchRequest = "Enter the username of the user you want to view: ";
@@ -119,12 +140,12 @@ public class Application {
 
     Scanner scanner;
     Backend server;
-    
+
     public Application() {
     	scanner = new Scanner(System.in);
     	server = new Backend();
     }
-    
+
     public void login() { //control the login section of the program
 
         boolean validCredentials = false;
@@ -156,13 +177,13 @@ public class Application {
             boolean correctLogin = false;
             String username;
             String password;
-            
+
             do {
                 System.out.print(usernamePrompt);
                 username = scanner.nextLine();
                 System.out.print(passwordPrompt);
                 password = scanner.nextLine();
-            
+
                 if (username.contains(" ") || username.contains(",")) {
                     System.out.println(usernameSpaceCorrection);
                 } else if (password.length() == 0 || username.length() == 0) {
@@ -172,10 +193,10 @@ public class Application {
                 	user = new Account(username, password); //current user signed in
                 }
             } while(!correctLogin);
-            
+
             if (actionInt == 1) { //user chooses to sign in
                 String worked = server.streamReader("login[" + username + "," + password + "]");
-                
+
                 if (worked.equals("false")) {
                 	System.out.println(invalidAccount);
                 } else {
@@ -205,7 +226,7 @@ public class Application {
         while (!goBack) {
             //display user's profile and show options
         	Account user = StreamParse.stringToAccount(server.streamReader("getProfile[" + localUsername +"]"));
-        	
+
             System.out.println(user.toString());
             System.out.println(yourProfile);
 
@@ -221,7 +242,7 @@ public class Application {
                 //prompt for current password
                 System.out.println(currentPasswordPrompt);
                 String password = scanner.nextLine();
-                
+
                 System.out.println(newPasswordPrompt);
                 String newPassword = scanner.nextLine();
                 if (newPassword.length() == 0) {
@@ -230,7 +251,7 @@ public class Application {
 
                 String changeSuccess = "changePassword[" + password + "," + newPassword + "]";
                 changeSuccess = server.streamReader(changeSuccess);
-                
+
                 if (changeSuccess.equals("false")) {
                     System.out.println(invalidPassword);
                 } else {
@@ -238,11 +259,11 @@ public class Application {
                 }
             } else if (action == 2) { //change username
             	boolean correctLogin = false;
-            	
+
             	do {
                 	System.out.println(newUsernamePrompt);
                 	String username = scanner.nextLine();
-                
+
                 	String taken = server.streamReader("changeUsername[" + username +"]");
                 	if (taken.equals("false")) {
                 		System.out.println(usernameTakenMessage);
@@ -250,7 +271,7 @@ public class Application {
                 	} else {
                 		localUsername = username;
                 	}
-                
+
                 	if (username.contains(" ") || username.contains(",")) {
                     	System.out.println(usernameSpaceCorrection);
                 	} else {
@@ -300,22 +321,26 @@ public class Application {
             	newTitle = scanner.nextLine();
             	String input = "editTitle[" + post.getTitle() + "," + post.getAuthor() + "," + newTitle + "]";
             	input = server.streamReader(input);
-            	
+
             	goodTitle = input.equals("true");
             	if (!goodTitle) {
             		System.out.println(onePostName);
             	}
             } while(!goodTitle);
-            
+
             String postUpdate = server.streamReader("getPost[" + newTitle + "," + post.getAuthor() + "]");
             post = StreamParse.stringToPost(postUpdate);
-            
+
         } else if (action == 2) { //edit content
             System.out.println(newPostContentPrompt);
             //post.editComment(user.getUsername(),scanner.nextLine());
             String content = scanner.nextLine();
             server.streamReader("editPost[" + post.getTitle() + "," + post.getAuthor() + "," + content + "]");
-        } else if (action == 3) { //delete post
+        } else if (action == 3) { //add comment
+        	System.out.println(createComment);
+        	String newComment = scanner.nextLine();
+        	server.streamReader("addComment[" + post.getTitle() + ","+ post.getAuthor() + "," + newComment + "]");
+    	  } else if (action == 4) { //delete post
             System.out.println(deletionConfirmation);
             String response = scanner.nextLine();
             if (response.equalsIgnoreCase("y")) {
@@ -323,12 +348,11 @@ public class Application {
             }
         }
     }
-	
-    public void viewUsersPosts(Account user) {
-        Scanner scanner = new Scanner(System.in);
+
+    public void editComment(Post post) {
         int action = 0; //default to zero to prevent
         do {
-            System.out.println(viewUserOptions);
+            System.out.println(viewCommentOptions);
             try {
                 action = scanner.nextInt();
                 scanner.nextLine();
@@ -340,10 +364,10 @@ public class Application {
                 quit = true;
                 System.out.println(exit);
                 return;
-            } else if (action > 4 || action < 1) {
+            } else if (action > 5 || action < 1) {
                 System.out.println(actionCorrection);
             }
-        } while (action > 3 || action < 1);
+        } while (action > 4 || action < 1);
 
         if (action == 1) {
             System.out.println(user.toString());
@@ -422,8 +446,44 @@ public class Application {
 
     }
 
+
+    public void viewUsersPosts(Account user) {
+        Scanner scanner = new Scanner(System.in);
+        int action = 0; //default to zero to prevent
+        DataManagement dm = new DataManagement();
+        do {
+            do {
+                System.out.println(viewUserOptions);
+                try {
+                    action = scanner.nextInt();
+                    scanner.nextLine();
+                } catch (InputMismatchException inputMismatchException) {
+                    System.out.println(actionCorrection);
+                    continue;
+                }
+                if (action == 0) { //anytime the user enters a 0 for an action, quit
+                    quit = true;
+                    System.out.println(exit);
+                    return;
+                } else if (action > 3 || action < 1) {
+                    System.out.println(actionCorrection);
+                }
+            } while (action > 3 || action < 1);
+
+            if (action == 1) {
+                System.out.println(user.toString());
+            } else if (action == 2) {
+                ArrayList<Post> posts = dm.getUserPosts(user.getUsername());
+                for (int x = 0; x < posts.size(); x++) {
+                    System.out.println(posts.get(x).toString());
+                }
+            }
+        } while (action != 3);
+    }
+
     public void mainMenu() {
         boolean loggedOut = false;
+        DataManagement dm = new DataManagement();
 
         while (!loggedOut) {
             System.out.println(mainMenu);
@@ -490,8 +550,8 @@ public class Application {
 
             } else if (action == 4) { //view and edit all your comments
                 // TODO: those commentted out stuffs would should the user's all posts with comments
-                DataManagement dm = new DataManagement();
-                ArrayList<Post> posts = dm.getUserPosts(user.getUsername());
+            	String stream = "getUserComments[" + localUsername + "]";
+                ArrayList<Post> posts = StreamParse.stringToPosts(server.streamReader(stream));
                 //find specific user's posts with comments
                 /*for (int i = 0; i < dm.getUserPosts(user.getUsername()).size(); i++) {
                     System.out.println("Post " + (i + 1) + posts.get(i).toString() + "\n");
@@ -502,47 +562,41 @@ public class Application {
                     }
                 }*/
                 //edit the comments
-                int editCommentChoice = 0;
-                int postChoice = 0;
-                String commentEdited = "";
+
+                for (int x = 0; x < posts.size(); x++) {
+                    System.out.println("Post " + (x + 1) + posts.get(x).toString() + "\n");
+                }
+
+                //display option to edit a post and get input
+                int postChoice = 0; //default to zero to prevent ide errors
                 do {
-                    do {
-                        System.out.println("Select the post you want to edit your comment(s)");
-                        postChoice = scanner.nextInt();  //minus one to get the true position
-                    } while (postChoice >= posts.size() || postChoice < -1);
-                    do {
-                        System.out.println(dm.getUserPosts(user.getUsername()).get(postChoice - 1).toString());
-                        System.out.println("1. Enter the number of comment you want to edit\n"
-                                + "2. Enter the number of comment you want to delete\n"
-                                + "3. back to main menu");
-                        editCommentChoice = scanner.nextInt();
-                    } while (editCommentChoice < 1 || editCommentChoice > 3);
-                    
-                    if (editCommentChoice == 1) {
+                	if (posts.size() == 0) {
+                		System.out.println("You have no comments!");
+                		break;
+                	}
+                	System.out.println("Select the post you want to edit your comment(s)");
+                    try {
+                        postChoice = scanner.nextInt();
                         scanner.nextLine();
-                        commentEdited = scanner.nextLine();
-                        //edit comments under the "Post" object
-                        //dm.getUserPosts(user.getUsername()).get(postChoice - 1).getComments().
-                                //get(editCommentChoice - 1).editComment(dm.getUserPosts(user.getUsername()).
-                                        //get(postChoice - 1), user.getUsername(), commentEdited);
-                        //save to database
-                        //dm.setPost(dm.getUserPosts(user.getUsername()).get(postChoice - 1));
-                    } else if (editCommentChoice == 2) {
-                        //edit comments to "delete" the "Post" object
-                        //dm.getUserPosts(user.getUsername()).get(postChoice).getComments().
-                                //get(editCommentChoice - 1).editComment(dm.getUserPosts(user.getUsername())
-                                        //.get(postChoice - 1), user.getUsername(), "deleted");
-                        //save to database
-                        dm.setPost(dm.getUserPosts(user.getUsername()).get(postChoice));
-                    } else if (editCommentChoice == 3) {
-                        break;  // return to main menu
+                    } catch (InputMismatchException inputMismatchException) {
+                        System.out.println();
+                    }
+                    if (postChoice > posts.size() || postChoice < -1) {
+                        System.out.println(actionCorrection);
+                    } else if (postChoice == 0) {
+                        System.out.println(exit);
+                        quit = true;
+                        return; //return to start() method, start method will end the program since field quit = true
                     }
                 } while (postChoice > posts.size() || postChoice < -1);
-		    
+
+                if (postChoice > 0) {
+                    editComment(posts.get(postChoice - 1));
+                }
+
 		//TODO: the comment should be added under action 5--view all post
 
             } else if (action == 5) {  //view all people's posts
-                DataManagement dm = new DataManagement();
                 //print all the post from most recent
                 String postAuthor = "";
                 for (int i = 0; i < 30; i++) {
@@ -559,7 +613,7 @@ public class Application {
                     break;
                 } else {
                     for (int i = 0; i < dm.getUserPosts(postAuthor).size(); i++) {
-                        System.out.println("Post: " + dm.getUserPosts(postAuthor).get(i).toString() + "\n"); 
+                        System.out.println("Post: " + dm.getUserPosts(postAuthor).get(i).toString() + "\n");
                     }
                     System.out.println("Enter the number of post you want to add comment");
                     int postChoice = 0;
@@ -575,26 +629,17 @@ public class Application {
                 }
 
             } else if (action == 6) { //search for a specific user
-                //ArrayList <Account> accounts = getAccounts(); //this will be a method to retrieve all users from
                 System.out.println(searchRequest);
-                String user = scanner.nextLine();
+                String username = scanner.nextLine();
 
-                Account correctUser;
+                Account correctUser = dm.getAccount(username);
 
-                //for (int x = 0; x < accounts.size(); x++) {
-                //    if (accounts.get(x).getUsername().equalsIgnoreCase(user)) {
-                //        correctUser = accounts.get(x);
-                //    }
-                //}
-
-                //if (correctUser == null) {//if no user is found
-                //    System.out.println(userNotFound);
-                //} else {
-                //    System.out.println(userFound);
-                //    viewUsersPosts(correctUser);
-                //}
-
-                //System.out.println(correctUser.toString());
+                if (correctUser == null) {//if no user is found
+                    System.out.println(userNotFound);
+                } else {
+                    System.out.println(userFound);
+                    viewUsersPosts(correctUser);
+                }
 
             } else if (action == 7) { //logout
                 loggedOut = true;

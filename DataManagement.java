@@ -79,7 +79,7 @@ public class DataManagement {
     	
     	for (int i = 0; i < postList.size(); i++) {
     		String[] block = postList.get(i);
-    		if (block[1].equals(title) && block[2].split(",")[0].equals(author)) {
+    		if (block.length > 2 && block[1].equals(title) && block[2].split(",")[0].equals(author)) {
     			return i;
     		}
     	}
@@ -166,12 +166,46 @@ public class DataManagement {
     	for (int i = 0; i < recentPosts.size(); i++) {
     		String[] block = recentPosts.get(i);
     		//Check main author
-    		if (block[2].split(",")[0].equals(user)) {
+    		if (block.length > 2 && block[2].split(",")[0].equals(user)) {
     			postList.add(toPost(block));
     		}
     	}
     	
     	return postList;
+    }
+    
+    // This method gets a list of posts with similar text somewhere in it
+    public ArrayList<Post> getSimilarPosts(String phrase) {
+    	ArrayList<String[]> postList = readFile("post.csv");
+    	ArrayList<Post> output = new ArrayList<Post>();
+    	
+    	for (int i = 0; i < postList.size(); i++) {
+    		String[] block = postList.get(i);
+    		if (block.length > 0) {
+    			for (int j = 0; j < block.length; j++) {
+    				if (block[j].indexOf(phrase) > -1) {
+    					output.add(toPost(block));
+    					break;
+    				}
+    			}
+    		}
+    	}
+    	
+    	return output;
+    }
+    
+    public ArrayList<String> getAssociatedUsers(String phrase) {
+    	ArrayList<String[]> userList = readFile("profile.csv");
+    	ArrayList<String> usernames = new ArrayList<String>();
+    	
+    	for (int i = 0; i < userList.size(); i++) {
+    		String[] block = userList.get(i);
+    		if (block.length > 1 && block[1].indexOf(phrase) > -1) {
+    			usernames.add(block[1]);
+    		}
+    	}
+    	
+    	return usernames;
     }
     
     public Post getPost(String title, String author) {
@@ -188,7 +222,7 @@ public class DataManagement {
     		String[] block = recentPosts.get(i);
     		//Check main author
     		
-    		for (int j = 3; j < block.length; j++) {
+    		for (int j = 2; j < block.length; j++) {
     			if (block[j].split(",")[0].equals(user)) {
     	    		postList.add(toPost(block));
     	    		break;
