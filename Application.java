@@ -23,96 +23,96 @@ public class Application {
     private String localUsername;
     private boolean quit = false; //becomes true if user enters 0 for action. Program terminates
 
-    private final static String welcome = """
-            +--------------------------------------------------+
-            | Welcome to Group 8's Social Network Application! |
-            |                                                  |
-            | Written by:                                      |
-            | Charles Graham, Nathan Yao, Mingrui Xia,         |
-            | Jasmine Maduafokwa, and Sami Heathcote           |
-            |                                                  |
-            | Copyright: We have no money for a copyright      |
-            |                                                  |
-            | NOTE: Enter 0 as an action to QUIT.              |
-            +--------------------------------------------------+""";
+    private final static String welcome = "" +
+            "+--------------------------------------------------+\n" +
+            "| Welcome to Group 8's Social Network Application! |\n" +
+            "|                                                  |\n" +
+            "| Written by:                                      |\n" +
+            "| Charles Graham, Nathan Yao, Mingrui Xia,         |\n" +
+            "| Jasmine Maduafokwa, and Sami Heathcote           |\n" +
+            "|                                                  |\n" +
+            "| Copyright: We have no money for a copyright      |\n" +
+            "|                                                  |\n" +
+            "| NOTE: Enter 0 as an action to QUIT.              |\n" +
+            "+--------------------------------------------------+\n";
     private final static String chooseAction = "Choose an Action:\n";
-    private final static String loginPage = "\n" + chooseAction + """
-            +--------------------------------------------------+
-            | LOGIN PAGE                                       |
-            | 1. Sign In                                       |
-            | 2. Create New Account                            |
-            +--------------------------------------------------+""";
-    private final static String mainMenu = "\n" + chooseAction + """
-            +--------------------------------------------------+
-            | MAIN MENU                                        |
-            | 1. Your Profile                                  |
-            | 2. Create Post                                   |
-            | 3. View Your Posts                               |
-            | 4. View Your Comments                            |
-            | 5. View All Posts                                |
-            | 6. Search User                                   |
-            | 7. Logout                                        |
-            +--------------------------------------------------+""";
-    private final static String yourProfile = "\n" + chooseAction + """
-            +--------------------------------------------------+
-            | YOUR PROFILE                                     |
-            | 1. Change Bio                                    |
-            | 2. Change Username                               |
-            | 3. Change Password                               |
-            | 4. Delete Account                                |
-            | 5. Back                                          |
-            +--------------------------------------------------+""";
-    private final static String editPost = "\n" + chooseAction + """
-            +--------------------------------------------------+
-            | EDIT POST                                        |
-            | 1. Edit Title                                    |
-            | 2. Edit Content                                  |
-            | 3. Add a Comment                                 |
-            | 4. Export Post                                   |
-            | 5. Delete Post                                   |
-            | 6. Back                                          |
-            +--------------------------------------------------+""";
-    private final static String createNewPost = "\n" + chooseAction + """
-            +--------------------------------------------------+
-            | CREATE POST                                      |
-            | 1. Write New Post                                |
-            | 2. Import Post from CSV                          |
-            | 3. Back                                          |
-            +--------------------------------------------------+""";
-    private final static String viewCommentOptions = "\n" + chooseAction + """
-            +--------------------------------------------------+
-            | EDIT POST                                        |
-            | 1. Add Comment                                   |
-            | 2. Edit Comment                                  |
-            | 3. Delete Comment                                |
-            | 4. Export as CSV                                 |
-            | 5. Back                                          |
-            +--------------------------------------------------+""";
-    private final static String viewUserOptions = "\n" + chooseAction + """
-            +--------------------------------------------------+
-            | VIEW                                             |
-            | 1. View Profile                                  |
-            | 2. View Posts                                    |
-            | 3. View Comments                                 |
-            | 4. Back                                          |
-            +--------------------------------------------------+""";
-    private final static String allPostOptions = "\n" + chooseAction + """
-    		+--------------------------------------------------+
-    		| OPTIONS                                          |
-    		| 1. Redisplay Page                                |
-    		| 2. View Post                                     |
-    		| 3. Load Next 5 Posts                             |
-    		| 4. Load Last 5 Posts                             |
-    		| 5. Display All Posts                             |
-    		| 6. Back                                          |
-    		+--------------------------------------------------+""";
-    private final static String totalOptions = "\n" + chooseAction + """
-    		+--------------------------------------------------+
-    		| OPTIONS                                          |
-    		| 1. Redisplay Page                                |
-    		| 2. View Post                                     |
-    		| 3. Back                                          |
-    		+--------------------------------------------------+""";
+    private final static String loginPage = "\n" + chooseAction +
+            "+--------------------------------------------------+\n" +
+            "| LOGIN PAGE                                       |\n" +
+            "| 1. Sign In                                       |\n" +
+            "| 2. Create New Account                            |\n" +
+            "+--------------------------------------------------+\n";
+    private final static String mainMenu = "\n" + chooseAction +
+            "+--------------------------------------------------+\n" +
+            "| MAIN MENU                                        |\n" +
+            "| 1. Your Profile                                  |\n" +
+            "| 2. Create Post                                   |\n" +
+            "| 3. View Your Posts                               |\n" +
+            "| 4. View Your Comments                            |\n" +
+            "| 5. View All Posts                                |\n" +
+            "| 6. Search User                                   |\n" +
+            "| 7. Logout                                        |\n" +
+            "+--------------------------------------------------+\n";
+    private final static String yourProfile = "\n" + chooseAction + 
+            "+--------------------------------------------------+\n" +
+            "| YOUR PROFILE                                     |\n" +
+            "| 1. Change Bio                                    |\n" +
+            "| 2. Change Username                               |\n" +
+            "| 3. Change Password                               |\n" +
+            "| 4. Delete Account                                |\n" +
+            "| 5. Back                                          |\n" +
+            "+--------------------------------------------------+\n";
+    private final static String editPost = "\n" + chooseAction + 
+            "+--------------------------------------------------+\n" +
+            "| EDIT POST                                        |\n" +
+            "| 1. Edit Title                                    |\n" +
+            "| 2. Edit Content                                  |\n" +
+            "| 3. Add a Comment                                 |\n" +
+            "| 4. Export Post                                   |\n" +
+            "| 5. Delete Post                                   |\n" +
+            "| 6. Back                                          |\n" +
+            "+--------------------------------------------------+";
+    private final static String createNewPost = "\n" + chooseAction +
+            "+--------------------------------------------------+\n" +
+            "| CREATE POST                                      |\n" +
+            "| 1. Write New Post                                |\n" +
+            "| 2. Import Post from CSV                          |\n" +
+            "| 3. Back                                          |\n" +
+            "+--------------------------------------------------+";
+    private final static String viewCommentOptions = "\n" + chooseAction +
+            "+--------------------------------------------------+\n" +
+            "| EDIT POST                                        |\n" +
+            "| 1. Add Comment                                   |\n" +
+            "| 2. Edit Comment                                  |\n" +
+            "| 3. Delete Comment                                |\n" +
+            "| 4. Export as CSV                                 |\n" +
+            "| 5. Back                                          |\n" +
+            "+--------------------------------------------------+";
+    private final static String viewUserOptions = "\n" + chooseAction +
+            "+--------------------------------------------------+\n" +
+            "| VIEW                                             |\n" +
+            "| 1. View Profile                                  |\n" +
+            "| 2. View Posts                                    |\n" + 
+            "| 3. View Comments                                 |\n" +
+            "| 4. Back                                          |\n" +
+            "+--------------------------------------------------+";
+    private final static String allPostOptions = "\n" + chooseAction +
+    		"+--------------------------------------------------+\n" +
+    		"| OPTIONS                                          |\n" +
+    		"| 1. Redisplay Page                                |\n" +
+    		"| 2. View Post                                     |\n" +
+    		"| 3. Load Next 5 Posts                             |\n" +
+    		"| 4. Load Last 5 Posts                             |\n" + 
+    		"| 5. Display All Posts                             |\n" + 
+    		"| 6. Back                                          |\n" +
+    		"+--------------------------------------------------+";
+    private final static String totalOptions = "\n" + chooseAction +
+    		"+--------------------------------------------------+\n" +
+    		"| OPTIONS                                          |\n" +
+    		"| 1. Redisplay Page                                |\n" +
+    		"| 2. View Post                                     |\n" +
+    		"| 3. Back                                          |\n" + 
+    		"+--------------------------------------------------+";
 
     //string constants for login section
     private final static String actionCorrection = "Invalid Action";
