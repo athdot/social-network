@@ -87,7 +87,7 @@ public class Post {
     
     private String replaceCommas(String input) {
     	//Replace string commas with something the user is very unlikely to type
-    	return input.replace(",", "[][]][COMMA_REP][[][]");
+    	return input.replace(",", "123COMMA_REP321");
     }
 
     //change title
@@ -99,7 +99,7 @@ public class Post {
     //Display message
     public String toString() {
         String output = "\n";
-        output += "| -- " + title.replace("[[[COMMA_REP[[[",",") + " --\n";
+        output += "| -- " + title.replace("123COMMA_REP321",",") + " --\n";
         output += "| Author: " + author + "\n";
         output += "| Posted: " + timeStamp.toString() + "\n";
         output += "| >> " + content + "\n";
