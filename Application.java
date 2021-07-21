@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -173,16 +174,16 @@ public class Application {
         System.out.println(welcome);
 
         do {
-            String actionStr; //an 'a' will stand for action to be done, stores initial input for action action
             int actionInt = 0; //user must enter an integer action, store that value from actionStr in here
             do {
                 System.out.println(loginPage);
-                actionStr = scanner.nextLine();
                 try {
-                    actionInt = Integer.parseInt(actionStr);
+                    actionInt = Integer.parseInt(scanner.nextLine());
                 } catch (NumberFormatException numberFormatException) {
                     System.out.println(actionCorrection);
                     continue; //skip the current iteration of the loop
+                } catch (NoSuchElementException noSuchElementException) { //catch this for JUnit testing debug
+                    System.out.println("WHY");
                 }
                 if (actionInt == 0) { //user enters 0 to exit the program (see app() method)
                     System.out.println(exit);
@@ -588,6 +589,7 @@ public class Application {
 
                         System.out.println("Emoji? Press 1: ");
 
+                        //todo: make sure this has input validation
                         int emojiChoice = scanner.nextInt();
                         scanner.nextLine();
 
@@ -595,11 +597,12 @@ public class Application {
                             if (emojiChoice == 1) {
 				// Function includes a scanner in which each number corresponds to an emoji
 				// Emoji picked is added to empty string along with comment    
-                                newComment += task.emojiSelection(emojis);
+//                                newComment += task.emojiSelection(emojis);
 				    
                                 System.out.println("Select 1 for another emoji or pick any other number " +
                                         "to exit");
-			   
+
+                                //todo: make sure this has input validation
                                 emojiChoice = scanner.nextInt();
                             }
                         System.out.println("Would you like to continue comment (Y) or exit (N)? ");

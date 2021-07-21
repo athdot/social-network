@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 /**
- * A framework to run public test cases.
+ * A framework to run basic tests on Group 8's Project 4
  *
  * <p>Purdue University -- CS18000 -- Summer 2021</p>
  */
@@ -67,22 +67,17 @@ public class RunLocalTest {
             System.setIn(testIn);
         }
 
-        @Test(timeout = 1000)
+        @Test(timeout = 100)
         public void testLogin() {
             try {
                 // Set the input
-                //this would never be a username or password
-                String input = "1\nwrongUsername!@#!@#\nwrongPassword!@#!@#\n";
+                // this is a wrong username and password (assuming it is not stored)
+                String input = "1\nwrongUser\nwrongPass\n" +
+                        "2\ncorrectUser\ncorrectPass\n" +
+                        "1";
 
                 // Pair the input with the expected result
-                String expected = "Username/Password is Wrong\n" +
-                        "\n" +
-                        "Choose an Action:\n" +
-                        "+--------------------------------------------------+\n" +
-                        "| LOGIN PAGE                                       |\n" +
-                        "| 1. Sign In                                       |\n" +
-                        "| 2. Create New Account                            |\n" +
-                        "+--------------------------------------------------+";
+                String expected = "";
 
                 // Runs the program with the input values
                 receiveInput(input);
@@ -101,7 +96,5 @@ public class RunLocalTest {
                 fail();
             }
         }
-
-
     }
 }

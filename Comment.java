@@ -61,14 +61,14 @@ public class Comment {
         }
     }
 
-    public String emojiSelection(String[] emoticon) {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Select emoji number: ");
-
-        int emoji = scanner.nextInt();
-        scanner.nextLine();
-
-        return emoticon[emoji - 1];
-    }
+//    public String emojiSelection(String[] emoticon) {
+//        Scanner scanner = new Scanner(System.in);
+//
+//        System.out.println("Select emoji number: ");
+//
+//        int emoji = scanner.nextInt();
+//        scanner.nextLine();
+//
+//        return emoticon[emoji - 1];
+//    }
 }
