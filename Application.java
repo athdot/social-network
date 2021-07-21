@@ -972,7 +972,7 @@ public class Application {
     	if (filename.indexOf(".csv") == -1) {
     		filename += ".csv";
     	}
-    	System.out.println("Exporting '" + post.getTitle() + "' as " + filename + "...");
+    	System.out.println("Exporting '" + post.getTitle() + "' as " + filename + " ...");
     	DataManagement temp = new DataManagement();
     	ArrayList<String[]> export = new ArrayList<String[]>();
     	export.add(post.toFile());
