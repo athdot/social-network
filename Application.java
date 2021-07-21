@@ -601,114 +601,17 @@ public class Application {
                 	System.out.println("This user has no posts...");
                 	continue;
                 }
-
-                //ask if the user wants to comment on a post
-                //System.out.println("Would you like to comment on a post? (Y/N)");
-                //String input;
-                //do {
-                //    input = scanner.nextLine();
-
-                //    if (!(input.equalsIgnoreCase("y") || input.equalsIgnoreCase("n"))) {
-                //        System.out.println("Please enter Y or N");
-                //    }
-                //} while (!(input.equalsIgnoreCase("y") || input.equalsIgnoreCase("n")));
-
-                //if (input.equalsIgnoreCase("n")) {
-                //    continue;
-                //}
-                //display option to comment on a post and get input
-                //int postChoice = 0; //default to zero to prevent ide errors
-                //do {
-                //   if (posts.size() == 0) {
-                //        System.out.println("There are no posts to comment on!");
-                //        break;
-                //    }
-                //    System.out.println(addComment);
-                //    try {
-                //        postChoice = scanner.nextInt();
-                //        scanner.nextLine();
-                //    } catch (InputMismatchException inputMismatchException) {
-                //        System.out.println();
-                //    }
-                //    if (postChoice > posts.size() || postChoice < -1) {
-                //        System.out.println(actionCorrection);
-                //    } else if (postChoice == 0) {
-                //        System.out.println(exit);
-                //        quit = true;
-                //        return; //return to start() method, start method will end the program since field quit = true
-                //    }
-                //} while (postChoice > posts.size() || postChoice < -1);
-
-                //if (postChoice > 0) {
-                //    String newComment = "";
-
-                //    String[] emojis = new String[0];
-
-                //    System.out.println("Would you like to enter a comment? (Y/N)");
-
-                //    String statement = scanner.nextLine();
-
-                //    while (statement.equalsIgnoreCase("y")) {
-			    // Makes a drop-down menu of emojis with numbers next to them
-                //        task.emojis(emojis);
-
-                //        System.out.println(createComment);
-
-                //        String yourComment = scanner.nextLine();
-
-                //        newComment += yourComment;
-
-                //        System.out.println("Emoji? Press 1: ");
-
-                //        //DONE: make sure this has input validation
-                //        int emojiChoice = 0; //default to 0 preventing IDE compile errors
-                //        boolean validInput = false;
-                //        do {
-                //            try {
-                //                emojiChoice = scanner.nextInt();
-                //                scanner.nextLine();
-                //                validInput = true;
-                //            } catch (InputMismatchException inputMismatchException) {
-                //                System.out.println(actionCorrection);
-                //            }
-                //        } while (!validInput);
-
-                //        while (emojiChoice == 1) {
-                //            if (emojiChoice == 1) {
-				// Function includes a scanner in which each number corresponds to an emoji
-				// Emoji picked is added to empty string along with comment
-//                                newComment += task.emojiSelection(emojis);
-
-                //                System.out.println("Select 1 for another emoji or pick any other number " +
-                //                        "to exit");
-
-                                //DONE: make sure this has input validation
-                //                boolean validInput2 = false;
-                //                do {
-                //                    try {
-                //                        emojiChoice = scanner.nextInt();
-                //                        scanner.nextLine();
-                //                        validInput2 = true;
-                //                    } catch (InputMismatchException inputMismatchException) {
-                //                        System.out.println(actionCorrection);
-                //                    }
-                //                } while (!validInput2);
-                //            }
-                //        System.out.println("Would you like to continue comment (Y) or exit (N)? ");
-                //        statement = scanner.nextLine();
-
-                //    }
-                //    server.streamReader("addComment[" + posts.get(postChoice - 1).getTitle() + ","
-                //           + posts.get(postChoice - 1).getAuthor() + "," + newComment + "]");
-                //}
-                //}
-
             } else if (action == 3) {
-            	String stream = "getUserComments[" + localUsername.toLowerCase() + "]";
+            	String stream = "getUserComments[" + user.getUsername().toLowerCase() + "]";
                 ArrayList<Post> posts = StreamParse.stringToPosts(server.streamReader(stream));
-
-                for (int x = 0; x < posts.size(); x++) {
+                
+                int x;
+                for (x = 0; x < posts.size(); x++) {
                     System.out.println("Post " + (x + 1) + posts.get(x).toString() + "\n");
+                }
+                if (x == 0) {
+                	System.out.println("This user has no comments...");
+                	continue;
                 }
             } else if (action == 4) {
                 break;
@@ -1027,7 +930,6 @@ public class Application {
         } catch (Exception e) {
         	//Catch any other misc errors
         	System.out.println("\n\nAn Error Occured\n\n");
-        	e.printStackTrace();
         	app.start();
         }
     }

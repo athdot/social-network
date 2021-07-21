@@ -174,7 +174,9 @@ public class DataManagement {
     	ArrayList<Post> postList = new ArrayList<Post>();
     	
     	for (int i = 0; i < recentPosts.size(); i++) {
-    		postList.add(toPost(recentPosts.get(i)));
+    		if (recentPosts.get(i).length > 0) {
+    			postList.add(toPost(recentPosts.get(i)));
+    		}
     	}
     	
     	return postList;
