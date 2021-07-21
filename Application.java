@@ -768,16 +768,13 @@ public class Application {
                         postChoice = scanner.nextInt();
                         scanner.nextLine();
                     } catch (InputMismatchException inputMismatchException) {
-                        System.out.println();
+                        System.out.println(actionCorrection);
+                        scanner.nextLine();
                     }
                     if (postChoice > posts.size() || postChoice < -1) {
                         System.out.println(actionCorrection);
-                    } else if (postChoice == 0) {
-                        System.out.println(exit);
-                        quit = true;
-                        return; //return to start() method, start method will end the program since field quit = true
                     }
-                } while (postChoice > posts.size() || postChoice < -1);
+                } while (postChoice < posts.size() || postChoice > -1);
 
                 if (postChoice > 0) {
                     editPost(posts.get(postChoice - 1));
@@ -785,7 +782,7 @@ public class Application {
 
             } else if (action == 4) { //view and edit all your comments
                 // TODO: those commentted out stuffs would should the user's all posts with comments
-            	String stream = "getUserComments[" + localUsername + "]";
+            	String stream = "getUserComments[" + localUsername.toLowerCase() + "]";
                 ArrayList<Post> posts = StreamParse.stringToPosts(server.streamReader(stream));
                 //find specific user's posts with comments
                 /*for (int i = 0; i < dm.getUserPosts(user.getUsername()).size(); i++) {
@@ -910,6 +907,7 @@ public class Application {
                 	if (postScale != 5) {
                 		if (postAuthor.equals("3")) {
                 			postScale = 5;
+                			postIndex = 0;
                 			continue;
                 		}
                 		System.out.println(actionCorrection);
@@ -942,6 +940,7 @@ public class Application {
                 	} else if (postAuthor.equals("5")) {
                 		//Display all posts
                 		postScale = -1;
+                		postIndex = 0;
                 		continue;
                 	} else if (postAuthor.equals("6")) {
                 		exitProcess = false;
