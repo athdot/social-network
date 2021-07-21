@@ -365,8 +365,8 @@ public class Application {
             boolean goodTitle = false;
             String newTitle;
             do {
-            	newTitle = scanner.nextLine().replace(",","[[[COMMA_REP[[[");
-            	String parsedTitle = post.getTitle().replace(",","[[[COMMA_REP[[[]");
+            	newTitle = scanner.nextLine().replace(",","123COMMA_REP321");
+            	String parsedTitle = post.getTitle().replace(",","123COMMA_REP321");
             	String input = "editTitle[" + post.getTitle() + "," + post.getAuthor() + "," + newTitle + "]";
             	input = server.streamReader(input);
 
@@ -527,7 +527,7 @@ public class Application {
                 if (content.length() == 0) {
                 	content = "Blank Content";
                 }
-                title = title.replace(",","[][]][COMMA_REP][[][]");
+                title = title.replace(",","123COMMA_REP321");
                 String worked = server.streamReader("post[" + title + "," + content +"]");
                 postSuccess = worked.equals("true");
 
@@ -749,7 +749,8 @@ public class Application {
 
             } else if (action == 3) { //view and edit your posts
                 //display posts from this user with numbers beside them
-                String stream = server.streamReader("getUserPosts[" + localUsername + "]");
+            	String getPosts = "getUserPosts[" + localUsername.toLowerCase() + "]";
+                String stream = server.streamReader(getPosts);
                 ArrayList<Post> posts = StreamParse.stringToPosts(stream);
                 for (int x = 0; x < posts.size(); x++) {
                     System.out.println("Post " + (x + 1) + posts.get(x).toString() + "\n");
@@ -956,7 +957,7 @@ public class Application {
 
                 do {
                     System.out.println(searchRequest);
-                    username = scanner.nextLine();
+                    username = scanner.nextLine().toLowerCase();
                     if (username.contains("-1")) {
                         break;
                     } else if (username.equalsIgnoreCase("0")) {
