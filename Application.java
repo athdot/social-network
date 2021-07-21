@@ -100,7 +100,7 @@ public class Application {
     private final static String usernamePrompt = "Your Username: ";
     private final static String passwordPrompt = "Your Password: ";
 
-    private final static String usernameSpaceCorrection = "Spaces and Commas are not Allowed";
+    private final static String usernameSpaceCorrection = "Spaces and Commas are not Allowed in Username";
     private final static String userPassLengthCorrection = "Username/Password is Too Short";
 
     //strings pertaining to profile actions
@@ -114,12 +114,12 @@ public class Application {
     //strings pertaining to post creation
     private final static String postTitlePrompt = "Enter a Post Title: ";
     private final static String postContentPrompt = "Enter the Post's Message: ";
-    private final static String onePostName = "You cannot name a post the same name twice!";
+    private final static String onePostName = "2 of Your Posts Cannot Have the Same Name!";
     private final static String createComment = "Enter your Comment: ";
 
     //strings pertaining to post editing/deletion
     private final static String postChoicePrompt = "Enter the number of the post you would like to edit"
-        + " or enter -1 to return to the main screen: ";
+        + "\nEnter -1 to return to the main screen: ";
     private final static String newPostTitlePrompt = "Enter a new Post Title: ";
     private final static String newPostContentPrompt = "Enter the Post's new Message: ";
     private final static String deletionConfirmation = "Are you sure you would like to delete this post? (Y/N): ";
@@ -147,8 +147,6 @@ public class Application {
     }
 
     public void login() { //control the login section of the program
-
-        boolean validCredentials = false;
         System.out.println(welcome);
 
         do {
@@ -190,7 +188,8 @@ public class Application {
                     System.out.println(userPassLengthCorrection);
                 } else {
                 	correctLogin = true;
-                	user = new Account(username, password); //current user signed in
+                	user = new Account(username, password); //current user signed in (THIS CAN PROBABLY BE REMOVED)...
+                    //if CSV import logic is changed. (see if it ends up unused)
                 }
             } while(!correctLogin);
 
@@ -200,7 +199,6 @@ public class Application {
                 if (worked.equals("false")) {
                 	System.out.println(invalidAccount);
                 } else {
-                	validCredentials = true;
                 	localUsername = username;
                 	break;
                 }
@@ -208,14 +206,13 @@ public class Application {
                 String worked = server.streamReader("createAccount[" + username + "," + password + "]");
                 if (worked.equals("true")) {
                 	System.out.println(accountCreated);
-                	validCredentials = true;
                 	localUsername = username;
                 	break;
                 } else {
                 	System.out.println(usernameTakenMessage);
                 }
             }
-        } while (!validCredentials); //continue to prompt login screen until user provides valid credentials
+        } while (true); //continue to prompt login screen until user provides valid credentials
     }
 
     // Deals with username and password
@@ -230,8 +227,16 @@ public class Application {
             System.out.println(user.toString());
             System.out.println(yourProfile);
 
-            int action = scanner.nextInt();
-            scanner.nextLine();
+            boolean validAction = false;
+            int action = 0;
+            do {
+                try {
+                    action = Integer.parseInt(scanner.nextLine());
+                    validAction = true;
+                } catch (NumberFormatException numberFormatException) {
+                    System.out.println(actionCorrection);
+                }
+            } while (!validAction);
 
             //if it's an invalid action, say so
             if (action < 1 || action > 6) {
@@ -433,7 +438,7 @@ public class Application {
                 if (importBlock.get(0)[2].split(",")[0].equals(user.getUsername())) {
                     //make sure that the username of the imported post matches currently signed-in user.
                     //you can't import a post for someone else.
-                    System.out.println("Post imported successfully");
+                    System.out.println("Importing...");
                     existing.add(importBlock.get(0));
                     dm.writeFile("post.csv", existing);
                 } else {
@@ -446,9 +451,7 @@ public class Application {
 
     }
 
-
     public void viewUsersPosts(Account user) {
-        Scanner scanner = new Scanner(System.in);
         int action = 0; //default to zero to prevent
         DataManagement dm = new DataManagement();
         do {
@@ -477,6 +480,8 @@ public class Application {
                 for (int x = 0; x < posts.size(); x++) {
                     System.out.println(posts.get(x).toString());
                 }
+            } else if (action == 4) {
+                break;
             }
         } while (action != 3);
     }
@@ -486,7 +491,7 @@ public class Application {
         DataManagement dm = new DataManagement();
 
         while (!loggedOut) {
-            System.out.println(mainMenu);
+            System.out.println(mainMenu); //main menu is too large to replay if invalid action message is displayed
 
             int action = 0; //default to zero to prevent IDE errors
             do {
@@ -574,7 +579,8 @@ public class Application {
                 		System.out.println("You have no comments!");
                 		break;
                 	}
-                	System.out.println("Select the post you want to edit your comment(s)");
+                	System.out.println("Select the post you want to edit your comment(s)\n" +
+                            "Enter -1 to return to main menu, 0 to quit program");
                     try {
                         postChoice = scanner.nextInt();
                         scanner.nextLine();
@@ -615,9 +621,21 @@ public class Application {
                     for (int i = 0; i < dm.getUserPosts(postAuthor).size(); i++) {
                         System.out.println("Post: " + dm.getUserPosts(postAuthor).get(i).toString() + "\n");
                     }
-                    System.out.println("Enter the number of post you want to add comment");
+
+                    boolean validChoice = false;
                     int postChoice = 0;
-                    postChoice = scanner.nextInt();
+                    do {
+                        try {
+                            System.out.println("Enter the number of post you want to add comment");
+                            postChoice = scanner.nextInt();
+                            scanner.nextLine(); //remove \n from pipeline
+                            validChoice = true;
+                        } catch (InputMismatchException inputMismatchException) {
+                            System.out.println(actionCorrection);
+                            continue;
+                        }
+                    } while (!validChoice);
+
                     try {
                         String commentEntered = scanner.nextLine();
                         Comment c = new Comment(user.getUsername(), commentEntered);
