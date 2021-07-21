@@ -34,14 +34,14 @@ public class Application {
             "| Copyright: We have no money for a copyright      |\n" +
             "|                                                  |\n" +
             "| NOTE: Enter 0 as an action to QUIT.              |\n" +
-            "+--------------------------------------------------+\n";
+            "+--------------------------------------------------+";
     private final static String chooseAction = "Choose an Action:\n";
     private final static String loginPage = "\n" + chooseAction +
             "+--------------------------------------------------+\n" +
             "| LOGIN PAGE                                       |\n" +
             "| 1. Sign In                                       |\n" +
             "| 2. Create New Account                            |\n" +
-            "+--------------------------------------------------+\n";
+            "+--------------------------------------------------+";
     private final static String mainMenu = "\n" + chooseAction +
             "+--------------------------------------------------+\n" +
             "| MAIN MENU                                        |\n" +
@@ -52,7 +52,7 @@ public class Application {
             "| 5. View All Posts                                |\n" +
             "| 6. Search User                                   |\n" +
             "| 7. Logout                                        |\n" +
-            "+--------------------------------------------------+\n";
+            "+--------------------------------------------------+";
     private final static String yourProfile = "\n" + chooseAction + 
             "+--------------------------------------------------+\n" +
             "| YOUR PROFILE                                     |\n" +
@@ -61,7 +61,7 @@ public class Application {
             "| 3. Change Password                               |\n" +
             "| 4. Delete Account                                |\n" +
             "| 5. Back                                          |\n" +
-            "+--------------------------------------------------+\n";
+            "+--------------------------------------------------+";
     private final static String editPost = "\n" + chooseAction + 
             "+--------------------------------------------------+\n" +
             "| EDIT POST                                        |\n" +
