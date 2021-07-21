@@ -1,0 +1,30 @@
+**Team 8 Documentation**
+
+Welcome to team 8's program. Below you will find instructions
+for running our code, as well as class descriptions and submission
+details.
+
+A detailed description of each class. This should include the functionality included in the class, the testing done to verify it works properly, and its relationship to other classes in the project. 
+
+**Instructions for running our Program**
+
+In order to use our application, first you must download
+all the relevant files, including Application, Account, Comment, Post,
+DataManagement, CryptoHash, Backend, and StreamParse. Once you have downloaded
+these to an IDE of your choice, you can run the program by running the main method
+of the Application class.
+
+**Submission Details**
+
+Student - Submitted Report on Brightspace
+
+Student - Submitted Vocareum workspace
+
+**Class Descriptions**
+
+1. Application - Application is the main front end class
+   for our program. It does all of the printing and recieves all input.
+   It also contains most of the logic for navigating the program and communicates
+   with the back end classes, such as Backend and DataManagement classes
+   to get the information it needs and store any new information.
+2. Account - Along with 
