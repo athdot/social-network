@@ -100,7 +100,7 @@ public class Post {
         output += "| >> " + content + "\n";
         
         for (int i = 0; i < comments.size(); i++) {
-        	output += comments.get(i).toString();
+        	output += "\n" + comments.get(i).toString();
         }
         return output;
     }
