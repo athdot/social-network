@@ -93,7 +93,14 @@ public class DataManagement {
     	for (int i = 0; i < blockFile.size(); i++) {
     		String[] block = blockFile.get(i);
     		for (int j = 0; j < block.length; j++) {
-    			block[j] = block[j].replaceAll(find, replace);
+    			String[] line = block[j].split(",");
+    			String lineRest = "";
+    			if (line[0] != null && line[0].equals(find)) {
+    				block[j] = replace;
+    				for (int k = 1; k < line.length; k++) {
+    					block[j] += "," + line[k];
+    				}
+    			}
     		}
     		blockFile.set(i, block);
     	}
