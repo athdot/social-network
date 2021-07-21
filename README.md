@@ -55,7 +55,8 @@ values passed to and from the backend functions to ensure the correct output is 
 The DataManagement.java class deals with the file reading and writing for storing and accessing posts,
 user information, and comments. This class mostly deals with the Backend class, indirectly sending information
 to/getting information from Application through the Backend class. Since the DataManagement class is directly connected
-to the Backend class
+to the Backend class, this class was tested at the same time, printing the values retrieved from DataManagement
+to find and fix errors in the output of the methods.
 
 
 
