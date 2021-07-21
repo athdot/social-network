@@ -132,6 +132,7 @@ public class Application {
     private final static String searchRequest = "Enter the username of the user you want to view: ";
     private final static String userNotFound = "There is no user with that username.";
     private final static String userFound = "Search successful. User found.";
+    private final static String addComment = "Choose the number of the post you would like to comment on";
 
     private final static String logout = "Logging Out...";
     private final static String exit = "Exiting...";
@@ -465,20 +466,70 @@ public class Application {
                     quit = true;
                     System.out.println(exit);
                     return;
-                } else if (action > 3 || action < 1) {
+                } else if (action > 4 || action < 1) {
                     System.out.println(actionCorrection);
                 }
-            } while (action > 3 || action < 1);
+            } while (action > 4 || action < 1);
 
             if (action == 1) {
                 System.out.println(user.toString());
             } else if (action == 2) {
                 ArrayList<Post> posts = dm.getUserPosts(user.getUsername());
                 for (int x = 0; x < posts.size(); x++) {
-                    System.out.println(posts.get(x).toString());
+                    System.out.println("Post: " + (x + 1) + posts.get(x).toString());
+                }
+
+                //ask if the user wants to comment on a post
+                System.out.println("Would you like to comment on a post? (Y/N)");
+                String input;
+                do {
+                    input = scanner.nextLine();
+
+                    if (!(input.equalsIgnoreCase("y") || input.equalsIgnoreCase("n"))) {
+                        System.out.println("Please enter Y or N");
+                    }
+                } while (!(input.equalsIgnoreCase("y") || input.equalsIgnoreCase("n")));
+
+                if (input.equalsIgnoreCase("n")) {
+                    continue;
+                }
+                //display option to comment on a post and get input
+                int postChoice = 0; //default to zero to prevent ide errors
+                do {
+                    if (posts.size() == 0) {
+                        System.out.println("There are no posts to comment on!");
+                        break;
+                    }
+                    System.out.println(addComment);
+                    try {
+                        postChoice = scanner.nextInt();
+                        scanner.nextLine();
+                    } catch (InputMismatchException inputMismatchException) {
+                        System.out.println();
+                    }
+                    if (postChoice > posts.size() || postChoice < -1) {
+                        System.out.println(actionCorrection);
+                    } else if (postChoice == 0) {
+                        System.out.println(exit);
+                        quit = true;
+                        return; //return to start() method, start method will end the program since field quit = true
+                    }
+                } while (postChoice > posts.size() || postChoice < -1);
+
+                if (postChoice > 0) {
+                    System.out.println(createComment);
+                    String newComment = scanner.nextLine();
+                    server.streamReader("addComment[" + posts.get(postChoice - 1).getTitle() + ","
+                            + posts.get(postChoice - 1).getAuthor() + "," + newComment + "]");
+                }
+
+            } else if (action == 3) {
+                ArrayList<Post> comments = dm.getUserComments(user.getUsername());
+                for (int x = 0; x < comments.size(); x++) {
+                    System.out.println(comments.get(x).toString());
                 }
             }
-        } while (action != 3);
+        } while (action != 4);
     }
 
     public void mainMenu() {
@@ -632,7 +683,10 @@ public class Application {
                 System.out.println(searchRequest);
                 String username = scanner.nextLine();
 
-                Account correctUser = dm.getAccount(username);
+                Account correctUser = null;
+                if (dm.accountExists(username)) {
+                    correctUser = dm.getAccount(username);
+                }
 
                 if (correctUser == null) {//if no user is found
                     System.out.println(userNotFound);
