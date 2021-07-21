@@ -771,9 +771,9 @@ public class Application {
                         System.out.println(actionCorrection);
                         scanner.nextLine();
                     }
-                    if (postChoice > posts.size() || postChoice < -1) {
+                    if (postChoice > posts.size() || postChoice < 0) {
                         System.out.println(actionCorrection);
-                    } else if (postChoice == -1) {
+                    } else {
                     	break;
                     }
                 } while (postChoice < posts.size() || postChoice > -1);
