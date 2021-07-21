@@ -98,7 +98,14 @@ public class RunLocalTest {
                         "7\n1\nUser\nPass\n" +
                         "1\n4\nY\n0\n"; //account deletion and exit function
 
+
+                // Runs the program with the input values
+                receiveInput(input);
                 String timestamp = new Date().toString(); //relies on speed of computer
+                Application.main(new String[0]);
+
+                // Retrieves the output from the program
+                String output = getOutput();
 
                 // Pair the input with the expected result
                 String expected = "+--------------------------------------------------+\n" +
@@ -485,17 +492,11 @@ public class RunLocalTest {
                         "+--------------------------------------------------+\n" +
                         "Exiting...";
 
-                // Runs the program with the input values
-                receiveInput(input);
-                Application.main(new String[0]);
-
-                // Retrieves the output from the program
-                String output = getOutput();
-
                 // Trims the output and verifies it is correct.
                 output = output.replace("\r\n", "\n");
                 assertEquals("Program does not meet all core.\n" +
-                                "Otherwise, check timestamp output comparison, which is negligible.",
+                                "Otherwise, check timestamp output comparison.\n" +
+                                "If only the timestamp is incorrect, the program passes this test.",
                         expected.trim(), output.trim());
 
             } catch (Exception e) {
