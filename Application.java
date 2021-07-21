@@ -1,4 +1,5 @@
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -18,8 +19,6 @@ public class Application {
     private String localUsername;
     private boolean quit = false; //becomes true if user enters 0 for action. Program terminates
 
-    private final static String accountFilename = "accountInfo.csv"; //file that remembers accounts
-
     private final static String welcome = """
             +--------------------------------------------------+
             | Welcome to Group 8's Social Network Application! |
@@ -36,7 +35,7 @@ public class Application {
             +--------------------------------------------------+
             | MAIN MENU                                        |
             | 1. Your Profile                                  |
-            | 2. Create New Post                               |
+            | 2. Create Post                                   |
             | 3. View Your Posts                               |
             | 4. View Your Comments                            |
             | 5. View All Posts                                |
@@ -59,12 +58,20 @@ public class Application {
             | 3. Delete Post                                   |
             | 4. Back                                          |
             +--------------------------------------------------+""";
+    private final static String createNewPost = "\n" + chooseAction + """
+            +--------------------------------------------------+
+            | CREATE POST                                      |
+            | 1. Write New Post                                |
+            | 2. Import Post from CSV                          |
+            | 3. Back                                          |
+            +--------------------------------------------------+""";
     private final static String viewUserOptions = "\n" + chooseAction + """
             +--------------------------------------------------+
-            | VIEW USER                                        |
+            | VIEW                                             |
             | 1. View Profile                                  |
             | 2. View Posts                                    |
-            | 3. Back                                          |
+            | 3. View Comments                                 |
+            | 4. Back                                          |
             +--------------------------------------------------+""";
 
     //string constants for login section
@@ -162,6 +169,7 @@ public class Application {
                     System.out.println(userPassLengthCorrection);
                 } else {
                 	correctLogin = true;
+                	user = new Account(username, password); //current user signed in
                 }
             } while(!correctLogin);
             
@@ -344,7 +352,74 @@ public class Application {
             for (int x = 0; x < posts.size(); x++) {
                 System.out.println(posts.get(x).toString());
             }
+        } else if (action == 3) {
+            //DONE: add option to view user comments and make action 4 to go back
+            ArrayList<Comment> comments = user.getComments();
+            for (int x = 0; x < comments.size(); x++) {
+                System.out.println(comments.get(x).toString());
+            }
+        } //action 4 will end this current method
+    }
+
+    public void createPost() {
+        System.out.println(createNewPost);
+        boolean validAction = false;
+        int action = 0;
+        do {
+            try {
+                action = Integer.parseInt(scanner.nextLine());
+                validAction = true;
+            } catch (NumberFormatException numberFormatException) {
+                System.out.println(actionCorrection);
+            }
+        } while (!validAction);
+
+        if (action == 1) { //write a new post
+            boolean postSuccess;
+            do {
+                System.out.println(postTitlePrompt); //get title
+                String title = scanner.nextLine();
+                System.out.println(postContentPrompt); //get message
+                String content = scanner.nextLine();
+
+                //Cannot create multiple posts of the same name
+                String worked = server.streamReader("post[" + title + "," + content +"]");
+                postSuccess = worked.equals("true");
+
+                if (!postSuccess) {
+                    System.out.println(onePostName);
+                }
+                //user.addPost(new Post(title, user.getUsername(), content,user)); //add it to the list of posts
+            } while (!postSuccess);
+        } else if (action == 2) {
+            DataManagement dm = new DataManagement();
+            System.out.println("Enter name of CSV file to import (including the extension)");
+            String importFilename = scanner.nextLine();
+
+            //methods in mind: readFile, getPost, toPost, writeFile
+            ArrayList<String[]> importBlock = dm.readFile(importFilename);
+            ArrayList<String[]> existing = dm.readFile("post.csv");
+
+//            for (int i = 0; i < importBlock.get(0).length; i++) { //length is 4 (has 1 comment, otherwise 3)
+//                System.out.println(importBlock.get(0)[i]); //DEBUGGING
+//            }
+//            System.out.println(user.getUsername());
+
+            try {
+                if (importBlock.get(0)[2].split(",")[0].equals(user.getUsername())) {
+                    //make sure that the username of the imported post matches currently signed-in user.
+                    //you can't import a post for someone else.
+                    System.out.println("Post imported successfully");
+                    existing.add(importBlock.get(0));
+                    dm.writeFile("post.csv", existing);
+                } else {
+                    System.out.println("This post cannot be imported");
+                }
+            } catch (IndexOutOfBoundsException indexOutOfBoundsException) {
+                System.out.println("File Access Failed");
+            }
         }
+
     }
 
     public void mainMenu() {
@@ -376,22 +451,8 @@ public class Application {
                 yourProfile();
 
             } else if (action == 2) { //create post
-            	boolean postSuccess = false;
-            	do {
-            		System.out.println(postTitlePrompt); //get title
-            		String title = scanner.nextLine();
-            		System.out.println(postContentPrompt); //get message
-            		String content = scanner.nextLine();
-                
-            		//Cannot create multiple posts of the same name
-            		String worked = server.streamReader("post[" + title + "," + content +"]");
-            		postSuccess = worked.equals("true");
-            		
-            		if (!postSuccess) {
-            			System.out.println(onePostName);
-            		}
-            		//user.addPost(new Post(title, user.getUsername(), content,user)); //add it to the list of posts
-            	} while (!postSuccess);
+                createPost();
+
             } else if (action == 3) { //view and edit your posts
                 //display posts from this user with numbers beside them
                 String stream = server.streamReader("getUserPosts[" + localUsername + "]");

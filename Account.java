@@ -239,4 +239,9 @@ public class Account {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    //get the user comments
+    public ArrayList<Comment> getComments() {
+        return comments;
+    }
 }

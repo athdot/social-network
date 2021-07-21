@@ -258,7 +258,7 @@ public class DataManagement {
     }
     
     //This method reads a file and takes all object blocks and turns them into a list
-    private ArrayList<String[]> readFile(String fileName) {
+    public ArrayList<String[]> readFile(String fileName) {
         //Search an ammount of blocks
         ArrayList<String[]> fileLines = new ArrayList<String[]>();
         try {
@@ -292,7 +292,7 @@ public class DataManagement {
     }
 
     //This method writes a list of object blocks to a file
-    private void writeFile(String fileName, ArrayList<String[]> fileLines) {
+    public void writeFile(String fileName, ArrayList<String[]> fileLines) {
     	BufferedWriter bfw = null;
     	
         try {
