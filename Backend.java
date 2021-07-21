@@ -182,9 +182,10 @@ public class Backend {
 		} else if (request.indexOf("getProfile[") == 0) {
 			//getProfile[username]
 			try {
-				Account acc = data.getAccount(unpack(request, "getProfile["));
+				Account acc = data.getAccount(unpack(request, "getProfile[").toLowerCase());
 				return StreamParse.accountToString(acc);
 			} catch (Exception e) {
+				e.printStackTrace();
 				return "false";
 			}
 		} else if (request.indexOf("postSearch[") == 0) {
