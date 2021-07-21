@@ -404,14 +404,18 @@ public class Application {
             }
         } while (action > 4 || action < 1);
 
-        if (action == 1) {
-            System.out.println(user.toString());
-        } else if (action == 2) {
+        if (action == 1) { //Add comment
+        	System.out.println(createComment);
+        	post.addComment(new Comment(localUsername, scanner.nextLine()));
+        	String call = scanner.nextLine().replace("\n","");
+        	call = "addComment[" + post.getTitle() + "," + post.getAuthor() + "," + call + "]";
+        	server.streamReader(call);
+        } else if (action == 2) { //Edit comment
             ArrayList<Post> posts = user.getPosts();
             for (int x = 0; x < posts.size(); x++) {
                 System.out.println(posts.get(x).toString());
             }
-        } else if (action == 3) {
+        } else if (action == 3) { //Delete comment
             //DONE: add option to view user comments and make action 4 to go back
             ArrayList<Comment> comments = user.getComments();
             for (int x = 0; x < comments.size(); x++) {
