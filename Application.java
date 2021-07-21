@@ -319,36 +319,40 @@ public class Application {
     public void viewUsersPosts(Account user) {
         Scanner scanner = new Scanner(System.in);
         int action = 0; //default to zero to prevent
+        DataManagement dm = new DataManagement();
         do {
-            System.out.println(viewUserOptions);
-            try {
-                action = scanner.nextInt();
-                scanner.nextLine();
-            } catch (InputMismatchException inputMismatchException) {
-                System.out.println(actionCorrection);
-                continue;
-            }
-            if (action == 0) { //anytime the user enters a 0 for an action, quit
-                quit = true;
-                System.out.println(exit);
-                return;
-            } else if (action > 4 || action < 1) {
-                System.out.println(actionCorrection);
-            }
-        } while (action > 3 || action < 1);
+            do {
+                System.out.println(viewUserOptions);
+                try {
+                    action = scanner.nextInt();
+                    scanner.nextLine();
+                } catch (InputMismatchException inputMismatchException) {
+                    System.out.println(actionCorrection);
+                    continue;
+                }
+                if (action == 0) { //anytime the user enters a 0 for an action, quit
+                    quit = true;
+                    System.out.println(exit);
+                    return;
+                } else if (action > 3 || action < 1) {
+                    System.out.println(actionCorrection);
+                }
+            } while (action > 3 || action < 1);
 
-        if (action == 1) {
-            System.out.println(user.toString());
-        } else if (action == 2) {
-            ArrayList<Post> posts = user.getPosts();
-            for (int x = 0; x < posts.size(); x++) {
-                System.out.println(posts.get(x).toString());
+            if (action == 1) {
+                System.out.println(user.toString());
+            } else if (action == 2) {
+                ArrayList<Post> posts = dm.getUserPosts(user.getUsername());
+                for (int x = 0; x < posts.size(); x++) {
+                    System.out.println(posts.get(x).toString());
+                }
             }
-        }
+        } while (action != 3);
     }
 
     public void mainMenu() {
         boolean loggedOut = false;
+        DataManagement dm = new DataManagement();
 
         while (!loggedOut) {
             System.out.println(mainMenu);
@@ -429,7 +433,6 @@ public class Application {
 
             } else if (action == 4) { //view and edit all your comments
                 // TODO: those commentted out stuffs would should the user's all posts with comments
-                DataManagement dm = new DataManagement();
                 ArrayList<Post> posts = dm.getUserPosts(user.getUsername());
                 //find specific user's posts with comments
                 /*for (int i = 0; i < dm.getUserPosts(user.getUsername()).size(); i++) {
@@ -481,7 +484,6 @@ public class Application {
 		//TODO: the comment should be added under action 5--view all post
 
             } else if (action == 5) {  //view all people's posts
-                DataManagement dm = new DataManagement();
                 //print all the post from most recent
                 String postAuthor = "";
                 for (int i = 0; i < 30; i++) {
@@ -514,26 +516,17 @@ public class Application {
                 }
 
             } else if (action == 6) { //search for a specific user
-                //ArrayList <Account> accounts = getAccounts(); //this will be a method to retrieve all users from
                 System.out.println(searchRequest);
-                String user = scanner.nextLine();
+                String username = scanner.nextLine();
 
-                Account correctUser;
+                Account correctUser = dm.getAccount(username);
 
-                //for (int x = 0; x < accounts.size(); x++) {
-                //    if (accounts.get(x).getUsername().equalsIgnoreCase(user)) {
-                //        correctUser = accounts.get(x);
-                //    }
-                //}
-
-                //if (correctUser == null) {//if no user is found
-                //    System.out.println(userNotFound);
-                //} else {
-                //    System.out.println(userFound);
-                //    viewUsersPosts(correctUser);
-                //}
-
-                //System.out.println(correctUser.toString());
+                if (correctUser == null) {//if no user is found
+                    System.out.println(userNotFound);
+                } else {
+                    System.out.println(userFound);
+                    viewUsersPosts(correctUser);
+                }
 
             } else if (action == 7) { //logout
                 loggedOut = true;
