@@ -105,6 +105,11 @@ public class Backend {
 			String[] values = unpack(request, "getRecentPosts[").split(",");
 			ArrayList<Post> temp = data.getRecentPosts(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
 			return StreamParse.postsToString(temp);
+		} else if (request.indexOf("getAllPosts") == 0) {
+			//getRecentPosts[start, end]
+			String values = unpack(request, "getAllPosts");
+			ArrayList<Post> temp = data.getAllPosts();
+			return StreamParse.postsToString(temp);
 		} else if (request.indexOf("logout") == 0) {
 			//logout
 			logout();

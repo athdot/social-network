@@ -18,6 +18,7 @@ public class Application {
 
     private Account user; //remember the user who is signed in to this instance of the app
     private Post post;
+    private Comment task;
     private String localUsername;
     private boolean quit = false; //becomes true if user enters 0 for action. Program terminates
 
@@ -99,7 +100,15 @@ public class Application {
     		| 2. View Post                                     |
     		| 3. Load Next 5 Posts                             |
     		| 4. Load Last 5 Posts                             |
-    		| 5. Back                                          |
+    		| 5. Display All Posts                             |
+    		| 6. Back                                          |
+    		+--------------------------------------------------+""";
+    private final static String totalOptions = "\n" + chooseAction + """
+    		+--------------------------------------------------+
+    		| OPTIONS                                          |
+    		| 1. Redisplay Page                                |
+    		| 2. View Post                                     |
+    		| 3. Back                                          |
     		+--------------------------------------------------+""";
 
     //string constants for login section
@@ -262,7 +271,7 @@ public class Application {
             } else if (action == 4) {
             	System.out.println("Are you sure you want to delete account " + localUsername + "? (Y/N)");
             	String thing = scanner.nextLine();
-            	if (thing.equals("Y")) {
+            	if (thing.toUpperCase().equals("Y")) {
             		System.out.println("Deleting account...");
             		server.streamReader("deleteAccount");
             		return true;
@@ -404,14 +413,18 @@ public class Application {
             }
         } while (action > 4 || action < 1);
 
-        if (action == 1) {
-            System.out.println(user.toString());
-        } else if (action == 2) {
+        if (action == 1) { //Add comment
+        	System.out.println(createComment);
+        	String call = scanner.nextLine().replace("\n","");
+        	call = "addComment[" + post.getTitle() + "," + post.getAuthor() + "," + call + "]";
+        	System.out.println("here");
+        	server.streamReader(call);
+        } else if (action == 2) { //Edit comment
             ArrayList<Post> posts = user.getPosts();
             for (int x = 0; x < posts.size(); x++) {
                 System.out.println(posts.get(x).toString());
             }
-        } else if (action == 3) {
+        } else if (action == 3) { //Delete comment
             //DONE: add option to view user comments and make action 4 to go back
             ArrayList<Comment> comments = user.getComments();
             for (int x = 0; x < comments.size(); x++) {
@@ -555,10 +568,47 @@ public class Application {
                 } while (postChoice > posts.size() || postChoice < -1);
 
                 if (postChoice > 0) {
-                    System.out.println(createComment);
-                    String newComment = scanner.nextLine();
+                    String newComment = "";
+
+                    String[] emojis = new String[0];
+
+                    System.out.println("Would you like to enter a comment?");
+
+                    String statement = scanner.nextLine();
+
+                    while (statement.equalsIgnoreCase("y")) {
+			// Makes a drop-down menu of emojis with numbers next to them   
+                        task.emojis(emojis);
+			
+                        System.out.println(createComment);
+			    
+                        String yourComment = scanner.nextLine();
+
+                        newComment += yourComment;
+
+                        System.out.println("Emoji? Press 1: ");
+
+                        int emojiChoice = scanner.nextInt();
+                        scanner.nextLine();
+
+                        while (emojiChoice == 1) {
+                            if (emojiChoice == 1) {
+				// Function includes a scanner in which each number corresponds to an emoji
+				// Emoji picked is added to empty string along with comment    
+                                newComment += task.emojiSelection(emojis);
+				    
+                                System.out.println("Select 1 for another emoji or pick any other number " +
+                                        "to exit");
+			   
+                                emojiChoice = scanner.nextInt();
+                            }
+                        System.out.println("Would you like to continue comment (Y) or exit (N)? ");
+                        statement = scanner.nextLine();
+
+                    }
                     server.streamReader("addComment[" + posts.get(postChoice - 1).getTitle() + ","
                             + posts.get(postChoice - 1).getAuthor() + "," + newComment + "]");
+                }
                 }
 
             } else if (action == 3) {
@@ -715,11 +765,21 @@ public class Application {
 
                 	do {
                 		//Options
-                		System.out.println(allPostOptions);
+                		if (postScale == 5) {
+                			System.out.println(allPostOptions);
+                		} else {
+                			System.out.println(totalOptions);
+                		}
                 		postAuthor = scanner.nextLine();
+                		try {
+                			
+                		} catch (Exception e) {
+                			System.out.println("Not a proper option!");
+                		}
                 	} while (dm.getUserPosts(postAuthor) == null);
                 	//show that user's post
                 	//add comments
+                	
                 	if (postAuthor.equals("1")) {
                 		continue;
                 	} else if (postAuthor.equals("2")) {
@@ -748,13 +808,29 @@ public class Application {
 
                         if (postChoice > 0) {
                             postChoice -= (postIndex + 1);
-                            System.out.println("Post: " + posts.get(postChoice).toString());
+                            if (postChoice < 0 || postChoice > posts.size()) {
+                            	System.out.println("Not a valid post!");
+                            } else {
+                            	System.out.println("Post: " + posts.get(postChoice).toString());
                             
-                            // Add comment options
-                            editComment(posts.get(postChoice));
+                            	// Add comment options
+                            	editComment(posts.get(postChoice));
+                            }
                         }
+                        continue;
+                	} 
+                	
+                	if (postScale != 5) {
+                		if (postAuthor.equals("3")) {
+                			postScale = 5;
+                			continue;
+                		}
+                		System.out.println(actionCorrection);
+                		continue;
+                	}
+                	
                 		
-                	} else if (postAuthor.equals("3")) {
+                	if (postAuthor.equals("3")) {
                 		String postList2 = "getRecentPosts[" + (postIndex + postScale);
                 		postList2 += "," + (postIndex + postScale * 2) + "]";
                         postList = server.streamReader(postList2);
@@ -777,23 +853,14 @@ public class Application {
                 			dontShow = true;
                 		}
                 	} else if (postAuthor.equals("5")) {
+                		//Display all posts
+                		postScale = -1;
+                		continue;
+                	} else if (postAuthor.equals("6")) {
                 		exitProcess = false;
                     	break;
                 	} else {
-                    	for (int i = 0; i < dm.getUserPosts(postAuthor).size(); i++) {
-                        	System.out.println("Post: " + dm.getUserPosts(postAuthor).get(i).toString() + "\n");
-                    	}
-                    	System.out.println("Enter the number of post you want to add comment");
-                    	int postChoice = 0;
-                    	postChoice = scanner.nextInt();
-                    	try {
-                        	String commentEntered = scanner.nextLine();
-                        	Comment c = new Comment(user.getUsername(), commentEntered);
-                        	dm.getUserPosts(postAuthor).get(postChoice - 1).addComment(c);  //add comment
-                        	dm.setPost(dm.getUserPosts(postAuthor).get(postChoice - 1));  //save the added comment to file
-                    	} catch (Exception e) {
-                        	e.printStackTrace();
-                    	}
+                    	System.out.println(actionCorrection);
                 	}
                 } while (!exitProcess);
 
