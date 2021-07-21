@@ -174,6 +174,40 @@ public class DataManagement {
     	return postList;
     }
     
+    // This method gets a list of posts with similar text somewhere in it
+    public ArrayList<Post> getSimilarPosts(String phrase) {
+    	ArrayList<String[]> postList = readFile("post.csv");
+    	ArrayList<Post> output = new ArrayList<Post>();
+    	
+    	for (int i = 0; i < postList.size(); i++) {
+    		String[] block = postList.get(i);
+    		if (block.length > 0) {
+    			for (int j = 0; j < block.length; j++) {
+    				if (block[j].indexOf(phrase) > -1) {
+    					output.add(toPost(block));
+    					break;
+    				}
+    			}
+    		}
+    	}
+    	
+    	return output;
+    }
+    
+    public ArrayList<String> getAssociatedUsers(String phrase) {
+    	ArrayList<String[]> userList = readFile("profile.csv");
+    	ArrayList<String> usernames = new ArrayList<String>();
+    	
+    	for (int i = 0; i < userList.size(); i++) {
+    		String[] block = userList.get(i);
+    		if (block.length > 1 && block[1].indexOf(phrase) > -1) {
+    			usernames.add(block[1]);
+    		}
+    	}
+    	
+    	return usernames;
+    }
+    
     public Post getPost(String title, String author) {
     	ArrayList<String[]> recentPosts = readFile("post.csv");
     	int index = getPost(recentPosts, title, author);
