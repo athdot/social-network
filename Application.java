@@ -664,37 +664,67 @@ public class Application {
                 String postAuthor = "";
                 int postIndex = 0;
                 int postScale = 5;
-                String postList = "getRecentPosts[" + postIndex + "," + (postIndex + postScale) + "]";
-                postList = server.streamReader(postList);
-                ArrayList<Post> posts = StreamParse.stringToPosts(postList);
-                for (int i = 0; i < posts.size(); i++) {
-                    System.out.println("Post: " + (postIndex + i + 1) + posts.get(i).toString() + "\n");
-                }
+              
+                boolean exitProcess = false;
+                
                 do {
-                	//Options
-                	System.out.println(allPostOptions);
-                    postAuthor = scanner.nextLine();
-                } while (dm.getUserPosts(postAuthor) == null);
-                //show that user's post
-                //add comments
-                if (postAuthor.equals("2")) {
-                    break;
-                } else {
-                    for (int i = 0; i < dm.getUserPosts(postAuthor).size(); i++) {
-                        System.out.println("Post: " + dm.getUserPosts(postAuthor).get(i).toString() + "\n");
+                	String postList = "getRecentPosts[" + postIndex + "," + (postIndex + postScale) + "]";
+                    postList = server.streamReader(postList);
+                    ArrayList<Post> posts = StreamParse.stringToPosts(postList);
+                    for (int i = 0; i < posts.size(); i++) {
+                        System.out.println("Post: " + (postIndex + i + 1) + posts.get(i).toString());
                     }
-                    System.out.println("Enter the number of post you want to add comment");
-                    int postChoice = 0;
-                    postChoice = scanner.nextInt();
-                    try {
-                        String commentEntered = scanner.nextLine();
-                        Comment c = new Comment(user.getUsername(), commentEntered);
-                        dm.getUserPosts(postAuthor).get(postChoice - 1).addComment(c);  //add comment
-                        dm.setPost(dm.getUserPosts(postAuthor).get(postChoice - 1));  //save the added comment to file
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
+                    
+                	do {
+                		//Options
+                		System.out.println(allPostOptions);
+                		postAuthor = scanner.nextLine();
+                	} while (dm.getUserPosts(postAuthor) == null);
+                	//show that user's post
+                	//add comments
+                	if (postAuthor.equals("1")) {
+                		//Load a certain post
+                		
+                	} else if (postAuthor.equals("2")) {
+                		String postList2 = "getRecentPosts[" + (postIndex + postScale);
+                		postList2 += "," + (postIndex + postScale * 2) + "]";
+                        postList = server.streamReader(postList2);
+                        ArrayList<Post> posts2 = StreamParse.stringToPosts(postList);
+                		if (posts2.size() > 0) {
+                			postIndex += postScale;
+                		} else {
+                			System.out.println("No further posts...");
+                		}
+                	} else if (postAuthor.equals("3")) {
+                		String postList2 = "getRecentPosts[" + (postIndex - postScale);
+                		postList2 += "," + postIndex + "]";
+                        postList = server.streamReader(postList2);
+                        ArrayList<Post> posts2 = StreamParse.stringToPosts(postList);
+                		if (posts2.size() > 0) {
+                			postIndex -= postScale;
+                		} else {
+                			System.out.println("No further posts...");
+                		}
+                	} else if (postAuthor.equals("4")) {
+                		exitProcess = false;
+                    	break;
+                	} else {
+                    	for (int i = 0; i < dm.getUserPosts(postAuthor).size(); i++) {
+                        	System.out.println("Post: " + dm.getUserPosts(postAuthor).get(i).toString() + "\n");
+                    	}
+                    	System.out.println("Enter the number of post you want to add comment");
+                    	int postChoice = 0;
+                    	postChoice = scanner.nextInt();
+                    	try {
+                        	String commentEntered = scanner.nextLine();
+                        	Comment c = new Comment(user.getUsername(), commentEntered);
+                        	dm.getUserPosts(postAuthor).get(postChoice - 1).addComment(c);  //add comment
+                        	dm.setPost(dm.getUserPosts(postAuthor).get(postChoice - 1));  //save the added comment to file
+                    	} catch (Exception e) {
+                        	e.printStackTrace();
+                    	}
+                	}
+                } while (!exitProcess);
 
             } else if (action == 6) { //search for a specific user
                 String username;

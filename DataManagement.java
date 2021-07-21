@@ -149,7 +149,7 @@ public class DataManagement {
     	ArrayList<Post> postList = new ArrayList<Post>();
     	
     	for (int i = startIndex; i < endIndex; i++ ) {
-    		if (i >= recentPosts.size()) {
+    		if (i >= recentPosts.size() || i < 0) {
     			break;
     		}
     		postList.add(toPost(recentPosts.get(i)));
