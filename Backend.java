@@ -94,6 +94,9 @@ public class Backend {
 			ArrayList<Post> tempPost = data.getUserPosts(unpack(request, "getUserPosts["));
 			//Send a post as string
 			return StreamParse.postsToString(tempPost);
+		} else if (request.indexOf("getUserComments[") == 0) {
+			ArrayList<Post> temp = data.getUserComments(unpack(request, "getUserComments["));
+			return StreamParse.postsToString(temp);
 		} else if (request.indexOf("logout") == 0) {
 			//logout
 			logout();

@@ -63,9 +63,18 @@ public class Application {
             | EDIT POST                                        |
             | 1. Edit Title                                    |
             | 2. Edit Content                                  |
-            | 3. Delete Post                                   |
-            | 4. Back                                          |
+            | 3. Add a Comment                                 |
+            | 4. Delete Post                                   |
+            | 5. Back                                          |
             +--------------------------------------------------+""";
+    private final static String viewCommentOptions = "\n" + chooseAction + """
+    		+--------------------------------------------------+
+    		| EDIT COMMENTS                                    |
+    		| 1. Add Comment                                   |
+    		| 2. Edit Comment                                  |
+    		| 3. Delete Comment                                |
+    		| 4. Back                                          |
+    		+--------------------------------------------------+""";
     private final static String viewUserOptions = "\n" + chooseAction + """
             +--------------------------------------------------+
             | VIEW USER                                        |
@@ -108,6 +117,10 @@ public class Application {
     private final static String newPostContentPrompt = "Enter the Post's new Message: ";
     private final static String deletionConfirmation = "Are you sure you would like to delete this post? (Y/N): ";
 
+    //strings pertaining to comment info
+    private final static String commentDelete = "What comment would you like to delete?"; 
+    private final static String commentEdit = "What comment would you like to edit?";
+    
     //strings pertaining to search users
     private final static String searchRequest = "Enter the username of the user you want to view: ";
     private final static String userNotFound = "There is no user with that username.";
@@ -328,6 +341,45 @@ public class Application {
         }
     }
 	
+    public void editComment(Post post) {
+        int action = 0; //default to zero to prevent
+        do {
+            System.out.println(viewCommentOptions);
+            try {
+                action = scanner.nextInt();
+                scanner.nextLine();
+            } catch (InputMismatchException inputMismatchException) {
+                System.out.println(actionCorrection);
+                continue;
+            }
+            if (action == 0) { //anytime the user enters a 0 for an action, quit
+                quit = true;
+                System.out.println(exit);
+                return;
+            } else if (action > 5 || action < 1) {
+                System.out.println(actionCorrection);
+            }
+        } while (action > 4 || action < 1);
+
+        if (action == 1) { //create comment
+            System.out.println(createComment);
+            //post.editTitle(user.getUsername(),scanner.nextLine());
+            String comment = scanner.nextLine();
+            server.streamReader("addComment[" + post.getTitle() + "," + post.getAuthor() + comment + "]");
+        } else if (action == 2) { //edit comment
+        	//Print out post with numbered comments
+        	//TODO
+        	System.out.println(commentEdit);
+            
+        } else if (action == 3) { //delete comment
+        	//Print out all your comments numbered
+        	
+        	System.out.println(commentDelete);
+        	
+        }
+    }
+
+    
     public void viewUsersPosts(Account user) {
         Scanner scanner = new Scanner(System.in);
         int action = 0; //default to zero to prevent
@@ -445,7 +497,8 @@ public class Application {
 
             } else if (action == 4) { //view and edit all your comments
                 // TODO: those commentted out stuffs would should the user's all posts with comments
-                ArrayList<Post> posts = dm.getUserPosts(user.getUsername());
+            	String stream = "getUserComments[" + localUsername + "]";
+                ArrayList<Post> posts = StreamParse.stringToPosts(server.streamReader(stream));
                 //find specific user's posts with comments
                 /*for (int i = 0; i < dm.getUserPosts(user.getUsername()).size(); i++) {
                     System.out.println("Post " + (i + 1) + posts.get(i).toString() + "\n");
@@ -456,42 +509,37 @@ public class Application {
                     }
                 }*/
                 //edit the comments
-                int editCommentChoice = 0;
-                int postChoice = 0;
-                String commentEdited = "";
+
+                for (int x = 0; x < posts.size(); x++) {
+                    System.out.println("Post " + (x + 1) + posts.get(x).toString() + "\n");
+                }
+
+                //display option to edit a post and get input
+                int postChoice = 0; //default to zero to prevent ide errors
                 do {
-                    do {
-                        System.out.println("Select the post you want to edit your comment(s)");
-                        postChoice = scanner.nextInt();  //minus one to get the true position
-                    } while (postChoice >= posts.size() || postChoice < -1);
-                    do {
-                        System.out.println(dm.getUserPosts(user.getUsername()).get(postChoice - 1).toString());
-                        System.out.println("1. Enter the number of comment you want to edit\n"
-                                + "2. Enter the number of comment you want to delete\n"
-                                + "3. back to main menu");
-                        editCommentChoice = scanner.nextInt();
-                    } while (editCommentChoice < 1 || editCommentChoice > 3);
-                    
-                    if (editCommentChoice == 1) {
+                	if (posts.size() == 0) {
+                		System.out.println("You have no comments!");
+                		break;
+                	}
+                	System.out.println("Select the post you want to edit your comment(s)");
+                    try {
+                        postChoice = scanner.nextInt();
                         scanner.nextLine();
-                        commentEdited = scanner.nextLine();
-                        //edit comments under the "Post" object
-                        //dm.getUserPosts(user.getUsername()).get(postChoice - 1).getComments().
-                                //get(editCommentChoice - 1).editComment(dm.getUserPosts(user.getUsername()).
-                                        //get(postChoice - 1), user.getUsername(), commentEdited);
-                        //save to database
-                        //dm.setPost(dm.getUserPosts(user.getUsername()).get(postChoice - 1));
-                    } else if (editCommentChoice == 2) {
-                        //edit comments to "delete" the "Post" object
-                        //dm.getUserPosts(user.getUsername()).get(postChoice).getComments().
-                                //get(editCommentChoice - 1).editComment(dm.getUserPosts(user.getUsername())
-                                        //.get(postChoice - 1), user.getUsername(), "deleted");
-                        //save to database
-                        dm.setPost(dm.getUserPosts(user.getUsername()).get(postChoice));
-                    } else if (editCommentChoice == 3) {
-                        break;  // return to main menu
+                    } catch (InputMismatchException inputMismatchException) {
+                        System.out.println();
+                    }
+                    if (postChoice > posts.size() || postChoice < -1) {
+                        System.out.println(actionCorrection);
+                    } else if (postChoice == 0) {
+                        System.out.println(exit);
+                        quit = true;
+                        return; //return to start() method, start method will end the program since field quit = true
                     }
                 } while (postChoice > posts.size() || postChoice < -1);
+
+                if (postChoice > 0) {
+                    editComment(posts.get(postChoice - 1));
+                }
 		    
 		//TODO: the comment should be added under action 5--view all post
 

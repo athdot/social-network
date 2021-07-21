@@ -222,7 +222,7 @@ public class DataManagement {
     		String[] block = recentPosts.get(i);
     		//Check main author
     		
-    		for (int j = 3; j < block.length; j++) {
+    		for (int j = 2; j < block.length; j++) {
     			if (block[j].split(",")[0].equals(user)) {
     	    		postList.add(toPost(block));
     	    		break;
