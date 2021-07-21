@@ -16,7 +16,12 @@ import static org.junit.Assert.fail;
 /**
  * A framework to run basic tests on Group 8's Project 4
  *
- * <p>Purdue University -- CS18000 -- Summer 2021</p>
+ * NOTE: Delete profile.csv and post.csv before running this test. This program tests the functionality of the expected
+ * app according to the provided requirements on the handout. Persistence of data is tested through login function, and
+ * attempts to override existing data. Creating, editing, and deleting accounts, posts, and comments is also tested.
+ *
+ * @author Group 8
+ * @version 7/21/2021
  */
 public class RunLocalTest {
     public static void main(String[] args)
@@ -67,14 +72,21 @@ public class RunLocalTest {
             System.setIn(testIn);
         }
 
-        @Test(timeout = 100)
+        @Test(timeout = 1000)
         public void testLogin() {
             try {
                 // Set the input
                 // this is a wrong username and password (assuming it is not stored)
-                String input = "1\nwrongUser\nwrongPass\n" +
-                        "2\ncorrectUser\ncorrectPass\n" +
-                        "1";
+                String input = "1\nwrongUser\nwrongPass\n" + //test invalid login
+                        "2\nUser\nPass\n" +
+                        "1\n1\nThis is my new bio\n" + //test editing profile bio
+                        "2\nUser2\n" +
+                        "2\nUser2\n" + //test choosing username that already exists
+                        "2\nUser3\n" +
+                        "3\nPass\nPass2\n5\n" +
+                        "2\n1\nPost title\nPost message\n" + //ensure posting and editing post works
+                        "3\n1\nNew post message\n" +
+                        "3\nX$!$%!@\n";
 
                 // Pair the input with the expected result
                 String expected = "";
@@ -88,7 +100,7 @@ public class RunLocalTest {
 
                 // Trims the output and verifies it is correct.
                 output = output.replace("\r\n", "\n");
-                assertEquals("Make sure your program handles incorrect logins!",
+                assertEquals("Program does not meet all core",
                         expected.trim(), output.trim());
 
             } catch (Exception e) {
