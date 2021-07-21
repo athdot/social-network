@@ -18,6 +18,7 @@ public class Application {
 
     private Account user; //remember the user who is signed in to this instance of the app
     private Post post;
+    private Comment task;
     private String localUsername;
     private boolean quit = false; //becomes true if user enters 0 for action. Program terminates
 
@@ -559,10 +560,47 @@ public class Application {
                 } while (postChoice > posts.size() || postChoice < -1);
 
                 if (postChoice > 0) {
-                    System.out.println(createComment);
-                    String newComment = scanner.nextLine();
+                    String newComment = "";
+
+                    String[] emojis = new String[0];
+
+                    System.out.println("Would you like to enter a comment?");
+
+                    String statement = scanner.nextLine();
+
+                    while (statement.equalsIgnoreCase("y")) {
+			// Makes a drop-down menu of emojis with numbers next to them   
+                        task.emojis(emojis);
+			
+                        System.out.println(createComment);
+			    
+                        String yourComment = scanner.nextLine();
+
+                        newComment += yourComment;
+
+                        System.out.println("Emoji? Press 1: ");
+
+                        int emojiChoice = scanner.nextInt();
+                        scanner.nextLine();
+
+                        while (emojiChoice == 1) {
+                            if (emojiChoice == 1) {
+				// Function includes a scanner in which each number corresponds to an emoji
+				// Emoji picked is added to empty string along with comment    
+                                newComment += task.emojiSelection(emojis);
+				    
+                                System.out.println("Select 1 for another emoji or pick any other number " +
+                                        "to exit");
+			   
+                                emojiChoice = scanner.nextInt();
+                            }
+                        System.out.println("Would you like to continue comment (Y) or exit (N)? ");
+                        statement = scanner.nextLine();
+
+                    }
                     server.streamReader("addComment[" + posts.get(postChoice - 1).getTitle() + ","
                             + posts.get(postChoice - 1).getAuthor() + "," + newComment + "]");
+                }
                 }
 
             } else if (action == 3) {
