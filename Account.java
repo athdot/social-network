@@ -37,34 +37,6 @@ public class Account {
         this.password = password; //will be encrypted from Application.java
         posts = new ArrayList<Post> ();
         bio = ""; //user can set the bio later
-        saveAccount();
-    }
-
-        public void saveAccount() throws FileNotFoundException { 
-	//save account to file
-        String b;
-        try {
-            FileOutputStream fo = new FileOutputStream("profile.csv");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        BufferedWriter bw = null;
-        try {
-            bw = new BufferedWriter(new FileWriter("profile.csv", true));
-
-                String name = getUsername();
-                String password = getPassword();
-
-
-                b = String.format("\n%s, %s\n", name, password);
-                bw.write(b);
-            bw.close();
-
-        } catch (FileNotFoundException e) {
-            throw new FileNotFoundException();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public String getUsername() {

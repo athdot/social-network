@@ -89,6 +89,14 @@ public class Application {
             | 3. View Comments                                 |
             | 4. Back                                          |
             +--------------------------------------------------+""";
+    private final static String allPostOptions = "\n" + chooseAction + """
+    		+--------------------------------------------------+
+    		| OPTIONS                                          |
+    		| 1. View Post                                     |
+    		| 2. Load Next 5 Posts                             |
+    		| 3. Load Last 5 Posts                             |
+    		| 4. Back                                          |
+    		+--------------------------------------------------+""";
 
     //string constants for login section
     private final static String actionCorrection = "Invalid Action";
@@ -664,9 +672,8 @@ public class Application {
                 }
                 do {
                 	//Options
+                	System.out.println(allPostOptions);
                     postAuthor = scanner.nextLine();
-                    System.out.println("1. Enter author name that you want to Create a comment" + "\n"
-                            + "2. return to main menu");
                 } while (dm.getUserPosts(postAuthor) == null);
                 //show that user's post
                 //add comments
