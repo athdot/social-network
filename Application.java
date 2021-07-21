@@ -143,7 +143,7 @@ public class Application {
 
     //strings pertaining to post editing/deletion
     private final static String postChoicePrompt = "Enter the number of the post you would like to edit"
-        + "\nEnter -1 to return to the main screen: ";
+        + "\nEnter 0 to return to the main screen: ";
     private final static String newPostTitlePrompt = "Enter a new Post Title: ";
     private final static String newPostContentPrompt = "Enter the Post's new Message: ";
     private final static String deletionConfirmation = "Are you sure you would like to delete this post? (Y/N): ";
@@ -771,12 +771,12 @@ public class Application {
                         System.out.println(actionCorrection);
                         scanner.nextLine();
                     }
-                    if (postChoice > posts.size() || postChoice < -1) {
+                    if (postChoice > posts.size() || postChoice < 0) {
                         System.out.println(actionCorrection);
                     } else {
                     	break;
                     }
-                } while (postChoice < posts.size() || postChoice > -1);
+                } while (postChoice < posts.size() || postChoice > 0);
 
                 if (postChoice > 0) {
                     editPost(posts.get(postChoice - 1));
