@@ -68,8 +68,9 @@ public class Application {
             | 1. Edit Title                                    |
             | 2. Edit Content                                  |
             | 3. Add a Comment                                 |
-            | 4. Delete Post                                   |
-            | 5. Back                                          |
+            | 4. Export Post                                   |
+            | 5. Delete Post                                   |
+            | 6. Back                                          |
             +--------------------------------------------------+""";
     private final static String createNewPost = "\n" + chooseAction + """
             +--------------------------------------------------+
@@ -80,11 +81,12 @@ public class Application {
             +--------------------------------------------------+""";
     private final static String viewCommentOptions = "\n" + chooseAction + """
             +--------------------------------------------------+
-            | EDIT COMMENTS                                    |
+            | EDIT POST                                        |
             | 1. Add Comment                                   |
             | 2. Edit Comment                                  |
             | 3. Delete Comment                                |
-            | 4. Back                                          |
+            | 4. Export as CSV                                 |
+            | 5. Back                                          |
             +--------------------------------------------------+""";
     private final static String viewUserOptions = "\n" + chooseAction + """
             +--------------------------------------------------+
@@ -385,7 +387,14 @@ public class Application {
         	System.out.println(createComment);
         	String newComment = scanner.nextLine();
         	server.streamReader("addComment[" + post.getTitle() + ","+ post.getAuthor() + "," + newComment + "]");
-    	  } else if (action == 4) { //delete post
+        } else if (action == 4) {
+        	System.out.println("What do you wish to name the file?");
+        	try {
+        		exportAsCsv(scanner.nextLine(), post);
+        	} catch (Exception e) {
+        		System.out.println("Error: Saving to file failed...");
+        	}
+        } else if (action == 5) { //delete post
             System.out.println(deletionConfirmation);
             String response = scanner.nextLine();
             if (response.equalsIgnoreCase("y")) {
@@ -412,7 +421,7 @@ public class Application {
             } else if (action > 5 || action < 1) {
                 System.out.println(actionCorrection);
             }
-        } while (action > 4 || action < 1);
+        } while (action > 5 || action < 1);
 
         if (action == 1) { //Add comment
         	System.out.println(createComment);
@@ -421,17 +430,72 @@ public class Application {
         	System.out.println("here");
         	server.streamReader(call);
         } else if (action == 2) { //Edit comment
-            ArrayList<Post> posts = user.getPosts();
-            for (int x = 0; x < posts.size(); x++) {
-                System.out.println(posts.get(x).toString());
+        	ArrayList<Comment> comments = post.getComments();
+            ArrayList<Comment> yourComment = new ArrayList<Comment>();
+            
+            for (int i = 0; i < comments.size(); i++ ) {
+            	if (comments.get(i).getAuthor().equals(localUsername)) {
+            		yourComment.add(comments.get(i));
+            	}
+            }
+            System.out.println("Your Comments: ");
+            for (int x = 0; x < yourComment.size(); x++) {
+            	System.out.println("Comment " + (x +  1) + ": \n");
+            	System.out.println("| Post: " + post.getTitle());
+                System.out.println(yourComment.get(x).toString());
+            }
+            System.out.println("Select a Comment to Edit: ");
+            String del = scanner.nextLine();
+            
+            try {
+            	int opt = Integer.parseInt(del);
+            	System.out.println("What would you like to change the comment to?");
+            	String newComment = scanner.nextLine();
+            	if (newComment.length() < 1) {
+            		newComment = " ";
+            	}
+            	String call = "editComment[" + post.getTitle() + "," + post.getAuthor();
+            	call += "," + (opt - 1) + "," +  newComment + "]";
+            	server.streamReader(call);
+            	System.out.println("Edited Comment!");
+            } catch (Exception e) {
+            	System.out.println("Not a valid number!");
             }
         } else if (action == 3) { //Delete comment
             //DONE: add option to view user comments and make action 4 to go back
-            ArrayList<Comment> comments = user.getComments();
-            for (int x = 0; x < comments.size(); x++) {
-                System.out.println(comments.get(x).toString());
+            ArrayList<Comment> comments = post.getComments();
+            ArrayList<Comment> yourComment = new ArrayList<Comment>();
+            
+            for (int i = 0; i < comments.size(); i++ ) {
+            	if (comments.get(i).getAuthor().equals(localUsername)) {
+            		yourComment.add(comments.get(i));
+            	}
             }
-        } //action 4 will end this current method
+            System.out.println("Your Comments: ");
+            for (int x = 0; x < yourComment.size(); x++) {
+            	System.out.println("Comment " + (x +  1) + ": \n");
+            	System.out.println("| Post: " + post.getTitle());
+                System.out.println(yourComment.get(x).toString());
+            }
+            System.out.println("Select a Comment to Delete: ");
+            String del = scanner.nextLine();
+            try {
+            	int opt = Integer.parseInt(del);
+            	String call = "deleteComment[" + post.getTitle() + "," + post.getAuthor();
+            	call += "," + (opt - 1) + "]";
+            	server.streamReader(call);
+            	System.out.println("Deleted Comment!");
+            } catch (Exception e) {
+            	System.out.println("Not a valid number!");
+            }
+        } else if (action == 4) {
+        	System.out.println("\nWhat do you wish to name the file?");
+        	try {
+        		exportAsCsv(scanner.nextLine(), post);
+        	} catch (Exception e) {
+        		System.out.println("Error: Saving to file failed...");
+        	}
+        } //action 5 will end this current method
     }
 
     public void createPost() {
@@ -905,6 +969,18 @@ public class Application {
                 System.out.println(actionCorrection);
             }
         }
+    }
+    
+    private void exportAsCsv(String filename, Post post) {
+    	if (filename.indexOf(".csv") == -1) {
+    		filename += ".csv";
+    	}
+    	System.out.println("Exporting '" + post.getTitle() + "' as " + filename + " ...");
+    	DataManagement temp = new DataManagement();
+    	ArrayList<String[]> export = new ArrayList<String[]>();
+    	export.add(post.toFile());
+    	temp.writeFile(filename, export);
+    	System.out.println("Operation complete");
     }
 
     public void start() { //control the flow of the user experience. Future run() method for threads?

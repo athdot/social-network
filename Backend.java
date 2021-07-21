@@ -170,7 +170,7 @@ public class Backend {
 			String[] textData = unpack(request, "deleteComment[").split(",");
 			Post post = data.getPost(textData[0], textData[1]);
 			ArrayList<Comment> comments = post.getComments();
-			comments.remove(Integer.parseInt(textData[3]));
+			comments.remove(Integer.parseInt(textData[2]));
 			post.setComments(comments);
 			data.setPost(post);
 		} else if (request.indexOf("getPost[") == 0) {
