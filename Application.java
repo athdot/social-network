@@ -488,7 +488,7 @@ public class Application {
             	System.out.println("Not a valid number!");
             }
         } else if (action == 4) {
-        	System.out.println("What do you wish to name the file?");
+        	System.out.println("\nWhat do you wish to name the file?");
         	try {
         		exportAsCsv(scanner.nextLine(), post);
         	} catch (Exception e) {
@@ -969,6 +969,9 @@ public class Application {
     }
     
     private void exportAsCsv(String filename, Post post) {
+    	if (filename.indexOf(".csv") == -1) {
+    		filename += ".csv";
+    	}
     	System.out.println("Exporting '" + post.getTitle() + "' as " + filename + "...");
     	DataManagement temp = new DataManagement();
     	ArrayList<String[]> export = new ArrayList<String[]>();
