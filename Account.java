@@ -40,8 +40,8 @@ public class Account {
         return password;
     }
 
-    public void setBio(String bio) {
-        this.bio = bio;
+    public String getBio() {
+        return bio;
     }
 
     public void setUsername(String username) {
@@ -50,6 +50,10 @@ public class Account {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 
     public String toString() {

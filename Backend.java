@@ -18,7 +18,7 @@ public class Backend {
     private static final String postInfoFilename = "postInfo.csv";
     private static final String commentInfoFilename = "commentInfo.csv";
 
-    private static final String fileExceptionError = "Error Opening File, Try Again"; //notify if something goes wrong
+    private static final String fileExceptionError = "Error Using File, Try Again"; //notify if something goes wrong
     private static final String makeshiftComma = "!@#"; //this code will translate to a comma
 
     //because we are working with CSV files, only the commas separating each cell should exist
@@ -42,9 +42,11 @@ public class Backend {
      * usernames, we will have to change username across all files.
      * @return
      */
-    public ArrayList<Account> getAccountInfo() {
-        //a line in accountInfo.csv would be: "usernameHere,passwordHere,bioHere"
+    //a line in accountInfo.csv would be: "usernameHere,passwordHere,bioHere"
+    //a line in postInfo.csv would be: "author/username,title,contentText,timestamp,"
+    //a line in commentInfo.csv would be: "author/username,contentText,commentTimestamp,postTimestamp"
 
+    public ArrayList<Account> getAccountInfo() {
         try {
             //if the files do not already exist, create them on user's computer
             //if they do exist, no harm done by opening in append mode and doing nothing
@@ -73,8 +75,6 @@ public class Backend {
     }
 
     public ArrayList<Post> getPostInfo() {
-        //a line in postInfo.csv would be: "author/username,title,contentText,timestamp,"
-
         try {
             File postF = new File(postInfoFilename);
             FileOutputStream postFos = new FileOutputStream(postF, true);
@@ -97,8 +97,6 @@ public class Backend {
     }
 
     public ArrayList<Comment> getCommentInfo() {
-        //a line in commentInfo.csv would be: "author/username,contentText,commentTimestamp,postTimestamp"
-
         try {
             File commentF = new File(commentInfoFilename);
             FileOutputStream commentFos = new FileOutputStream(commentF, true);
@@ -120,10 +118,40 @@ public class Backend {
         return commentArrayList;
     }
 
-    public void setAccountInfo() {
+    public void setAccountInfo(ArrayList<Account> accountArrayList) {
+        try {
+            File accountF = new File(accountInfoFilename);
+            FileOutputStream accountFos = new FileOutputStream(accountF); //no append mode, overwrite current file
+            PrintWriter accountPw = new PrintWriter(accountFos);
+
+            for (int i = 0; i < accountArrayList.size(); i++) {
+                Account current = accountArrayList.get(i);
+                accountPw.printf("%s,%s,%s\n", current.getUsername(), addFormatting(current.getPassword()),
+                        addFormatting(current.getBio()));
+            }
+
+        } catch (IOException ioException) {
+            //this block should never be reached
+            System.out.println(fileExceptionError);
+        }
     }
 
     public void setPostInfo() {
+        try {
+            File postF = new File(postInfoFilename);
+            FileOutputStream postFos = new FileOutputStream(postF); //no append mode, overwrite current file
+            PrintWriter postPw = new PrintWriter(postFos);
+
+            for (int i = 0; i < postArrayList.size(); i++) {
+                Post current = postArrayList.get(i);
+                postPw.printf("%s,%s,%s,%s\n", current.getAuthor(), addFormatting(current.getTitle()),
+                        addFormatting(current.getContent()), current.getTimestamp());
+            }
+
+        } catch (IOException ioException) {
+            //this block should never be reached
+            System.out.println(fileExceptionError);
+        }
     }
 
     public void setCommentInfo() {
