@@ -55,7 +55,8 @@ public class Application {
             | 1. Change Bio                                    |
             | 2. Change Username                               |
             | 3. Change Password                               |
-            | 4. Back                                          |
+            | 4. Delete Account                                |
+            | 5. Back                                          |
             +--------------------------------------------------+""";
     private final static String editPost = "\n" + chooseAction + """
             +--------------------------------------------------+
@@ -92,10 +93,11 @@ public class Application {
     private final static String allPostOptions = "\n" + chooseAction + """
     		+--------------------------------------------------+
     		| OPTIONS                                          |
-    		| 1. View Post                                     |
-    		| 2. Load Next 5 Posts                             |
-    		| 3. Load Last 5 Posts                             |
-    		| 4. Back                                          |
+    		| 1. Redisplay Page                                |
+    		| 2. View Post                                     |
+    		| 3. Load Next 5 Posts                             |
+    		| 4. Load Last 5 Posts                             |
+    		| 5. Back                                          |
     		+--------------------------------------------------+""";
 
     //string constants for login section
@@ -228,7 +230,7 @@ public class Application {
     }
 
     // Deals with username and password
-    public void yourProfile() {
+    public boolean yourProfile() {
         boolean goBack = false;
 
         //while still in the profile menu
@@ -253,8 +255,17 @@ public class Application {
             //if it's an invalid action, say so
             if (action < 1 || action > 6) {
                 System.out.println(actionCorrection);
-            } else if (action == 4) {
+            } else if (action == 5) {
                 goBack = true;
+            } else if (action == 4) {
+            	System.out.println("Are you sure you want to delete account " + localUsername + "? (Y/N)");
+            	String thing = scanner.nextLine();
+            	if (thing.equals("Y")) {
+            		System.out.println("Deleting account...");
+            		server.streamReader("deleteAccount");
+            		goBack = true;
+            		return true;
+            	}
             } else if (action == 3) { //change password
                 //prompt for current password
                 System.out.println(currentPasswordPrompt);
@@ -307,6 +318,8 @@ public class Application {
                 server.streamReader("changeBio[" + scanner.nextLine() +"]");
             }
         }
+        
+        return false;
     }
 
     public void editPost(Post post) {
@@ -424,6 +437,12 @@ public class Application {
                 String content = scanner.nextLine();
 
                 //Cannot create multiple posts of the same name
+                if (title.length() == 0) {
+                	title = "Blank Post";
+                }
+                if (content.length() == 0) {
+                	content = "Blank Content";
+                }
                 String worked = server.streamReader("post[" + title + "," + content +"]");
                 postSuccess = worked.equals("true");
 
@@ -575,8 +594,11 @@ public class Application {
             } while (action < 1 || action > 7); //action 0 would have executed returns statement
 
             if (action == 1) { //go to your profile page
-                yourProfile();
-
+                boolean hardExit = yourProfile();
+                if (hardExit) {
+                	loggedOut = true;
+                    continue;
+                }
             } else if (action == 2) { //create post
                 createPost();
 
@@ -671,13 +693,17 @@ public class Application {
                 int postScale = 5;
 
                 boolean exitProcess = false;
-
+                boolean dontShow = false;
+                
                 do {
                 	String postList = "getRecentPosts[" + postIndex + "," + (postIndex + postScale) + "]";
                     postList = server.streamReader(postList);
                     ArrayList<Post> posts = StreamParse.stringToPosts(postList);
-                    for (int i = 0; i < posts.size(); i++) {
-                        System.out.println("Post: " + (postIndex + i + 1) + posts.get(i).toString());
+                    if (!dontShow) {
+                    	for (int i = 0; i < posts.size(); i++) {
+                        	System.out.println("Post: " + (postIndex + i + 1) + posts.get(i).toString());
+                    	}
+                    	dontShow = false;
                     }
 
                 	do {
@@ -688,9 +714,40 @@ public class Application {
                 	//show that user's post
                 	//add comments
                 	if (postAuthor.equals("1")) {
+                		continue;
+                	} else if (postAuthor.equals("2")) {
                 		//Load a certain post
 
-                	} else if (postAuthor.equals("2")) {
+                		int postChoice = 0; //default to zero to prevent ide errors
+                        do {
+                        	if (posts.size() == 0) {
+                        		System.out.println("User has no posts!");
+                        		break;
+                        	}
+                            System.out.println(postChoicePrompt);
+                            try {
+                                postChoice = scanner.nextInt();
+                                scanner.nextLine();
+                            } catch (InputMismatchException inputMismatchException) {
+                                System.out.println();
+                            }
+                            if (postChoice - postIndex > posts.size() || postChoice - postIndex < -1) {
+                                System.out.println(actionCorrection);
+                            } else if (postChoice - postIndex == 0) {
+                                postChoice = -1;
+                                break; //return to start() method, start method will end the program since field quit = true
+                            }
+                        } while (postChoice > posts.size() || postChoice < -1);
+
+                        if (postChoice > 0) {
+                            postChoice -= (postIndex + 1);
+                            System.out.println("Post: " + posts.get(postChoice).toString());
+                            
+                            // Add comment options
+                            editComment(posts.get(postChoice));
+                        }
+                		
+                	} else if (postAuthor.equals("3")) {
                 		String postList2 = "getRecentPosts[" + (postIndex + postScale);
                 		postList2 += "," + (postIndex + postScale * 2) + "]";
                         postList = server.streamReader(postList2);
@@ -699,8 +756,9 @@ public class Application {
                 			postIndex += postScale;
                 		} else {
                 			System.out.println("No further posts...");
+                			dontShow = true;
                 		}
-                	} else if (postAuthor.equals("3")) {
+                	} else if (postAuthor.equals("4")) {
                 		String postList2 = "getRecentPosts[" + (postIndex - postScale);
                 		postList2 += "," + postIndex + "]";
                         postList = server.streamReader(postList2);
@@ -709,8 +767,9 @@ public class Application {
                 			postIndex -= postScale;
                 		} else {
                 			System.out.println("No further posts...");
+                			dontShow = true;
                 		}
-                	} else if (postAuthor.equals("4")) {
+                	} else if (postAuthor.equals("5")) {
                 		exitProcess = false;
                     	break;
                 	} else {

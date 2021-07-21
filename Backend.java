@@ -44,6 +44,9 @@ public class Backend {
 				data.setAccount(loggedAccount);
 				return "true";
 			}
+		} else if (request.indexOf("deleteAccount") == 0) {
+			data.deleteAccount(loggedAccount.getUsername());
+			loggedAccount = null;
 		} else if (request.indexOf("changeBio[") == 0) {
 			//changeBio[newBio]
 			loggedAccount.setBio(unpack(request, "changeBio["));
