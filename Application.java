@@ -99,6 +99,7 @@ public class Application {
     private final static String postTitlePrompt = "Enter a Post Title: ";
     private final static String postContentPrompt = "Enter the Post's Message: ";
     private final static String onePostName = "You cannot name a post the same name twice!";
+    private final static String createComment = "Enter your Comment: ";
 
     //strings pertaining to post editing/deletion
     private final static String postChoicePrompt = "Enter the number of the post you would like to edit"
