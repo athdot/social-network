@@ -129,7 +129,8 @@ public class Application {
     private final static String commentEdit = "What comment would you like to edit?";
 
     //strings pertaining to search users
-    private final static String searchRequest = "Enter the username of the user you want to view: ";
+    private final static String searchRequest = "Enter the username of the user you want to view or enter " +
+            "-1 to return to the main screen: ";
     private final static String userNotFound = "There is no user with that username.";
     private final static String userFound = "Search successful. User found.";
     private final static String addComment = "Choose the number of the post you would like to comment on";
@@ -680,20 +681,23 @@ public class Application {
                 }
 
             } else if (action == 6) { //search for a specific user
-                System.out.println(searchRequest);
-                String username = scanner.nextLine();
-
+                String username;
                 Account correctUser = null;
-                if (dm.accountExists(username)) {
-                    correctUser = dm.getAccount(username);
-                }
 
-                if (correctUser == null) {//if no user is found
-                    System.out.println(userNotFound);
-                } else {
-                    System.out.println(userFound);
-                    viewUsersPosts(correctUser);
-                }
+                do {
+                    System.out.println(searchRequest);
+                    username = scanner.nextLine();
+                    if (dm.accountExists(username)) {
+                        correctUser = dm.getAccount(username);
+                    }
+
+                    if (correctUser == null) {//if no user is found
+                        System.out.println(userNotFound);
+                    } else {
+                        System.out.println(userFound);
+                    }
+                } while (correctUser == null);
+                viewUsersPosts(correctUser);
 
             } else if (action == 7) { //logout
                 loggedOut = true;
