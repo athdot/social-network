@@ -439,7 +439,7 @@ public class Application {
                     //make sure that the username of the imported post matches currently signed-in user.
                     //you can't import a post for someone else.
                     System.out.println("Post imported successfully");
-                    existing.add(importBlock.get(0));
+                    existing.add(0, importBlock.get(0));
                     dm.writeFile("post.csv", existing);
                 } else {
                     System.out.println("This post cannot be imported");
@@ -659,10 +659,11 @@ public class Application {
                 String postList = "getRecentPosts[" + postIndex + "," + (postIndex + postScale) + "]";
                 postList = server.streamReader(postList);
                 ArrayList<Post> posts = StreamParse.stringToPosts(postList);
-                for (int i = 0; i < postScale; i++) {
+                for (int i = 0; i < posts.size(); i++) {
                     System.out.println("Post: " + (postIndex + i + 1) + posts.get(i).toString() + "\n");
                 }
                 do {
+                	//Options
                     postAuthor = scanner.nextLine();
                     System.out.println("1. Enter author name that you want to Create a comment" + "\n"
                             + "2. return to main menu");
