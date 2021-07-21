@@ -22,6 +22,11 @@ import static org.junit.Assert.fail;
  * attempts to override existing data. Creating, editing, and deleting accounts, posts, and comments is also tested.
  * Other functions, including searching for user or view all posts, is touched upon.
  *
+ * NOTE: Due to the existence of generated timestamps based on real time, the testcase may not work 100% of the time.
+ * This may be caused by processing speed or simply running the program while time dials forward one second.
+ * Assuming that it is not a hardware problem, try to run the testcase a couple of times before determining if the
+ * program is following expected output formatting.
+ *
  * @author Group 8
  * @version 7/21/2021
  */
