@@ -365,8 +365,8 @@ public class Application {
             boolean goodTitle = false;
             String newTitle;
             do {
-            	newTitle = scanner.nextLine().replace(",","[[[COMMA_REP[[[");
-            	String parsedTitle = post.getTitle().replace(",","[[[COMMA_REP[[[]");
+            	newTitle = scanner.nextLine().replace(",","123COMMA_REP321");
+            	String parsedTitle = post.getTitle().replace(",","123COMMA_REP321");
             	String input = "editTitle[" + post.getTitle() + "," + post.getAuthor() + "," + newTitle + "]";
             	input = server.streamReader(input);
 
@@ -527,7 +527,7 @@ public class Application {
                 if (content.length() == 0) {
                 	content = "Blank Content";
                 }
-                title = title.replace(",","[][]][COMMA_REP][[][]");
+                title = title.replace(",","123COMMA_REP321");
                 String worked = server.streamReader("post[" + title + "," + content +"]");
                 postSuccess = worked.equals("true");
 
