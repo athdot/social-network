@@ -57,7 +57,7 @@ public class Comment {
         return output;
     }
     
-    public void emojis(String[] emojis) {
+    public void emojis() {
         System.out.println("Emoji drop down menu: ");
 
         int bambi = 1;
