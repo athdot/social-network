@@ -75,7 +75,7 @@ public class Post {
     public String[] toFile() {
     	ArrayList<String> output = new ArrayList<String>();
     	output.add("Post");
-    	output.add(title);
+    	output.add(replaceCommas(title));
     	output.add(author + "," + timeStamp.toString() + "," + content);
     	
     	for (int i = 0; i < comments.size(); i++) {
@@ -83,6 +83,11 @@ public class Post {
     	}
     	
     	return output.toArray(new String[0]);
+    }
+    
+    private String replaceCommas(String input) {
+    	//Replace string commas with something the user is very unlikely to type
+    	return input.replace(",", "[][]][COMMA_REP][[][]");
     }
 
     //change title
@@ -94,7 +99,7 @@ public class Post {
     //Display message
     public String toString() {
         String output = "\n";
-        output += "| -- " + title + " --\n";
+        output += "| -- " + title.replace("[[[COMMA_REP[[[",",") + " --\n";
         output += "| Author: " + author + "\n";
         output += "| Posted: " + timeStamp.toString() + "\n";
         output += "| >> " + content + "\n";

@@ -41,7 +41,7 @@ public class StreamParse {
     	for (int i = 3; i < content.length; i++) {
     		textContent += "," + content[i];
     	}
-    	Post out = new Post(postInput[1], content[0], textContent);
+    	Post out = new Post(postInput[1].replace("[][]][COMMA_REP][[][]",","), content[0], textContent);
     	out.setTimeStamp(getDate(content[1]));
     	ArrayList<Comment> comments = new ArrayList<Comment>();
     	

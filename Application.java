@@ -330,7 +330,7 @@ public class Application {
             } else if (action == 0) {
                 quit = true; //program will exit
 
-            } else { //change bio
+            } else if (action == 1) { //change bio
                 System.out.println(newBioPrompt);
                 server.streamReader("changeBio[" + scanner.nextLine() +"]");
             }
@@ -365,7 +365,8 @@ public class Application {
             boolean goodTitle = false;
             String newTitle;
             do {
-            	newTitle = scanner.nextLine();
+            	newTitle = scanner.nextLine().replace(",","[[[COMMA_REP[[[");
+            	String parsedTitle = post.getTitle().replace(",","[[[COMMA_REP[[[]");
             	String input = "editTitle[" + post.getTitle() + "," + post.getAuthor() + "," + newTitle + "]";
             	input = server.streamReader(input);
 
@@ -526,6 +527,7 @@ public class Application {
                 if (content.length() == 0) {
                 	content = "Blank Content";
                 }
+                title = title.replace(",","[][]][COMMA_REP][[][]");
                 String worked = server.streamReader("post[" + title + "," + content +"]");
                 postSuccess = worked.equals("true");
 
@@ -698,11 +700,12 @@ public class Application {
 
             int action = 0; //default to zero to prevent IDE errors
             do {
+            	 String actionTemp = scanner.nextLine();
                 try {
-                    action = scanner.nextInt();
-                    scanner.nextLine(); //remove \n from pipeline
-                } catch (InputMismatchException inputMismatchException) {
+                	action = Integer.parseInt(actionTemp);
+                } catch (Exception e) {
                     System.out.println(actionCorrection);
+                    action = 0;
                     continue;
                 }
                 if (action == 0) {

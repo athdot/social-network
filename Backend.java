@@ -130,6 +130,7 @@ public class Backend {
 			data.setPost(post);
 		} else if (request.indexOf("editPost[") == 0) {
 			//editPost[postTitle, postAuthor, content]
+			System.out.println(request);
 			String[] textData = unpack(request, "editPost[").split(",");
 			for (int i = 3; i < textData.length; i++) {
 				textData[2] += "," + textData[i];
