@@ -406,9 +406,9 @@ public class Application {
 
         if (action == 1) { //Add comment
         	System.out.println(createComment);
-        	post.addComment(new Comment(localUsername, scanner.nextLine()));
         	String call = scanner.nextLine().replace("\n","");
         	call = "addComment[" + post.getTitle() + "," + post.getAuthor() + "," + call + "]";
+        	System.out.println("here");
         	server.streamReader(call);
         } else if (action == 2) { //Edit comment
             ArrayList<Post> posts = user.getPosts();

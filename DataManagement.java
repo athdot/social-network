@@ -158,6 +158,17 @@ public class DataManagement {
     	return postList;
     }
     
+    public ArrayList<Post> getAllPosts() {
+    	ArrayList<String[]> recentPosts = readFile("post.csv");
+    	ArrayList<Post> postList = new ArrayList<Post>();
+    	
+    	for (int i = 0; i < recentPosts.size(); i++) {
+    		postList.add(toPost(recentPosts.get(i)));
+    	}
+    	
+    	return postList;
+    }
+    
     //Gets all posts a user has participated in at all
     public ArrayList<Post> getUserPosts(String user) {
     	ArrayList<String[]> recentPosts = readFile("post.csv");
