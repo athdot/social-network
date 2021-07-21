@@ -192,12 +192,14 @@ public class Application {
                     System.out.println(userPassLengthCorrection);
                 } else {
                 	correctLogin = true;
-                	user = new Account(username, password); //current user signed in
+                	user = new Account(username.toLowerCase(), password); 
+                	//current user signed in
                 }
             } while(!correctLogin);
 
             if (actionInt == 1) { //user chooses to sign in
-                String worked = server.streamReader("login[" + username + "," + password + "]");
+            	String worked = "login[" + username.toLowerCase() + "," + password + "]";
+                worked = server.streamReader(worked);
 
                 if (worked.equals("false")) {
                 	System.out.println(invalidAccount);
@@ -207,7 +209,8 @@ public class Application {
                 	break;
                 }
             } else { //if (actionInt == 2), where user chooses to create new account
-                String worked = server.streamReader("createAccount[" + username + "," + password + "]");
+            	String worked = "createAccount[" + username.toLowerCase() + "," + password + "]";
+                worked = server.streamReader(worked);
                 if (worked.equals("true")) {
                 	System.out.println(accountCreated);
                 	validCredentials = true;
@@ -651,8 +654,13 @@ public class Application {
             } else if (action == 5) {  //view all people's posts
                 //print all the post from most recent
                 String postAuthor = "";
-                for (int i = 0; i < 30; i++) {
-                    System.out.println("Post: " + (i + 1) + dm.getRecentPosts(0, 30).get(i).toString() + "\n");
+                int postIndex = 0;
+                int postScale = 5;
+                String postList = "getRecentPosts[" + postIndex + "," + (postIndex + postScale) + "]";
+                postList = server.streamReader(postList);
+                ArrayList<Post> posts = StreamParse.stringToPosts(postList);
+                for (int i = 0; i < postScale; i++) {
+                    System.out.println("Post: " + (postIndex + i + 1) + posts.get(i).toString() + "\n");
                 }
                 do {
                     postAuthor = scanner.nextLine();

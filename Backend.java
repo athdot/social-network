@@ -97,6 +97,11 @@ public class Backend {
 		} else if (request.indexOf("getUserComments[") == 0) {
 			ArrayList<Post> temp = data.getUserComments(unpack(request, "getUserComments["));
 			return StreamParse.postsToString(temp);
+		} else if (request.indexOf("getRecentPosts[") == 0) {
+			//getRecentPosts[start, end]
+			String[] values = unpack(request, "getRecentPosts[").split(",");
+			ArrayList<Post> temp = data.getRecentPosts(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+			return StreamParse.postsToString(temp);
 		} else if (request.indexOf("logout") == 0) {
 			//logout
 			logout();
