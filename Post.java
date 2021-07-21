@@ -3,11 +3,9 @@ import java.util.Date;
 
 /**
  * Post - CS180 PJ04
- *
  * A class representative of a social network post
  *
  * @author C. H. Graham
- *
  * @version 07/17/2021
  *
  **/

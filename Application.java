@@ -53,7 +53,7 @@ public class Application {
             "| 6. Search User                                   |\n" +
             "| 7. Logout                                        |\n" +
             "+--------------------------------------------------+";
-    private final static String yourProfile = "\n" + chooseAction + 
+    private final static String yourProfile = "\n" + chooseAction +
             "+--------------------------------------------------+\n" +
             "| YOUR PROFILE                                     |\n" +
             "| 1. Change Bio                                    |\n" +
@@ -62,7 +62,7 @@ public class Application {
             "| 4. Delete Account                                |\n" +
             "| 5. Back                                          |\n" +
             "+--------------------------------------------------+";
-    private final static String editPost = "\n" + chooseAction + 
+    private final static String editPost = "\n" + chooseAction +
             "+--------------------------------------------------+\n" +
             "| EDIT POST                                        |\n" +
             "| 1. Edit Title                                    |\n" +
@@ -92,7 +92,7 @@ public class Application {
             "+--------------------------------------------------+\n" +
             "| VIEW                                             |\n" +
             "| 1. View Profile                                  |\n" +
-            "| 2. View Posts                                    |\n" + 
+            "| 2. View Posts                                    |\n" +
             "| 3. View Comments                                 |\n" +
             "| 4. Back                                          |\n" +
             "+--------------------------------------------------+";
@@ -102,8 +102,8 @@ public class Application {
     		"| 1. Redisplay Page                                |\n" +
     		"| 2. View Post                                     |\n" +
     		"| 3. Load Next 5 Posts                             |\n" +
-    		"| 4. Load Last 5 Posts                             |\n" + 
-    		"| 5. Display All Posts                             |\n" + 
+    		"| 4. Load Last 5 Posts                             |\n" +
+    		"| 5. Display All Posts                             |\n" +
     		"| 6. Back                                          |\n" +
     		"+--------------------------------------------------+";
     private final static String totalOptions = "\n" + chooseAction +
@@ -111,7 +111,7 @@ public class Application {
     		"| OPTIONS                                          |\n" +
     		"| 1. Redisplay Page                                |\n" +
     		"| 2. View Post                                     |\n" +
-    		"| 3. Back                                          |\n" + 
+    		"| 3. Back                                          |\n" +
     		"+--------------------------------------------------+";
 
     //string constants for login section
@@ -433,7 +433,7 @@ public class Application {
         } else if (action == 2) { //Edit comment
         	ArrayList<Comment> comments = post.getComments();
             ArrayList<Comment> yourComment = new ArrayList<Comment>();
-            
+
             for (int i = 0; i < comments.size(); i++ ) {
             	if (comments.get(i).getAuthor().equals(localUsername)) {
             		yourComment.add(comments.get(i));
@@ -447,7 +447,7 @@ public class Application {
             }
             System.out.println("Select a Comment to Edit: ");
             String del = scanner.nextLine();
-            
+
             try {
             	int opt = Integer.parseInt(del);
             	System.out.println("What would you like to change the comment to?");
@@ -466,7 +466,7 @@ public class Application {
             //DONE: add option to view user comments and make action 4 to go back
             ArrayList<Comment> comments = post.getComments();
             ArrayList<Comment> yourComment = new ArrayList<Comment>();
-            
+
             for (int i = 0; i < comments.size(); i++ ) {
             	if (comments.get(i).getAuthor().equals(localUsername)) {
             		yourComment.add(comments.get(i));
@@ -644,18 +644,18 @@ public class Application {
                     String statement = scanner.nextLine();
 
                     while (statement.equalsIgnoreCase("y")) {
-			// Makes a drop-down menu of emojis with numbers next to them   
+			// Makes a drop-down menu of emojis with numbers next to them
                         task.emojis(emojis);
-			
+
                         System.out.println(createComment);
-			    
+
                         String yourComment = scanner.nextLine();
 
                         newComment += yourComment;
 
                         System.out.println("Emoji? Press 1: ");
 
-                        //todo: make sure this has input validation
+                        //DONE: make sure this has input validation
                         int emojiChoice = 0; //default to 0 preventing IDE compile errors
                         boolean validInput = false;
                         do {
@@ -671,13 +671,13 @@ public class Application {
                         while (emojiChoice == 1) {
                             if (emojiChoice == 1) {
 				// Function includes a scanner in which each number corresponds to an emoji
-				// Emoji picked is added to empty string along with comment    
+				// Emoji picked is added to empty string along with comment
 //                                newComment += task.emojiSelection(emojis);
-				    
+
                                 System.out.println("Select 1 for another emoji or pick any other number " +
                                         "to exit");
 
-                                //todo: make sure this has input validation
+                                //DONE: make sure this has input validation
                                 boolean validInput2 = false;
                                 do {
                                     try {
@@ -784,7 +784,7 @@ public class Application {
                 }
 
             } else if (action == 4) { //view and edit all your comments
-                // TODO: those commentted out stuffs would should the user's all posts with comments
+
             	String stream = "getUserComments[" + localUsername + "]";
                 ArrayList<Post> posts = StreamParse.stringToPosts(server.streamReader(stream));
                 //find specific user's posts with comments
@@ -838,7 +838,7 @@ public class Application {
 
                 boolean exitProcess = false;
                 boolean dontShow = false;
-                
+
                 do {
                 	String postList = "getRecentPosts[" + postIndex + "," + (postIndex + postScale) + "]";
                     postList = server.streamReader(postList);
@@ -859,14 +859,14 @@ public class Application {
                 		}
                 		postAuthor = scanner.nextLine();
                 		try {
-                			
+
                 		} catch (Exception e) {
                 			System.out.println("Not a proper option!");
                 		}
                 	} while (dm.getUserPosts(postAuthor) == null);
                 	//show that user's post
                 	//add comments
-                	
+
                 	if (postAuthor.equals("1")) {
                 		continue;
                 	} else if (postAuthor.equals("2")) {
@@ -899,14 +899,14 @@ public class Application {
                             	System.out.println("Not a valid post!");
                             } else {
                             	System.out.println("Post: " + posts.get(postChoice).toString());
-                            
+
                             	// Add comment options
                             	editComment(posts.get(postChoice));
                             }
                         }
                         continue;
-                	} 
-                	
+                	}
+
                 	if (postScale != 5) {
                 		if (postAuthor.equals("3")) {
                 			postScale = 5;
@@ -915,8 +915,8 @@ public class Application {
                 		System.out.println(actionCorrection);
                 		continue;
                 	}
-                	
-                		
+
+
                 	if (postAuthor.equals("3")) {
                 		String postList2 = "getRecentPosts[" + (postIndex + postScale);
                 		postList2 += "," + (postIndex + postScale * 2) + "]";
@@ -990,7 +990,7 @@ public class Application {
             }
         }
     }
-    
+
     private void exportAsCsv(String filename, Post post) {
     	if (filename.indexOf(".csv") == -1) {
     		filename += ".csv";
