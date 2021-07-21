@@ -1,14 +1,16 @@
-import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
  * Application - Project 4, Social Network App
- * Handles overall functionality of application, brings together Account, Comment, and Post
+ * Front end of the application, brings together all classes. Makes contact with backend classes Backend,
+ * DataManagement, and StreamParse. Multiple methods to run the app interface are included below.
  *
- * @author Group 8, N. Yao, ...
+ * OTHER NOTES: Logic that is too large to contain easily in mainMenu() are split off into their own methods on the
+ * server. For easy navigation, collapse methods and work on the one you need. FUTURE
+ *
+ * @author Group 8
  * @version July 17, 2021
  */
 
@@ -253,7 +255,7 @@ public class Application {
             } while (!validAction);
 
             //if it's an invalid action, say so
-            if (action < 1 || action > 6) {
+            if (action < 0 || action > 5) {
                 System.out.println(actionCorrection);
             } else if (action == 5) {
                 goBack = true;
@@ -263,7 +265,6 @@ public class Application {
             	if (thing.equals("Y")) {
             		System.out.println("Deleting account...");
             		server.streamReader("deleteAccount");
-            		goBack = true;
             		return true;
             	}
             } else if (action == 3) { //change password
@@ -286,39 +287,43 @@ public class Application {
                 	System.out.println(changedPassword);
                 }
             } else if (action == 2) { //change username
-            	boolean correctLogin = false;
+                boolean correctLogin = false;
 
-            	do {
-                	System.out.println(newUsernamePrompt);
-                	String username = scanner.nextLine();
+                do {
+                    System.out.println(newUsernamePrompt);
+                    String username = scanner.nextLine();
 
-                	String taken = server.streamReader("changeUsername[" + username +"]");
-                	if (taken.equals("false")) {
-                		System.out.println(usernameTakenMessage);
-                		continue;
-                	} else {
-                		localUsername = username;
-                	}
+                    String taken = server.streamReader("changeUsername[" + username + "]");
+                    if (taken.equals("false")) {
+                        System.out.println(usernameTakenMessage);
+                        continue;
+                    } else {
+                        localUsername = username;
+                    }
 
-                	if (username.contains(" ") || username.contains(",")) {
-                    	System.out.println(usernameSpaceCorrection);
-                	} else {
-                		correctLogin = true;
-                	}
-            	} while(!correctLogin);
+                    if (username.contains(" ") || username.contains(",")) {
+                        System.out.println(usernameSpaceCorrection);
+                    } else {
+                        correctLogin = true;
+                    }
+                } while (!correctLogin);
 
-            // User can choose to computer generate a username
-            } else if (action == 5) {
-                user.computerGenerateName(user.getUsername());
-            // User can choose to computer generate a password
-            } else if (action == 6) {
-                user.computerGenerateName(user.getPassword());
+//            // User can choose to computer generate a username //why is this here?
+//            } else if (action == 5) {
+//                user.computerGenerateName(user.getUsername());
+//            // User can choose to computer generate a password
+//            } else if (action == 6) {
+//                user.computerGenerateName(user.getPassword());
+
+            } else if (action == 0) {
+                quit = true; //program will exit
+
             } else { //change bio
                 System.out.println(newBioPrompt);
                 server.streamReader("changeBio[" + scanner.nextLine() +"]");
             }
         }
-        
+
         return false;
     }
 
@@ -595,9 +600,11 @@ public class Application {
 
             if (action == 1) { //go to your profile page
                 boolean hardExit = yourProfile();
-                if (hardExit) {
+                if (quit) {
+                    System.out.println(exit);
+                    return;
+                } else if (hardExit) {
                 	loggedOut = true;
-                    continue;
                 }
             } else if (action == 2) { //create post
                 createPost();

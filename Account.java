@@ -15,7 +15,6 @@ public class Account {
 
     //A short blurb about the user 
     private String bio;
-    private Post post;
     private static String[] names = {"carter","language","socrates","love","orange","taper",
             "london","trouble","sandpaper","stables","ocean","river","elephant","juice",
             "varsace","blankets","velvet","castaways","strange","things","cards","beyonce",
