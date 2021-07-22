@@ -41,7 +41,7 @@ public class StreamParse {
     	for (int i = 3; i < content.length; i++) {
     		textContent += "," + content[i];
     	}
-    	Post out = new Post(postInput[1].replace("123COMMA_REP321",","), content[0], textContent);
+    	Post out = new Post(postInput[1].replace("123COMMA_REP321", ","), content[0], textContent);
     	out.setTimeStamp(getDate(content[1]));
     	ArrayList<Comment> comments = new ArrayList<Comment>();
     	
@@ -87,11 +87,11 @@ public class StreamParse {
 	public static Account stringToAccount(String acc) {
 		String[] accountInput = acc.split("\n");
 		Account output = new Account(accountInput[1], accountInput[2]);
-    	output.setBio(accountInput[3].replace("bio:",""));
+    	output.setBio(accountInput[3].replace("bio:", ""));
     	return output;
 	}
 	
-	public static ArrayList<Post> stringToPosts(String posts){
+	public static ArrayList<Post> stringToPosts(String posts) {
 		if (posts.equals("")) {
 			return new ArrayList<Post>();
 		}

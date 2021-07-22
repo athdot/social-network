@@ -17,34 +17,6 @@ public class DataManagement {
     //For me to remember whats going on
     //All blocks are String[]
     //Every block is stored in a ArrayList<String[]>
-	
-    //A few misc test cases
-    public static void main(String[] args) {
-        DataManagement hehe = new DataManagement();
-        Post post1 = new Post("testcase","user","text");
-        hehe.setPost(post1);
-        hehe.setPost(new Post("diamonds","babadsadasaa","test123124"));
-        hehe.setPost(new Post("TEST","babasdas","hey"));
-        post1.addComment(new Comment("babadook","this is a test of comments"));
-        hehe.setPost(post1);
-        ArrayList<Post> g = hehe.getUserPosts("babadook");
-        for (int i = 0; i < g.size(); i++) {
-         	System.out.println(g.get(i).toString());
-        }
-        for (int i = 0; i < g.size(); i++) {
-        	System.out.println(g.get(i).toString());
-        }
-        //=-=-=- Testcase 2
-        Account temp = new Account("Chad",CryptoHash.getHash("thedad"));
-        temp.setBio("Hey bo213123o");
-        hehe.setAccount(temp);
-        Account test1 = new Account("Charles",CryptoHash.getHash("password"));
-        hehe.setAccount(test1);
-        System.out.println(hehe.getAccount("Charles").toString());
-        test1.setBio("Test123");
-        hehe.setAccount(test1);
-        System.out.println(hehe.getAccount("Charles").toString());
-    }
     
     //This method deletes a post in the file system, if it exists
     public void deletePost(Post post) {
@@ -121,7 +93,7 @@ public class DataManagement {
     	for (int i = 3; i < content.length; i++) {
     		textContent += "," + content[i];
     	}
-    	Post out = new Post(postInput[1].replace("123COMMA_REP321",","), content[0], textContent);
+    	Post out = new Post(postInput[1].replace("123COMMA_REP321", ","), content[0], textContent);
     	out.setTimeStamp(getDate(content[1]));
     	ArrayList<Comment> comments = new ArrayList<Comment>();
     	
@@ -260,7 +232,7 @@ public class DataManagement {
     //This method turns a post 'block' into a post object, essentially parsing it
     public Account toAccount(String[] accountInput) {
     	Account output = new Account(accountInput[1], accountInput[2]);
-    	output.setBio(accountInput[3].replace("bio:",""));
+    	output.setBio(accountInput[3].replace("bio:", ""));
     	return output;
     }
     
@@ -329,7 +301,7 @@ public class DataManagement {
             
             ArrayList<String> block = new ArrayList<String>();
             
-            while((currentLine = bfr.readLine()) != null){
+            while ((currentLine = bfr.readLine()) != null) {
                 //Unsure of if this will work or not
             	if (currentLine.equals("")) {
             		String[] ammt = block.toArray(new String[0]);
@@ -342,7 +314,7 @@ public class DataManagement {
             	}
             }
             fileLines.add(block.toArray(new String[0]));
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("File Access Failed");
         }
 
@@ -368,14 +340,14 @@ public class DataManagement {
             		bfw.write(fileLines.get(i)[j] + "\n");
             	}
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("File Write Failed");
         } finally {
-        	try {
-        	    if(bfw != null)
-        		    bfw.close();
-	        } catch(Exception ex){
-	            System.out.println("Error in closing the BufferedWriter"+ex);
+            try {
+                if (bfw != null)
+                    bfw.close();
+	        } catch (Exception ex) {
+	            System.out.println("Error in closing the BufferedWriter" + ex);
 	        }
         }
     }

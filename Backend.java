@@ -198,7 +198,7 @@ public class Backend {
 				return "";
 			}
 			String returnValue = temp.get(0);
-			for (int i = 0; i < temp.size(); i ++) {
+			for (int i = 0; i < temp.size(); i++) {
 				returnValue += "," + temp.get(i);
 			}
 			return returnValue;
@@ -208,7 +208,7 @@ public class Backend {
 	}
 	
 	private String unpack(String request, String beginning) {
-		return request.replace(beginning,"").replace("]", "");
+		return request.replace(beginning, "").replace("]", "");
 	}
 	
 	private boolean login(String username, String password) {
@@ -218,7 +218,7 @@ public class Backend {
 				loggedAccount = temp;
 				return true;
 			}
-		} catch(Exception e) {
+		} catch (Exception e) {
 			//Incorrect username or password
 		}
 		return false;

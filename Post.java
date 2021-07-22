@@ -97,7 +97,7 @@ public class Post {
     //Display message
     public String toString() {
         String output = "\n";
-        output += "| -- " + title.replace("123COMMA_REP321",",") + " --\n";
+        output += "| -- " + title.replace("123COMMA_REP321", ",") + " --\n";
         output += "| Author: " + author + "\n";
         output += "| Posted: " + timeStamp.toString() + "\n";
         output += "| >> " + content + "\n";

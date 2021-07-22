@@ -15,12 +15,12 @@ public class Account {
 
     //A short blurb about the user 
     private String bio;
-    private static String[] names = {"carter","language","socrates","love","orange","taper",
-            "london","trouble","sandpaper","stables","ocean","river","elephant","juice",
-            "varsace","blankets","velvet","castaways","strange","things","cards","beyonce",
-            "polar","zeus","create","pool","canvas","feather","titties","milkbox","triangle",
-            "redherring","leonardo","deadpool","schoolishard","masterschamber","mindpower",
-            "lordofthekings","willofd","goodmorning","testsubject","prickledpear"};
+    private static String[] names = {"carter", "language", "socrates", "love", "orange", "taper",
+        "london", "trouble", "sandpaper", "stables", "ocean", "river", "elephant", "juice",
+        "varsace", "blankets", "velvet", "castaways", "strange", "things", "cards", "beyonce",
+        "polar", "zeus", "create", "pool", "canvas", "feather", "titties", "milkbox", "triangle",
+        "redherring", "leonardo", "deadpool", "schoolishard", "masterschamber", "mindpower",
+        "lordofthekings", "willofd", "goodmorning", "testsubject", "prickledpear"};
 
     //array list of comments and posts made by this account
     private ArrayList<Post> posts;
@@ -31,10 +31,9 @@ public class Account {
 
     
     public Account(String username, String password) {
-        //TODO: Check if user exists, and if they do output error?
         this.username = username;
         this.password = password; //will be encrypted from Application.java
-        posts = new ArrayList<Post> ();
+        posts = new ArrayList<Post>();
         bio = ""; //user can set the bio later
     }
 
@@ -95,7 +94,7 @@ public class Account {
         try {
             // Program allows user to keep their old name if they later decide
             // to opt out of computer generated name chooser
-            if (generate != 1 && select != "") {
+            if (generate != 1 && !select.equals("")) {
                 System.out.println(select);
             } else if (generate == 1) {
                 // Formulate a randomized username unique to user
@@ -133,9 +132,8 @@ public class Account {
         }
     }
 	
-    //TODO: Remove me, for testing
     public String getPassword() {
-    	return password;
+        return password;
     }
     
     public boolean correctPassword(String input) {

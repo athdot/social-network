@@ -24,7 +24,7 @@ public class CryptoHash {
 
 	    String output = "";
 	    // char 32 to 126 range
-	    for (int i = 0; i < password.length(); i ++) {
+	    for (int i = 0; i < password.length(); i++) {
 	        output += (char) ((((int) password.charAt(i)) * 1000 * i / divisor) % 93 + 33);
 	    }
 
