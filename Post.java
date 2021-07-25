@@ -69,7 +69,7 @@ public class Post {
     //Display message
     public String toString() {
         String formattedComment = String.format("%s on %s Posted:\n" +
-                "%s", author, timestamp.toString(), content);
+                "%s", author, timestamp, content);
         return formattedComment;
     }
 }

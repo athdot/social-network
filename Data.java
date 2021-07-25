@@ -16,24 +16,24 @@ public class Data {
     public static ArrayList<Post> postArrayList; //fields: title author content timestamp comments
     public static ArrayList<Comment> commentArrayList; //fields: author, content, timestamp
 
-    private static final String accountInfoFilename = "accountInfo.csv"; //filenames
-    private static final String postInfoFilename = "postInfo.csv";
-    private static final String commentInfoFilename = "commentInfo.csv";
+    private static final String ACCOUNT_INFO_FILENAME = "accountInfo.csv"; //filenames
+    private static final String POST_INFO_FILENAME = "postInfo.csv";
+    private static final String COMMENT_INFO_FILENAME = "commentInfo.csv";
 
-    private static final String fileExceptionError = "Error Using File, Try Again"; //notify if something goes wrong
-    private static final String makeshiftComma = "!@#"; //this code will translate to a comma
+    public static final String FILE_ERROR = "Error Using File"; //notify if something goes wrong
+    private static final String MAKESHIFT_COMMA = "!@#"; //this code will translate to a comma
 
     //because we are working with CSV files, only the commas separating each cell should exist
     private String addFormatting(String normal) { //writing to file: replace all commas with makeshiftComma "!@#"
         if (normal == null)
             return "";
-        return normal.replace(",", makeshiftComma);
+        return normal.replace(",", MAKESHIFT_COMMA);
     }
 
     private String removeFormatting(String formatted) { //reading from file: replace all makeshiftComma "!@#" with ","
         if (formatted == null)
             return "";
-        return formatted.replace(makeshiftComma, ",");
+        return formatted.replace(MAKESHIFT_COMMA, ",");
     }
 
     /**
@@ -48,20 +48,20 @@ public class Data {
      * FILE SYSTEM
      * A line in accountInfo.csv would be: "usernameHere,passwordHere,bioHere"
      * A line in postInfo.csv would be: "author/username,title,contentText,timestamp,"
-     * A line in commentInfo.csv would be: "author/username,contentText,commentTimestamp,postTimestamp"
+     * A line in commentInfo.csv would be: "author/username,contentText,timestamp,postTitle(ID)"
      */
 
     /**
      * Read the current contents of account file into accountArrayList.
      * A line in accountInfo.csv would be: "usernameHere,passwordHere,bioHere".
      */
-    public static void getAccountInfo() {
+    public synchronized static void getAccountInfo() {
         Data data = new Data();
 
         try {
             //if the files do not already exist, create them on user's computer
             //if they do exist, no harm done by opening in append mode and doing nothing
-            File accountF = new File(accountInfoFilename);
+            File accountF = new File(ACCOUNT_INFO_FILENAME);
             FileOutputStream accountFos = new FileOutputStream(accountF, true);
             accountFos.close();
 
@@ -82,7 +82,7 @@ public class Data {
             }
         } catch (IOException ioException) {
             //this block should never be reached
-            System.out.println(fileExceptionError);
+            System.out.println(FILE_ERROR);
         }
     }
 
@@ -90,11 +90,11 @@ public class Data {
      * Write the current contents of accountArrayList into the account file.
      * A line in accountInfo.csv would be: "usernameHere,passwordHere,bioHere".
      */
-    public static void setAccountInfo() {
+    public synchronized static void setAccountInfo() {
         Data data = new Data();
 
         try {
-            File accountF = new File(accountInfoFilename);
+            File accountF = new File(ACCOUNT_INFO_FILENAME);
             FileOutputStream accountFos = new FileOutputStream(accountF); //no append mode, overwrite current file
             PrintWriter accountPw = new PrintWriter(accountFos);
 
@@ -106,7 +106,7 @@ public class Data {
 
         } catch (IOException ioException) {
             //this block should never be reached
-            System.out.println(fileExceptionError);
+            System.out.println(FILE_ERROR);
         }
     }
 
@@ -114,11 +114,11 @@ public class Data {
      * Read the current contents of post file into postArrayList.
      * A line in postInfo.csv would be: "author/username,title,contentText,timestamp,"
      */
-    public static void getPostInfo() {
+    public synchronized static void getPostInfo() {
         Data data = new Data();
 
         try {
-            File postF = new File(postInfoFilename);
+            File postF = new File(POST_INFO_FILENAME);
             FileOutputStream postFos = new FileOutputStream(postF, true);
             postFos.close();
 
@@ -134,7 +134,7 @@ public class Data {
             }
         } catch (IOException ioException) {
             //this block should never be reached
-            System.out.println(fileExceptionError);
+            System.out.println(FILE_ERROR);
         }
     }
 
@@ -142,11 +142,11 @@ public class Data {
      * Write the current contents of postArrayList into the post file.
      * A line in postInfo.csv would be: "author/username,title,contentText,timestamp,"
      */
-    public static void setPostInfo() {
+    public synchronized static void setPostInfo() {
         Data data = new Data();
 
         try {
-            File postF = new File(postInfoFilename);
+            File postF = new File(POST_INFO_FILENAME);
             FileOutputStream postFos = new FileOutputStream(postF); //no append mode, overwrite current file
             PrintWriter postPw = new PrintWriter(postFos);
 
@@ -158,19 +158,19 @@ public class Data {
 
         } catch (IOException ioException) {
             //this block should never be reached
-            System.out.println(fileExceptionError);
+            System.out.println(FILE_ERROR);
         }
     }
 
     /**
      * Read the current contents of comment file into commentArrayList.
-     * A line in commentInfo.csv would be: "author/username,contentText,commentTimestamp,postTimestamp"
+     * A line in commentInfo.csv would be: "author/username,contentText,timestamp,postTitle(ID)"
      */
-    public static void getCommentInfo() {
+    public synchronized static void getCommentInfo() {
         Data data = new Data();
 
         try {
-            File commentF = new File(commentInfoFilename);
+            File commentF = new File(COMMENT_INFO_FILENAME);
             FileOutputStream commentFos = new FileOutputStream(commentF, true);
             commentFos.close();
 
@@ -181,36 +181,55 @@ public class Data {
                 if (line == null)
                     break;
                 String[] info = line.split(",");
-                commentArrayList.add(new Comment(info[0], data.removeFormatting(info[1]), info[2], info[3]));
+                commentArrayList.add(new Comment(info[0], data.removeFormatting(info[1]), info[2],
+                        data.removeFormatting(info[3])));
             }
         } catch (IOException ioException) {
             //this block should never be reached
-            System.out.println(fileExceptionError);
+            System.out.println(FILE_ERROR);
         }
     }
 
     /**
      * Write the current contents of commentArrayList into the comment file.
-     * A line in commentInfo.csv would be: "author/username,contentText,commentTimestamp,postTimestamp"
+     * A line in commentInfo.csv would be: "author/username,contentText,timestamp,postTitle(ID)"
      */
-    public static void setCommentInfo() {
+    public synchronized static void setCommentInfo() {
         Data data = new Data();
 
         try {
-            File commentF = new File(commentInfoFilename);
+            File commentF = new File(COMMENT_INFO_FILENAME);
             FileOutputStream commentFos = new FileOutputStream(commentF); //no append mode, overwrite current file
             PrintWriter commentPw = new PrintWriter(commentFos);
 
             for (Comment current : commentArrayList) {
                 //replace commas with makeshift comma using addFormatting. content may have commas
                 commentPw.printf("%s,%s,%s,%s\n", current.getAuthor(), data.addFormatting(current.getContent()),
-                        current.getCommentTimestamp(), current.getPostTimestamp());
+                        current.getCommentTimestamp(), data.addFormatting(current.getPostTitle()));
             }
 
         } catch (IOException ioException) {
             //this block should never be reached
-            System.out.println(fileExceptionError);
+            System.out.println(FILE_ERROR);
         }
+    }
+
+    /**
+     * Used during importing a post from CSV
+     * A line in postInfo.csv would be: "author/username,title,contentText,timestamp,"
+     */
+    public static Post readPost(String filename) throws IOException, NullPointerException {
+        Data data = new Data();
+
+        File f = new File(filename);
+        FileReader fr = new FileReader(f);
+        BufferedReader bfr = new BufferedReader(fr);
+
+        String line = bfr.readLine();
+        String[] info = line.split(",");
+
+        //program sees newly imported post as a new post. Newest posts belong at the end any list.
+        return new Post(info[0], data.removeFormatting(info[1]), data.removeFormatting(info[2]));
     }
 
     /**
